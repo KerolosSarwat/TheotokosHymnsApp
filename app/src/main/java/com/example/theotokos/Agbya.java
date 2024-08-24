@@ -1,6 +1,8 @@
 package com.example.theotokos;
 
-public class Agbya {
+import java.io.Serializable;
+
+public class Agbya implements Serializable {
     private String title;
     private String content;
     private String description;

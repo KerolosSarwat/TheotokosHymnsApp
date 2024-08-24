@@ -1,6 +1,7 @@
 package com.example.theotokos;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -18,7 +19,7 @@ public class AgbyaDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
+//        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_agbya_details);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -26,13 +27,18 @@ public class AgbyaDetailsActivity extends AppCompatActivity {
             return insets;
         });
 
-        String agbyaTitle = getIntent().getStringExtra("agbyaTitle");
-        String agbyaContent = getIntent().getStringExtra("agbyaContent");
-        String agbyaDescription = getIntent().getStringExtra("agbyaDescription");
+        titleTextView = findViewById(R.id.detailTitle);
+        contentTextView = findViewById(R.id.detailContent);
+        descriptionTextView = findViewById(R.id.detailDescription);
 
-        // Set the text views with the hymn data
-        titleTextView.setText(agbyaTitle);
-        contentTextView.setText(agbyaContent);
-        descriptionTextView.setText(agbyaDescription);
+        Agbya agbya = (Agbya) getIntent().getSerializableExtra("agbya");
+
+        if (agbya != null){
+
+            titleTextView.setText(agbya.getTitle());
+            contentTextView.setText(agbya.getContent());
+            descriptionTextView.setText(agbya.getDescription());
+        }
+        Log.e("onCreate: ", "Agbya is NULL" );
     }
 }

@@ -2,6 +2,8 @@ package com.example.theotokos;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Parcelable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class AgbyaAdapter extends RecyclerView.Adapter<AgbyaAdapter.AgbyaViewHolder> {
@@ -36,11 +39,12 @@ public class AgbyaAdapter extends RecyclerView.Adapter<AgbyaAdapter.AgbyaViewHol
         // Bind data to the ViewHolder's views
         holder.titleTextView.setText(agbya.getTitle());
         holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, AgbyaDetailsActivity.class);
-            intent.putExtra("agbyaTitle", agbya.getTitle());
-            intent.putExtra("agbyaContent", agbya.getTitle());
+            Log.d("onBindViewHolder: ", agbya.getContent());
 
-            intent.putExtra("agbyaDescription", agbya.getTitle());
+            Intent intent = new Intent(context, AgbyaDetailsActivity.class).putExtra("agbya", agbya);
+//            intent.putExtra("agbyaTitle", agbya.getTitle());
+//            intent.putExtra("agbyaContent", agbya.getContent());
+//            intent.putExtra("agbyaDescription", agbya.getDescription());
 
             context.startActivity(intent);
         });
