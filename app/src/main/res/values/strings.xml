@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Theotokos</string>
+    <string name="title_activity_agbya">Agbya</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="userName">أسم المستخدم</string>
+    <string name="password">كلمة المرور</string>
+    <!-- to toggle the open close button of the navigation drawer -->
+    <string name="nav_open">Open</string>
+    <string name="nav_close">Close</string>
+
+</resources>
