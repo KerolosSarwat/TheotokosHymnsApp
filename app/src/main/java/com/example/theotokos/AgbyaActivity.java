@@ -34,12 +34,20 @@ public class AgbyaActivity extends AppCompatActivity {
         });
 
         agbyaRecyclerView = findViewById(R.id.agbyaRecyclerView);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        db = FirebaseFirestore.getInstance();
+        fetchAgbyaData();
+
         agbyaAdapter = new AgbyaAdapter(new ArrayList<>(), this);
         agbyaRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         agbyaRecyclerView.setAdapter(agbyaAdapter);
 
-        db = FirebaseFirestore.getInstance();
-        fetchAgbyaData();
+
     }
 
     private void fetchAgbyaData() {

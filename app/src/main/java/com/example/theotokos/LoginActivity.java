@@ -1,6 +1,7 @@
 package com.example.theotokos;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,7 +24,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setContentView(R.layout.activity_login);
        String username = DataCache.getData(this, "username",null);
        String password = DataCache.getData(this, "password",null);
 
@@ -31,25 +32,17 @@ public class LoginActivity extends AppCompatActivity {
            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
            startActivity(intent);
        }
-        else {
 
-           setContentView(R.layout.activity_login);
-           etUsername = findViewById(R.id.etUsername);
-           etPassword = findViewById(R.id.etPassword);
-           btnLogin = findViewById(R.id.btnLogin);
-           btnSignup = findViewById(R.id.btnSignup);
-
-       }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        btnSignup.setOnClickListener(view -> {
-            Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
-            startActivity(intent);
+        etUsername = findViewById(R.id.etUsername);
+        etPassword = findViewById(R.id.etPassword);
+        btnLogin = findViewById(R.id.btnLogin);
+        btnSignup = findViewById(R.id.btnSignup);
 
-        });
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -59,6 +52,13 @@ public class LoginActivity extends AppCompatActivity {
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
                 // Validate credentials and proceed to next activity or display error
+            }
+        });
+        btnSignup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+                startActivity(intent);
             }
         });
     }

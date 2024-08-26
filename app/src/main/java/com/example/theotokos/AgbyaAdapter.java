@@ -39,17 +39,12 @@ public class AgbyaAdapter extends RecyclerView.Adapter<AgbyaAdapter.AgbyaViewHol
         // Bind data to the ViewHolder's views
         holder.titleTextView.setText(agbya.getTitle());
         holder.itemView.setOnClickListener(v -> {
-            Log.d("onBindViewHolder: ", agbya.getContent());
 
             Intent intent = new Intent(context, AgbyaDetailsActivity.class).putExtra("agbya", agbya);
-//            intent.putExtra("agbyaTitle", agbya.getTitle());
-//            intent.putExtra("agbyaContent", agbya.getContent());
-//            intent.putExtra("agbyaDescription", agbya.getDescription());
-
             context.startActivity(intent);
         });
-        //holder.contentTextView.setText(agbya.getContent());
     }
+
 
     @Override
     public int getItemCount() {
