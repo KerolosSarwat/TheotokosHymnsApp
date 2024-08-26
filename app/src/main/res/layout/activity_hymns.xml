@@ -9,11 +9,15 @@
 
     <Spinner
         android:id="@+id/titlesSpinner"
+        style="@android:style/Widget.Spinner.DropDown"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
+        android:backgroundTintMode="multiply"
+        android:popupBackground="@color/light_blue_600"
+        android:scrollbarStyle="outsideInset"
         android:spinnerMode="dialog"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

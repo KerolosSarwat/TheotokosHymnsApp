@@ -29,7 +29,7 @@ public class TableLayoutHelper {
             textView1.setText(value1);
             textView1.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
             textView1.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
-            textView1.setPadding(16, 8, 16, 8);
+            textView1.setPadding(16, 8, 16, 10);
             tableRow.addView(textView1);
 
             TextView textView2 = new TextView(context);
@@ -40,7 +40,7 @@ public class TableLayoutHelper {
             Typeface typeface = ResourcesCompat.getFont(context, R.font.coptic_font);
             textView2.setTypeface(typeface);
             textView2.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
-            textView2.setPadding(16, 8, 16, 8);
+            textView2.setPadding(16, 8, 16, 10);
             tableRow.addView(textView2);
 
             TextView textView3 = new TextView(context);
@@ -48,7 +48,7 @@ public class TableLayoutHelper {
             textView3.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
 
             textView3.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
-            textView3.setPadding(16, 8, 16, 8);
+            textView3.setPadding(16, 8, 16, 10);
             tableRow.addView(textView3);
 
             tableLayout.addView(tableRow);
