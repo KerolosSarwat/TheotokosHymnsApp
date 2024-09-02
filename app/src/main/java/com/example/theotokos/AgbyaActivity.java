@@ -12,7 +12,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -21,6 +24,8 @@ public class AgbyaActivity extends AppCompatActivity {
     private RecyclerView agbyaRecyclerView;
     private AgbyaAdapter agbyaAdapter;
     private FirebaseFirestore db;
+    private DataCache dataCache;
+    private final List<String> studentLevels = Arrays.asList(new String[]{"حضانة", "أولى ابتدائى", "ثانية ابتدائى", "ثالثة ابتدائى", "رابعة ابتدائى", "خامسة ابتدائى", "سادسة ابتدائى", "اعدادى", "ثانوى", "جامعيين و خريجين"});
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +37,7 @@ public class AgbyaActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
+        dataCache = DataCache.getInstance(this);
         agbyaRecyclerView = findViewById(R.id.agbyaRecyclerView);
 
     }
@@ -41,7 +46,25 @@ public class AgbyaActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         db = FirebaseFirestore.getInstance();
-        fetchAgbyaData();
+
+        User user = dataCache.getUser();
+        if(user.getLevel().equals( "حضانة"))
+            fetchAgbyaData(0);
+        else if(user.getLevel().equals( "أولى ابتدائى"))
+            fetchAgbyaData(1);
+        else if(user.getLevel().equals( "ثانية ابتدائى"))
+            fetchAgbyaData(2);
+        else if(user.getLevel().equals( "ثالثة ابتدائى"))
+            fetchAgbyaData(3);
+        else if(user.getLevel().equals( "رابعة ابتدائى"))
+            fetchAgbyaData(4);
+        else if(user.getLevel().equals( "خامسة ابتدائى"))
+            fetchAgbyaData(5);
+        else if(user.getLevel().equals( "سادسة ابتدائى"))
+            fetchAgbyaData(6);
+        else if(user.getLevel().equals("ثانوى")||user.getLevel().equals("اعدادى")||user.getLevel().equals( "جامعيين و خريجين"))
+            fetchAgbyaData(7);
+
 
         agbyaAdapter = new AgbyaAdapter(new ArrayList<>(), this);
         agbyaRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -50,14 +73,16 @@ public class AgbyaActivity extends AppCompatActivity {
 
     }
 
-    private void fetchAgbyaData() {
+    private void fetchAgbyaData(int level) {
         db.collection("agbya")
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     List<Agbya> agbyaList = new ArrayList<>();
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                         Agbya agbya = document.toObject(Agbya.class);
-                        agbyaList.add(agbya);
+
+                        if (agbya.getAgeLevel().contains(level))
+                            agbyaList.add(agbya);
                     }
 
                     // Update the RecyclerView adapter with the fetched data

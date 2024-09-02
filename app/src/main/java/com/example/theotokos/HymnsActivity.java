@@ -30,7 +30,7 @@ public class HymnsActivity extends AppCompatActivity implements AdapterView.OnIt
     private TableLayout tableLayout;
     TextView hymnTitle, hymnCopticContent, hymnArabicContent, hymnCopticArabicContent;
     private OnDataFetchedListener listener;
-
+    private DataCache dataCache;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +43,24 @@ public class HymnsActivity extends AppCompatActivity implements AdapterView.OnIt
         hymnSpinner = findViewById(R.id.titlesSpinner);
         //tableLayout = findViewById(R.id.tableContent);
         db = FirebaseFirestore.getInstance();
-
-        fetchHymnData();
+        dataCache = DataCache.getInstance(this);
+        User user = dataCache.getUser();
+        if(user.getLevel().equals( "حضانة"))
+            fetchHymnData(0);
+        else if(user.getLevel().equals( "أولى ابتدائى"))
+            fetchHymnData(1);
+        else if(user.getLevel().equals( "ثانية ابتدائى"))
+            fetchHymnData(2);
+        else if(user.getLevel().equals( "ثالثة ابتدائى"))
+            fetchHymnData(3);
+        else if(user.getLevel().equals( "رابعة ابتدائى"))
+            fetchHymnData(4);
+        else if(user.getLevel().equals( "خامسة ابتدائى"))
+            fetchHymnData(5);
+        else if(user.getLevel().equals( "سادسة ابتدائى"))
+            fetchHymnData(6);
+        else if(user.getLevel().equals("ثانوى")||user.getLevel().equals("اعدادى")||user.getLevel().equals( "جامعيين و خريجين"))
+            fetchHymnData(7);
 
         listener = new OnDataFetchedListener() {
             @Override
@@ -69,7 +85,7 @@ public class HymnsActivity extends AppCompatActivity implements AdapterView.OnIt
     }
 
     @NonNull
-    private void fetchHymnData() {
+    private void fetchHymnData(int level) {
         List<String> hymnTitles = new ArrayList<>();
 
         db.collection("hymns")
@@ -78,9 +94,11 @@ public class HymnsActivity extends AppCompatActivity implements AdapterView.OnIt
                     ArrayList<Hymn> hymnsArray = new ArrayList<>();
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                         Hymn hymn = document.toObject(Hymn.class);
-
-                        hymnTitles.add(hymn.getTitle());
-                        hymnsArray.add(hymn);
+                        Log.e( "fetchHymnData: ", ""+hymn.getAgeLevel() );
+                        if (hymn.getAgeLevel() != null && hymn.getAgeLevel().contains(level)){
+                            hymnTitles.add(hymn.getTitle());
+                            hymnsArray.add(hymn);
+                        }
 
                         Log.i("Title", "Data fethced to array: " +  hymnsArray);
                         //hymnsArray.add(new Hymn(document.get("copticArabicContent").toString(), document.get("arabicContent").toString(), document.get("copticContent").toString(), document.get("title").toString()));

@@ -83,11 +83,11 @@ public class SignupActivity extends AppCompatActivity {
 
             Log.d(TAG, "onResume: "+ genderValue);
 
-            User user = new User(etFullName.getText().toString(), etPhone.getText().toString(), tvBirthdate.getText().toString(), genderValue, etAddress.getText().toString(), etChurch.getText().toString(), etUsername.getText().toString(), etPassword.getText().toString(), spStudentLevel.getSelectedItem().toString());
+            User user = new User(etFullName.getText().toString(), etPhone.getText().toString(), tvBirthdate.getText().toString(), genderValue, etAddress.getText().toString(), etChurch.getText().toString(), etUsername.getText().toString()+"@theotokos.com", etPassword.getText().toString(), spStudentLevel.getSelectedItem().toString());
             try {
                 submitUserData();
-                DataCache.saveData(this, "username", user.username);
-                DataCache.saveData(this, "password", user.password);
+//                DataCache.saveData(this, "username", user.username);
+//                DataCache.saveData(this, "password", user.password);
 
 
                 Intent intent = new Intent(SignupActivity.this, MainActivity.class);
