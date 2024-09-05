@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
         View hymnsImageView = findViewById(R.id.hymns);
         View agbyaImageView = findViewById(R.id.agbya);
         View copticImageView = findViewById(R.id.coptic);
+        View taksImageView = findViewById(R.id.taks);
         hymnsImageView.setOnClickListener(v -> {
             // Handle the click event here
             Intent hymnsIntent = new Intent(MainActivity.this, HymnsActivity.class);
@@ -74,14 +75,16 @@ public class MainActivity extends AppCompatActivity {
             startActivity(copticIntent);
         });
 
-        navigationView.getMenu().findItem(R.id.nav_logout).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
-                dataCache.clearCache();
-                Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(loginIntent);
-                return false;
-            }
+        taksImageView.setOnClickListener(view -> {
+            Intent taksIntent = new Intent(MainActivity.this, TaksActivity.class);
+            startActivity(taksIntent);
+        });
+
+        navigationView.getMenu().findItem(R.id.nav_logout).setOnMenuItemClickListener(menuItem -> {
+            Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+            dataCache.clearCache();
+            startActivity(loginIntent);
+            return false;
         });
     }
 

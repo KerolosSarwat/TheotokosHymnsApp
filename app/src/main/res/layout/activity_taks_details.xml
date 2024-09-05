@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AgbyaDetailsActivity">
+    tools:context=".TaksDetailsActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -33,23 +33,24 @@
                 android:textStyle="bold"
                 android:layout_marginBottom="16dp" />
             <TextView
-            android:id="@+id/detailContent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:textSize="18sp" />
+                android:id="@+id/detailContent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:textSize="18sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:text="التأمل"
-                android:textSize="36dp" />
+                android:text="الواجــب"
+                android:textSize="36sp" />
             <TextView
-                android:id="@+id/detailDescription"
+                android:id="@+id/detailHomework"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16sp" />
         </LinearLayout>
     </ScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

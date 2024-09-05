@@ -5,14 +5,17 @@
 
     <item
         android:id="@+id/nav_account"
-        android:title="My Account" />
+        android:icon="@drawable/baseline_manage_accounts_24"
+        android:title="الحساب الشخصى" />
 
     <item
         android:id="@+id/nav_settings"
-        android:title="Settings" />
+        android:icon="@drawable/baseline_settings_24"
+        android:title="الإعدادات" />
 
     <item
         android:id="@+id/nav_logout"
-        android:title="Logout" />
+        android:icon="@drawable/baseline_logout_24"
+        android:title="تسجيل خروج" />
 
 </menu>

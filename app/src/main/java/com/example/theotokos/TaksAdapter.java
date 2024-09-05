@@ -10,34 +10,35 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class AgbyaAdapter extends RecyclerView.Adapter<AgbyaAdapter.AgbyaViewHolder> {
+public class TaksAdapter extends RecyclerView.Adapter<TaksAdapter.TaksViewHolder> {
 
-    private List<Agbya> agbyaList;
+    private List<Taks> taksList;
     private Context context;
 
-    public AgbyaAdapter(List<Agbya> agbyaList, Context context) {
-        this.agbyaList = agbyaList;
+    public TaksAdapter(List<Taks> taksList, Context context) {
+        this.taksList = taksList;
         this.context = context;
     }
 
     @NonNull
     @Override
-    public AgbyaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public TaksViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Inflate your item layout
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout, parent, false);
-        return new AgbyaViewHolder(view);
+        return new TaksViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AgbyaViewHolder holder, int position) {
-        Agbya agbya = agbyaList.get(position);
+    public void onBindViewHolder(@NonNull TaksViewHolder holder, int position) {
+        Taks taks = taksList.get(position);
         // Bind data to the ViewHolder's views
-        holder.titleTextView.setText(agbya.getTitle());
+        taks.setContent(taks.getContent().replace("*", "\n"));
+        holder.titleTextView.setText(taks.getTitle());
         holder.itemView.setOnClickListener(v -> {
-
-            Intent intent = new Intent(context, AgbyaDetailsActivity.class).putExtra("agbya", agbya);
+            Intent intent = new Intent(context, TaksDetailsActivity.class).putExtra("taks", taks);
             context.startActivity(intent);
         });
     }
@@ -45,22 +46,22 @@ public class AgbyaAdapter extends RecyclerView.Adapter<AgbyaAdapter.AgbyaViewHol
 
     @Override
     public int getItemCount() {
-        return agbyaList.size();
+        return taksList.size();
     }
 
-    public class AgbyaViewHolder extends RecyclerView.ViewHolder {
+    public class TaksViewHolder extends RecyclerView.ViewHolder {
         TextView titleTextView;
         TextView contentTextView;
 
-        public AgbyaViewHolder(@NonNull View itemView) {
+        public TaksViewHolder(@NonNull View itemView) {
             super(itemView);
             titleTextView = itemView.findViewById(R.id.titleTextView);
             //contentTextView = itemView.findViewById(R.id.contentTextView);
         }
     }
-    public void submitList(List<Agbya> newAgbyaList) {
-        agbyaList.clear();
-        agbyaList.addAll(newAgbyaList);
+    public void submitList(List<Taks> newTaksList) {
+        taksList.clear();
+        taksList.addAll(newTaksList);
         notifyDataSetChanged();
     }
 }

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     tools:context=".SignupActivity">
 
     <EditText
@@ -53,19 +54,36 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:layout_marginStart="53dp"
-        android:layout_marginEnd="12dp"
-        android:text="أختر التاريخ"
+        android:text="تاريخ الميلاد"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tvBirthdate"
         app:layout_constraintTop_toBottomOf="@+id/etPhone" />
 
     <RadioGroup
         android:id="@+id/rgGender"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
         android:layout_margin="16dp"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnPickDate">
+        app:layout_constraintTop_toBottomOf="@+id/textView3">
+
+        <RadioButton
+            android:id="@+id/rbFemale"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="أنثى"
+            app:layout_constraintTop_toBottomOf="@+id/tvBirthdate" />
+
+        <RadioButton
+            android:id="@+id/rbMale"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="ذكر"
+            app:layout_constraintTop_toBottomOf="@+id/tvBirthdate" />
 
     </RadioGroup>
 
@@ -81,7 +99,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.906"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rbMale"
+        app:layout_constraintTop_toBottomOf="@+id/rgGender"
         app:layout_constraintVertical_bias="0.0" />
 
     <EditText
@@ -148,39 +166,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etPassword" />
 
-    <RadioButton
-        android:id="@+id/rbFemale"
-        android:layout_width="54dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="98dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="47dp"
-        android:text="أنثى"
-        app:layout_constraintEnd_toStartOf="@+id/rbMale"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvBirthdate" />
-
-    <RadioButton
-        android:id="@+id/rbMale"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="104dp"
-        android:text="ذكر"
-        app:layout_constraintEnd_toStartOf="@+id/textView3"
-        app:layout_constraintTop_toBottomOf="@+id/tvBirthdate" />
 
     <TextView
         android:id="@+id/header"
         android:layout_width="wrap_content"
         android:layout_height="75dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:fontFamily="@font/cairo"
         android:text="تسجيل جديد"
         android:textColor="@color/black"
-        android:textSize="40sp"
+        android:textSize="36sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -189,7 +186,7 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:text="النوع"
         android:textSize="24sp"
