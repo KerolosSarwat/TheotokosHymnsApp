@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class HymnsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -75,7 +76,6 @@ public class HymnsActivity extends AppCompatActivity implements AdapterView.OnIt
             }
         };
         try {
-            Log.d("Kirollos", "list length: "+hymnList.size() );
             hymnSpinner.setOnItemSelectedListener(this);
             //hymnCopticContent.setText(hymnList.get(1).getArabicContent());
 
@@ -94,16 +94,11 @@ public class HymnsActivity extends AppCompatActivity implements AdapterView.OnIt
                     ArrayList<Hymn> hymnsArray = new ArrayList<>();
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                         Hymn hymn = document.toObject(Hymn.class);
-                        Log.e( "fetchHymnData: ", ""+hymn.getAgeLevel() );
                         if (hymn.getAgeLevel() != null && hymn.getAgeLevel().contains(level)){
                             hymnTitles.add(hymn.getTitle());
                             hymnsArray.add(hymn);
                         }
-
-                        Log.i("Title", "Data fethced to array: " +  hymnsArray);
-                        //hymnsArray.add(new Hymn(document.get("copticArabicContent").toString(), document.get("arabicContent").toString(), document.get("copticContent").toString(), document.get("title").toString()));
                     }
-                    Log.i("Kirollos", "Data fethced to list size " + hymnsArray.size());
 
 
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, hymnTitles);
@@ -111,13 +106,14 @@ public class HymnsActivity extends AppCompatActivity implements AdapterView.OnIt
                     hymnSpinner.setAdapter(adapter);
                     listener.onDataFetched(hymnsArray);
 
-                    Log.d("Kirollos", "Data Fetched successfully");
+                    //.d("Kirollos", "Data Fetched successfully");
 
                     // Do something with the hymnList, like updating a RecyclerView
                 })
                 .addOnFailureListener(e -> {
                     // Handle errors
-                    Log.e("Firestore", "Error getting documents.", e);
+                    Toast.makeText(this, "خطأ برجاء المحاولة وقت لاحق", Toast.LENGTH_SHORT).show();
+                    //Log.e("Firestore", "Error getting documents.", e);
                 });
     }
 

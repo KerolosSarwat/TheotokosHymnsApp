@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.Theotokos" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="Theme.Theotokos" parent="Theme.MaterialComponents.Light">
         <!-- Primary brand color. -->
         <item name="colorPrimary">#990404</item>
         <item name="colorPrimaryVariant">#990404</item>
@@ -14,7 +14,6 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
-
 
     <style name="ThemeOverlay.Theotokos.FullscreenContainer" parent="">
         <item name="fullscreenBackgroundColor">@color/light_blue_600</item>

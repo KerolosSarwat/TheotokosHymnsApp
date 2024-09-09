@@ -29,7 +29,7 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private DataCache dataCache;
     private static final int REQUEST_STORAGE_PERMISSION = 100;
-    private static final int STORAGE_PERMISSION_CODE = 23;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
         }
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = auth.getCurrentUser();
+
         dataCache = DataCache.getInstance(this);
         User user = dataCache.getUser();
         if (user != null){

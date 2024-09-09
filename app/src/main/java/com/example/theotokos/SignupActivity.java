@@ -14,6 +14,7 @@ import android.widget.Spinner;
 import android.app.DatePickerDialog;
 import android.widget.TextView;
 import java.util.Calendar;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import android.widget.Toast;
@@ -32,9 +33,10 @@ public class SignupActivity extends AppCompatActivity {
     private RadioGroup rgGender;
     private Spinner spStudentLevel;
     private Button btnSignup, btnPickDate;
-    private TextView tvBirthdate;
+//    private TextView tvBirthdate;
     String genderValue;
-    private final String[] studentLevels = {"أختر المرحلة","حضانة", "أولى ابتدائى","ثانية ابتدائى", "ثالثة ابتدائى", "رابعة ابتدائى", "خامسة ابتدائى", "سادسة ابتدائى", "اعدادى", "ثانوى", "جامعيين و خريجين"};
+    private final String[] studentLevels = {"أختر المرحلة الدراسية","حضانة", "أولى ابتدائى","ثانية ابتدائى", "ثالثة ابتدائى", "رابعة ابتدائى", "خامسة ابتدائى", "سادسة ابتدائى", "اعدادى", "ثانوى", "جامعيين و خريجين"};
+    DataCache dataCache;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,19 +44,19 @@ public class SignupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
         btnPickDate = findViewById(R.id.btnPickDate);
         etFullName = findViewById(R.id.etFullName);
-        tvBirthdate = findViewById(R.id.tvBirthdate);
+
         etPhone = findViewById(R.id.etPhone);
         etAddress = findViewById(R.id.etAddress);
         etChurch = findViewById(R.id.etChurch);
         rgGender = findViewById(R.id.rgGender);
         spStudentLevel = findViewById(R.id.spStudentLevel);
         btnSignup = findViewById(R.id.btnSignup);
-        tvBirthdate = findViewById(R.id.tvBirthdate);
+//        tvBirthdate = findViewById(R.id.tvBirthdate);
         etUsername = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
         FirebaseApp.initializeApp(this);
 
-
+        dataCache = DataCache.getInstance(this);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, studentLevels);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
@@ -79,14 +81,17 @@ public class SignupActivity extends AppCompatActivity {
 
             Log.d("onResume: ", genderValue);
 
-            if (spStudentLevel.getSelectedItem().toString().equals("أختر المرحلة")){
+            if (spStudentLevel.getSelectedItem().toString().equals("أختر المرحلة الدراسية")){
                 Toast.makeText(this, "برجاء أختيار المرحلة", Toast.LENGTH_LONG).show();
             }
-            else if (tvBirthdate.getText() == null ||tvBirthdate.getText().equals("")){
-                Toast.makeText(this, "برجاء اختيار تاريخ الميلاد", Toast.LENGTH_LONG).show();
+            else if(etPhone.getText().length() != 11 ){
+                Toast.makeText(this, "برجاء كتابة رقم الهاتف بشكل صحيح", Toast.LENGTH_LONG).show();
             }
+//            else if (tvBirthdate.getText() == null ||tvBirthdate.getText().equals("")){
+//                Toast.makeText(this, "برجاء اختيار تاريخ الميلاد", Toast.LENGTH_LONG).show();
+//            }
             else {
-                User user = new User(etFullName.getText().toString(), etPhone.getText().toString(), tvBirthdate.getText().toString(), genderValue, etAddress.getText().toString(), etChurch.getText().toString(), etUsername.getText().toString(), etPassword.getText().toString(), spStudentLevel.getSelectedItem().toString());
+                User user = new User(etFullName.getText().toString(), etPhone.getText().toString(), btnPickDate.getText().toString(), genderValue, etAddress.getText().toString(), etChurch.getText().toString(), etUsername.getText().toString(), etPassword.getText().toString(), spStudentLevel.getSelectedItem().toString());
                 DatabaseReference database = FirebaseDatabase.getInstance().getReference("users");
 
                 try {
@@ -109,56 +114,22 @@ public class SignupActivity extends AppCompatActivity {
         DatePickerDialog datePickerDialog = new DatePickerDialog(this, (view, Year, monthOfYear, dayOfMonth) -> {
             // Handle the selected date
             String selectedDate = Year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
-            tvBirthdate.setText(selectedDate);
+            btnPickDate.setText(selectedDate);
+//            tvBirthdate.setText();
         },
                 year, month, day);
         datePickerDialog.show();
     }
 
-
-    private boolean isUserExists(User user, DatabaseReference database){
-        String userId = database.push().getKey();
-        //boolean flag;
-        database.child(userId).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()) {
-                            User usr = dataSnapshot.getValue(User.class);
-                            if(usr != null && usr.getUsername().equals(user.getUsername())) {
-                                Toast.makeText(SignupActivity.this, "المستخدم موجود بالفعل", Toast.LENGTH_SHORT).show();
-                                //flag = false;
-                                // Handle the fetched user data
-                                Log.e("RealtimeDatabase", "User data: " + usr.toString());
-
-                                //return flag;
-                            }
-                            else {
-                                // Handle case where user does not exist
-                                // set user data into database
-
-                            }
-                        }
-                    }
-
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                        // Handle errors
-                        Log.w("RealtimeDatabase", "loadPost:onCancelled", databaseError.toException());
-                    }
-                });
-        return false;
-    }
-
     private void submitUserData(User user,  DatabaseReference database) {
         ///Return True if user submitted successfully
         ///Return False if user already exists
-        String userId = database.push().getKey();
-
-        database.child(userId).setValue(user)
+        database.child(user.getUsername()).setValue(user)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful())
                     {
+                        dataCache = new DataCache(SignupActivity.this);
+                        dataCache.saveUser(user);
                         Log.e( "onDataChange: ","Success" );
                         // Handle successful submission (e.g., clear fields, navigate to another screen)
                         Toast.makeText(SignupActivity.this, "User data submitted successfully", Toast.LENGTH_SHORT).show();
@@ -168,9 +139,9 @@ public class SignupActivity extends AppCompatActivity {
                     } else {
                         Log.e( "onDataChange: ","Error" );
 
-                        Toast.makeText(SignupActivity.this, "خطأ فى تسجيل البيانات", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SignupActivity.this, "رجاء تغير أسم المستخدم", Toast.LENGTH_LONG).show();
                         // Handle error (e.g., display error message)
                     }
-                });
+                }).addOnFailureListener(task -> Toast.makeText(SignupActivity.this, "خطأ فى تسجيل البيانات", Toast.LENGTH_LONG).show());
     }
 }

@@ -1,5 +1,8 @@
 package com.example.theotokos;
 
+import java.sql.Timestamp;
+import java.time.Instant;
+
 public class User {
     public String fullName;
     public String phoneNumber;
@@ -10,6 +13,8 @@ public class User {
     public String username;
     public String password;
     public String level;
+    public long createdDate;
+    public long updatedDate;
 
     public User() {
         // Default constructor required for Firebase
@@ -87,6 +92,36 @@ public class User {
         this.level = level;
     }
 
+    public long getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(long createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public long getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(long updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+
+    public User(String fullName, String phoneNumber, String birthdate, String gender, String address, String church, String username, String password, String level, long createdDate, long updatedDate) {
+        this.fullName = fullName;
+        this.phoneNumber = phoneNumber;
+        this.birthdate = birthdate;
+        this.gender = gender;
+        this.address = address;
+        this.church = church;
+        this.username = username;
+        this.password = password;
+        this.level = level;
+        this.createdDate = createdDate;
+        this.updatedDate = updatedDate;
+    }
+
     public User(String fullName, String phoneNumber, String birthdate, String gender, String address, String church, String username, String password, String level) {
         this.fullName = fullName;
         this.phoneNumber = phoneNumber;
@@ -97,5 +132,8 @@ public class User {
         this.username = username;
         this.password = password;
         this.level = level;
+        this.createdDate = System.currentTimeMillis();
+        this.updatedDate = System.currentTimeMillis();
     }
+
 }

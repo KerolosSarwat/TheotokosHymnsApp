@@ -8,5 +8,8 @@
     <!-- to toggle the open close button of the navigation drawer -->
     <string name="nav_open">Open</string>
     <string name="nav_close">Close</string>
+    <string name="sign">تسجيل</string>
+    <string name="pref_category_general">Font</string>
+    <string name="pref_font_size">Font Size</string>
 
 </resources>

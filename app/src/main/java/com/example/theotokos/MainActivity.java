@@ -86,6 +86,11 @@ public class MainActivity extends AppCompatActivity {
             startActivity(loginIntent);
             return false;
         });
+        navigationView.getMenu().findItem(R.id.nav_settings).setOnMenuItemClickListener(menuItem -> {
+            Intent loginIntent = new Intent(MainActivity.this, SettingActivity.class);
+            startActivity(loginIntent);
+            return false;
+        });
     }
 
     @Override
