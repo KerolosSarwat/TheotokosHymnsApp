@@ -2,7 +2,9 @@ package com.example.theotokos;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -81,15 +83,17 @@ public class LoginActivity extends AppCompatActivity {
                                         for (DataSnapshot childSnapshot : dataSnapshot.getChildren())
                                         {
                                             User user = childSnapshot.getValue(User.class);
-                                            if (user.getPassword().equals(password))
-                                            {
-                                                // User found, handle login
-                                                dataCache.saveUser(user);
-                                                navigateToMainActivity();
-                                            } else {
-                                            // Incorrect password
-                                                Toast.makeText(LoginActivity.this, "كلمة المرور خطأ", Toast.LENGTH_LONG).show();
-                                        }
+                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                                if (PasswordHasher.validatePassword(user.getPassword(), password))
+                                                {
+                                                    // User found, handle login
+                                                    dataCache.saveUser(user);
+                                                    navigateToMainActivity();
+                                                } else {
+                                                // Incorrect password
+                                                    Toast.makeText(LoginActivity.this, "كلمة المرور خطأ", Toast.LENGTH_LONG).show();
+                                            }
+                                            }
                                         }
                                     } else {
                                         // User not found

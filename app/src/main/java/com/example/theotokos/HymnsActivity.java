@@ -105,15 +105,10 @@ public class HymnsActivity extends AppCompatActivity implements AdapterView.OnIt
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     hymnSpinner.setAdapter(adapter);
                     listener.onDataFetched(hymnsArray);
-
-                    //.d("Kirollos", "Data Fetched successfully");
-
-                    // Do something with the hymnList, like updating a RecyclerView
                 })
                 .addOnFailureListener(e -> {
                     // Handle errors
                     Toast.makeText(this, "خطأ برجاء المحاولة وقت لاحق", Toast.LENGTH_SHORT).show();
-                    //Log.e("Firestore", "Error getting documents.", e);
                 });
     }
 

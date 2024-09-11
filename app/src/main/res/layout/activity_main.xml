@@ -22,6 +22,7 @@
         <!-- this the navigation view which draws and shows the navigation drawer -->
         <!-- include the menu created in the menu folder -->
         <ScrollView
+            android:background="#FDFCDC"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -34,7 +35,7 @@
                     android:id="@+id/frameLayout"
                     android:layout_width="match_parent"
                     android:layout_height="85sp"
-                    android:background="#03045E"
+                    android:background="#0081A7"
                     android:padding="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -65,11 +66,11 @@
                     app:cardPreventCornerOverlap="true"
                     app:cardUseCompatPadding="true"
                     tools:ignore="MissingConstraints"
+                    android:background="#FED9B7"
                     tools:layout_editor_absoluteX="10dp"
                     tools:layout_editor_absoluteY="75dp">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-
                         android:id="@+id/hymns"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">

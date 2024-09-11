@@ -40,6 +40,7 @@ public class AgbyaDetailsActivity extends AppCompatActivity {
         Agbya agbya = (Agbya) getIntent().getSerializableExtra("agbya");
 
         if (agbya != null){
+
             titleTextView.setText(agbya.getTitle());
             contentTextView.setText(agbya.getContent());
             descriptionTextView.setText(agbya.getDescription());

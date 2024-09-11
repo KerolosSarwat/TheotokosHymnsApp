@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#caf0f8"
-    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
+    android:background="#fdfcdc"
+    android:theme="@style/Theme.MaterialComponents.Light"
     tools:context=".SignupActivity">
 
     <ScrollView
@@ -27,7 +27,7 @@
                 android:fontFamily="@font/cairo"
                 android:layout_gravity="center"
                 android:text="تسجيل جديد"
-                android:textColor="#03045e"
+                android:textColor="#0081a7"
                 android:textSize="36sp" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -92,10 +92,10 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
-                android:background="#0077b6"
+                android:background="#3077b6"
                 android:fontFamily="@font/cairo"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:drawableRight="@drawable/baseline_date_range_24"
+                android:drawableEnd="@drawable/baseline_date_range_24"
                 android:text="تاريخ الميلاد" />
 
             <RadioGroup
@@ -234,9 +234,7 @@
                     android:inputType="textPassword"
                     android:maxLines="1"
                     android:textColor="@color/black" />
-
             </com.google.android.material.textfield.TextInputLayout>
-
 
             <Button
                 android:id="@+id/btnSignup"
@@ -247,7 +245,7 @@
                 android:layout_marginTop="18dp"
                 android:layout_marginEnd="8dp"
                 android:fontFamily="@font/cairo"
-                android:background="#03045e"
+                android:background="#f07167"
                 android:textColor="@color/white"
                 android:text="@string/sign" />
         </LinearLayout>
