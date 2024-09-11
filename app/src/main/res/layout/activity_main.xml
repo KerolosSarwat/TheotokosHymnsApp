@@ -23,7 +23,7 @@
         <!-- this the navigation view which draws and shows the navigation drawer -->
         <!-- include the menu created in the menu folder -->
         <ScrollView
-            android:background="#FDFCDC"
+            android:background="#EFEFE5"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
