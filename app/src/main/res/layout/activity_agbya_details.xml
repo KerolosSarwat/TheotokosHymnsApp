@@ -45,6 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:text="التأمل"
+                android:fontFamily="@font/cairo"
                 android:textSize="26sp" />
             <TextView
                 android:id="@+id/detailDescription"

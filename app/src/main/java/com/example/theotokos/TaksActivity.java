@@ -2,6 +2,7 @@ package com.example.theotokos;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -74,10 +75,14 @@ public class TaksActivity extends AppCompatActivity {
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     List<Taks> taksList = new ArrayList<>();
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                        Taks taks = document.toObject(Taks.class);
-
-                        if (taks.getAgeLevel().contains(level))
-                            taksList.add(taks);
+                        try {
+                            Taks taks = document.toObject(Taks.class);
+                            //Log.e( "fetchTaksata: ", taks.getTitle()+ "\t"+ taks.getAgeLevel() );
+                            if ( taks.getAgeLevel().contains(level))
+                                taksList.add(taks);
+                        }catch (Exception exception){
+                            Toast.makeText(this, exception.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
                     }
 
                     // Update the RecyclerView adapter with the fetched data

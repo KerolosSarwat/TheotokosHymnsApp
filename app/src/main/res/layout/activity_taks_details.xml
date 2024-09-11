@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FDFCDC"
     tools:context=".TaksDetailsActivity">
 
     <ScrollView
@@ -44,6 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:text="الواجــب"
+                android:fontFamily="@font/cairo"
                 android:textSize="36sp" />
             <TextView
                 android:id="@+id/detailHomework"
