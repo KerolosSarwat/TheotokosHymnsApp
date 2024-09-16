@@ -14,6 +14,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import android.content.Intent;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -22,6 +25,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -40,6 +45,7 @@ public class LoginActivity extends AppCompatActivity {
         {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_STORAGE_PERMISSION);
         }
+        Objects.requireNonNull(getSupportActionBar()).hide();
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
 
@@ -65,47 +71,42 @@ public class LoginActivity extends AppCompatActivity {
             String username = etUsername.getText().toString();
             String password = etPassword.getText().toString();
 
-            if (username.isEmpty() || password.isEmpty()){
+            if (username.isEmpty()){
                 Toast.makeText(LoginActivity.this, "برجاء ادخال اسم المستخدم أو كلمة المرور",Toast.LENGTH_LONG).show();
             }
             else {
                 if (NetworkUtils.isNetworkConnected(LoginActivity.this)) {
 
                     DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
+                    Log.e( "onResume: ", usersRef.child(username).getKey() + "\t"+ usersRef.child(username).getClass() );
+                    usersRef.child(username).get().addOnSuccessListener(dataSnapshot -> {
+                        User user = dataSnapshot.getValue(User.class);
+                        user.setCode(usersRef.child(username).getKey());
+//                        Log.e( "onResume: ", user.getPhoneNumber());
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            if(password.isEmpty()){
+                                Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+                                intent.putExtra("userID", username);
+                                startActivity(intent);
+                            }
 
-                    usersRef.orderByChild("username")
-                            .equalTo(username)
-                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                            else if (PasswordHasher.validatePassword(user.getPassword(), password))
+                            {
+                                // User found, handle login
+                                dataCache.saveUser(user);
+                                navigateToMainActivity();
+                            } else {
+                                // Incorrect password
+                                Toast.makeText(LoginActivity.this, "كلمة المرور خطأ", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
                                 @Override
-                                public void onDataChange(@NonNull
-                                        DataSnapshot dataSnapshot) {
-                                    if (dataSnapshot.exists()) {
-                                        for (DataSnapshot childSnapshot : dataSnapshot.getChildren())
-                                        {
-                                            User user = childSnapshot.getValue(User.class);
-                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                                if (PasswordHasher.validatePassword(user.getPassword(), password))
-                                                {
-                                                    // User found, handle login
-                                                    dataCache.saveUser(user);
-                                                    navigateToMainActivity();
-                                                } else {
-                                                // Incorrect password
-                                                    Toast.makeText(LoginActivity.this, "كلمة المرور خطأ", Toast.LENGTH_LONG).show();
-                                            }
-                                            }
-                                        }
-                                    } else {
+                                public void onFailure(@NonNull Exception e) {
                                         // User not found
                                         Toast.makeText(LoginActivity.this, "المستخدم غير موجود", Toast.LENGTH_LONG).show();
-                                    }
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
 
                                 }
-
                             });
                 }
                 else {

@@ -9,11 +9,15 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.app.DatePickerDialog;
 import android.widget.TextView;
+
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -37,11 +41,13 @@ public class SignupActivity extends AppCompatActivity {
     String genderValue;
     private final String[] studentLevels = {"أختر المرحلة الدراسية","حضانة", "أولى ابتدائى","ثانية ابتدائى", "ثالثة ابتدائى", "رابعة ابتدائى", "خامسة ابتدائى", "سادسة ابتدائى", "اعدادى", "ثانوى", "جامعيين و خريجين"};
     DataCache dataCache;
+    String userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+        Objects.requireNonNull(getSupportActionBar()).hide();
         btnPickDate = findViewById(R.id.btnPickDate);
         etFullName = findViewById(R.id.etFullName);
 
@@ -68,6 +74,9 @@ public class SignupActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+        userID = getIntent().getStringExtra("userID");
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference("users");
+        fetchData(database);
         btnPickDate.setOnClickListener(view -> showDatePickerDialog());
 
         btnSignup.setOnClickListener(view -> {
@@ -98,7 +107,7 @@ public class SignupActivity extends AppCompatActivity {
                 else {
                     user = new User(etFullName.getText().toString(), etPhone.getText().toString(), btnPickDate.getText().toString(), genderValue, etAddress.getText().toString(), etChurch.getText().toString(), etUsername.getText().toString(), etPassword.getText().toString(), spStudentLevel.getSelectedItem().toString());
                 }
-                DatabaseReference database = FirebaseDatabase.getInstance().getReference("users");
+
 
                 try {
                     submitUserData(user, database);
@@ -116,7 +125,6 @@ public class SignupActivity extends AppCompatActivity {
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-
         DatePickerDialog datePickerDialog = new DatePickerDialog(this, (view, Year, monthOfYear, dayOfMonth) -> {
             // Handle the selected date
             String selectedDate = Year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
@@ -127,26 +135,49 @@ public class SignupActivity extends AppCompatActivity {
         datePickerDialog.show();
     }
 
+    private void fetchData(DatabaseReference database){
+        database.child(userID).get()
+                .addOnSuccessListener(dataSnapshot -> {
+                        User user = dataSnapshot.getValue(User.class);
+                        etFullName.setText(user.getFullName());
+                        etPhone.setText(user.getPhoneNumber());
+                        etAddress.setText(user.getAddress());
+                        etChurch.setText(user.getChurch());
+                        etUsername.setText(user.getUsername());
+                        spStudentLevel.setSelection(Arrays.asList(studentLevels).indexOf(user.getLevel()));
+                        btnPickDate.setText(user.getBirthdate());
+                        RadioButton rb;
+                        if(user.getGender().equals("Male")) {
+                            rb = findViewById(R.id.rbMale);
+                            rb.setChecked(true);
+                        }else {
+                            rb = findViewById(R.id.rbFemale);
+                            rb.setChecked(true);
+                        }
+
+                });
+    }
+
     private void submitUserData(User user,  DatabaseReference database) {
         ///Return True if user submitted successfully
         ///Return False if user already exists
-        database.child(user.getUsername()).setValue(user)
+
+        database.child(userID).setValue(user)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful())
                     {
                         dataCache = new DataCache(SignupActivity.this);
                         dataCache.saveUser(user);
                         Log.e( "onDataChange: ","Success" );
+
                         // Handle successful submission (e.g., clear fields, navigate to another screen)
                         Toast.makeText(SignupActivity.this, "User data submitted successfully", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(SignupActivity.this, MainActivity.class);
                         startActivity(intent);
-
                     } else {
-                        Log.e( "onDataChange: ","Error" );
-
-                        Toast.makeText(SignupActivity.this, "رجاء تغير أسم المستخدم", Toast.LENGTH_LONG).show();
                         // Handle error (e.g., display error message)
+                        Log.e( "onDataChange: ","Error" );
+                        Toast.makeText(SignupActivity.this, "رجاء تغير أسم المستخدم", Toast.LENGTH_LONG).show();
                     }
                 }).addOnFailureListener(task -> Toast.makeText(SignupActivity.this, "خطأ فى تسجيل البيانات", Toast.LENGTH_LONG).show());
     }

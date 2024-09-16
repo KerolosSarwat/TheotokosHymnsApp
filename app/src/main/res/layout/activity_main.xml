@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:theme="@style/AppTheme.RoundedActionBar"
     android:background="#0081A7"
     tools:context=".MainActivity">
 
@@ -50,7 +51,7 @@
                         android:fontFamily="@font/cairo"
                         android:text="مدرسة ثيؤطوكوس للألحان"
                         android:textColor="#FFFFFF"
-                        android:textSize="28sp" />
+                        android:textSize="13pt" />
 
                 </FrameLayout>
 

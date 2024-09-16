@@ -1,11 +1,13 @@
 package com.example.theotokos;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -50,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         dataCache = DataCache.getInstance(this);
+        getSupportActionBar().setTitle("مرحباً " + dataCache.getUser().getFullName().split(" ")[0]);
 
     }
 
@@ -81,14 +84,17 @@ public class MainActivity extends AppCompatActivity {
         });
 
         navigationView.getMenu().findItem(R.id.nav_logout).setOnMenuItemClickListener(menuItem -> {
-            Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
-            dataCache.clearCache();
-            startActivity(loginIntent);
+            showLogoutConfirmationDialog();
             return false;
         });
         navigationView.getMenu().findItem(R.id.nav_settings).setOnMenuItemClickListener(menuItem -> {
             Intent loginIntent = new Intent(MainActivity.this, SettingActivity.class);
             startActivity(loginIntent);
+            return false;
+        });
+        navigationView.getMenu().findItem(R.id.nav_profile).setOnMenuItemClickListener(menuItem -> {
+            Intent profileIntent = new Intent(MainActivity.this, ProfileActivity.class);
+            startActivity(profileIntent);
             return false;
         });
     }
@@ -100,5 +106,21 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    private void showLogoutConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("تسجيل خروج")
+                .setMessage("هل تريد تسجيل خروج من التطبيق")
+                .setPositiveButton("نعم", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Log out the user
+                        Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+                        dataCache.clearCache();
+                        startActivity(loginIntent);
+                    }
+                })
+                .setNegativeButton("لا", null)
+                .show();
     }
 }

@@ -27,6 +27,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Objects;
 
 
 public class CopticActivity extends AppCompatActivity {
@@ -46,6 +47,7 @@ public class CopticActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        Objects.requireNonNull(getSupportActionBar()).hide();
         pdfView = findViewById(R.id.pdfView);
         dataCache = DataCache.getInstance(this);
         progressBar = findViewById(R.id.progressBar);

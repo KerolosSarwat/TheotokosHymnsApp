@@ -1,23 +1,27 @@
 package com.example.theotokos;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.viewmodel.CreationExtras;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceScreen;
 //import java.util.prefs.PreferenceChangeListener;
 
-public class SettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceChangeListener {
+public class SettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceChangeListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String KEY_FONT_SIZE = "font_size";
 
     private SharedPreferences sharedPreferences;
 
+    @SuppressLint("DefaultLocale")
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.setting, rootKey);
@@ -25,7 +29,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         sharedPreferences = requireContext().getSharedPreferences("your_preference_file_name", Context.MODE_PRIVATE);
 
         PreferenceScreen preferenceScreen = getPreferenceScreen();
-        //preferenceScreen.getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+        preferenceScreen.getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
 
 
         // Initialize preferences to their default values if not set
@@ -38,6 +42,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         if (preference.getKey().equals(KEY_FONT_SIZE)) {
             int fontSize = (int) newValue;
+            Log.e("onPreferenceChange: ",""+fontSize );
             // Apply the font size to your app's views
             //applyFontSize(fontSize);
 
@@ -54,5 +59,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
     @Override
     public CreationExtras getDefaultViewModelCreationExtras() {
         return super.getDefaultViewModelCreationExtras();
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, @Nullable String s) {
+        Log.e("onPreferenceChange: ","font size" );
     }
 }

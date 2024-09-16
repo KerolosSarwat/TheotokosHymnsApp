@@ -9,6 +9,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,7 +41,7 @@ public class HymnsActivity extends AppCompatActivity implements AdapterView.OnIt
 
 
         setContentView(R.layout.activity_hymns);
-
+        Objects.requireNonNull(getSupportActionBar()).hide();
         hymnSpinner = findViewById(R.id.titlesSpinner);
         //tableLayout = findViewById(R.id.tableContent);
         db = FirebaseFirestore.getInstance();

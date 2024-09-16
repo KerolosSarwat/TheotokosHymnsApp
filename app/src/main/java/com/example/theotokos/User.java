@@ -13,8 +13,18 @@ public class User {
     public String username;
     public String password;
     public String level;
-    public long createdDate;
-    public long updatedDate;
+    public String createdDate;
+    public String updatedDate;
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String code;
 
     public User() {
         // Default constructor required for Firebase
@@ -92,23 +102,23 @@ public class User {
         this.level = level;
     }
 
-    public long getCreatedDate() {
+    public String getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(long createdDate) {
+    public void setCreatedDate(String createdDate) {
         this.createdDate = createdDate;
     }
 
-    public long getUpdatedDate() {
+    public String getUpdatedDate() {
         return updatedDate;
     }
 
-    public void setUpdatedDate(long updatedDate) {
+    public void setUpdatedDate(String updatedDate) {
         this.updatedDate = updatedDate;
     }
 
-    public User(String fullName, String phoneNumber, String birthdate, String gender, String address, String church, String username, String password, String level, long createdDate, long updatedDate) {
+    public User(String fullName, String phoneNumber, String birthdate, String gender, String address, String church, String username, String password, String level, String createdDate, String updatedDate) {
         this.fullName = fullName;
         this.phoneNumber = phoneNumber;
         this.birthdate = birthdate;
@@ -132,8 +142,8 @@ public class User {
         this.username = username;
         this.password = password;
         this.level = level;
-        this.createdDate = System.currentTimeMillis();
-        this.updatedDate = System.currentTimeMillis();
+        this.createdDate = ""+System.currentTimeMillis();
+        this.updatedDate = ""+System.currentTimeMillis();
     }
 
 }

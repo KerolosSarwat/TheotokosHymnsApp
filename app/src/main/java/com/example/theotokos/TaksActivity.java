@@ -17,6 +17,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class TaksActivity extends AppCompatActivity {
 
@@ -35,6 +36,7 @@ public class TaksActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        Objects.requireNonNull(getSupportActionBar()).hide();
         dataCache = DataCache.getInstance(this);
         taksRecyclerView = findViewById(R.id.taksRecyclerView);
 

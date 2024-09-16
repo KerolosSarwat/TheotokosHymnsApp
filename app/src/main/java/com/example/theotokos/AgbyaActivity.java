@@ -37,6 +37,7 @@ public class AgbyaActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        Objects.requireNonNull(getSupportActionBar()).hide();
         dataCache = DataCache.getInstance(this);
         agbyaRecyclerView = findViewById(R.id.agbyaRecyclerView);
 
