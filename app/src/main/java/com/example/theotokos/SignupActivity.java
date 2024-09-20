@@ -1,13 +1,17 @@
 package com.example.theotokos;
 import static android.content.ContentValues.TAG;
 
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -42,6 +46,7 @@ public class SignupActivity extends AppCompatActivity {
     private final String[] studentLevels = {"أختر المرحلة الدراسية","حضانة", "أولى ابتدائى","ثانية ابتدائى", "ثالثة ابتدائى", "رابعة ابتدائى", "خامسة ابتدائى", "سادسة ابتدائى", "اعدادى", "ثانوى", "جامعيين و خريجين"};
     DataCache dataCache;
     String userID;
+    DatePickerDialog.OnDateSetListener dateSetListener1, dateSetListener2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +82,23 @@ public class SignupActivity extends AppCompatActivity {
         userID = getIntent().getStringExtra("userID");
         DatabaseReference database = FirebaseDatabase.getInstance().getReference("users");
         fetchData(database);
-        btnPickDate.setOnClickListener(view -> showDatePickerDialog());
+        btnPickDate.setOnClickListener(view -> {
+            Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            DatePickerDialog datePickerDialog = new DatePickerDialog(this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, dateSetListener1, year, month, day);
+            datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//
+            datePickerDialog.show();
+        });
+
+        dateSetListener1 = (view, year1, month1, day1) -> {
+            // 1 number less for every month
+            // example- for january month=0
+            month1 = month1 + 1;
+            String date = day1 + "-" + month1 + "-" + year1;
+            btnPickDate.setText(date);
+        };
 
         btnSignup.setOnClickListener(view -> {
 
@@ -119,22 +140,6 @@ public class SignupActivity extends AppCompatActivity {
 
     }
 
-    private void showDatePickerDialog() {
-        Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this, (view, Year, monthOfYear, dayOfMonth) -> {
-            // Handle the selected date
-            String selectedDate = Year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
-            btnPickDate.setText(selectedDate);
-//            tvBirthdate.setText();
-        },
-                year, month, day);
-        datePickerDialog.show();
-    }
-
     private void fetchData(DatabaseReference database){
         database.child(userID).get()
                 .addOnSuccessListener(dataSnapshot -> {
@@ -159,9 +164,7 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     private void submitUserData(User user,  DatabaseReference database) {
-        ///Return True if user submitted successfully
-        ///Return False if user already exists
-
+        user.setCode(userID);
         database.child(userID).setValue(user)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful())

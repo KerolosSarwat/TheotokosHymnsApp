@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat;
 import android.content.Intent;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -76,38 +77,46 @@ public class LoginActivity extends AppCompatActivity {
             }
             else {
                 if (NetworkUtils.isNetworkConnected(LoginActivity.this)) {
-
                     DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
-                    Log.e( "onResume: ", usersRef.child(username).getKey() + "\t"+ usersRef.child(username).getClass() );
-                    usersRef.child(username).get().addOnSuccessListener(dataSnapshot -> {
-                        User user = dataSnapshot.getValue(User.class);
-                        user.setCode(usersRef.child(username).getKey());
-//                        Log.e( "onResume: ", user.getPhoneNumber());
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            if(password.isEmpty()){
-                                Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
-                                intent.putExtra("userID", username);
-                                startActivity(intent);
-                            }
-
-                            else if (PasswordHasher.validatePassword(user.getPassword(), password))
-                            {
-                                // User found, handle login
-                                dataCache.saveUser(user);
-                                navigateToMainActivity();
-                            } else {
-                                // Incorrect password
-                                Toast.makeText(LoginActivity.this, "كلمة المرور خطأ", Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                        // User not found
-                                        Toast.makeText(LoginActivity.this, "المستخدم غير موجود", Toast.LENGTH_LONG).show();
-
+                    try {
+                        usersRef.child(username).get().addOnSuccessListener(dataSnapshot -> {
+                            User user = dataSnapshot.getValue(User.class);
+                            if(user != null){
+                            String code = usersRef.child(username).getKey();
+                            user.setCode(code);
+                            //Log.e( "onResume: ", user.getPhoneNumber());
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                if(password.isEmpty()){
+                                    Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+                                    intent.putExtra("userID", username);
+                                    startActivity(intent);
                                 }
-                            });
+
+                                else if (!user.getPassword().isEmpty() && PasswordHasher.validatePassword(user.getPassword(), password))
+                                {
+                                    // User found, handle login
+                                    dataCache.saveUser(user);
+                                    navigateToMainActivity();
+                                } else {
+                                    // Incorrect password
+                                    Toast.makeText(LoginActivity.this, "كلمة المرور خطأ", Toast.LENGTH_LONG).show();
+                                }
+                            }
+                            }else{
+                                Toast.makeText(LoginActivity.this, "المستخدم غير موجود", Toast.LENGTH_LONG).show();
+
+                            }
+                        }).addOnFailureListener(e -> {
+                            // User not found
+                            Toast.makeText(LoginActivity.this, "المستخدم غير موجود", Toast.LENGTH_LONG).show();
+
+                        }).addOnCanceledListener(() -> Toast.makeText(LoginActivity.this, "برجاء المحاولة فى وقت لاحق", Toast.LENGTH_LONG).show());
+                    }catch (NullPointerException ex){
+                        Toast.makeText(LoginActivity.this, "اسم المستخدم غير موجود", Toast.LENGTH_LONG).show();
+                    }catch (Exception ex){
+                        Toast.makeText(LoginActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+
                 }
                 else {
                     Toast.makeText(LoginActivity.this, "برجاء الاتصال بالانترنت", Toast.LENGTH_LONG).show();
@@ -116,13 +125,10 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
-        btnSignup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
-                startActivity(intent);
-            }
-        });
+//        btnSignup.setOnClickListener(view -> {
+//            Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+//            startActivity(intent);
+//        });
     }
 
     private void checkUserExists(String uid) {

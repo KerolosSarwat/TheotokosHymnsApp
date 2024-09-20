@@ -35,6 +35,7 @@ public class ProfileActivity extends AppCompatActivity {
         dataCache = DataCache.getInstance(this);
         user = dataCache.getUser();
         qrCodeImageView = findViewById(R.id.qrCodeImageView);
+        getSupportActionBar().hide();
     }
 
     @Override
@@ -44,11 +45,19 @@ public class ProfileActivity extends AppCompatActivity {
         TextView fullname = findViewById(R.id.fullnameTextView);
         fullname.setText(user.getFullName());
         generateQRCode(user.getCode());
+        TextView phone = findViewById(R.id.phoneTextView);
+        phone.setText(user.getPhoneNumber());
+        TextView address = findViewById(R.id.AddressTextView);
+        address.setText(user.getAddress());
+        TextView church = findViewById(R.id.churchTextView);
+        church.setText(user.getChurch());
+        TextView birthdate = findViewById(R.id.birthdateTextView);
+        birthdate.setText(user.getBirthdate());
     }
 
     public void generateQRCode(String data) {
         try {
-            int size = 512; // Adjust the size as needed
+            int size = 1024; // Adjust the size as needed
             BitMatrix matrix = new QRCodeWriter().encode(data, BarcodeFormat.QR_CODE, size, size);
             Bitmap bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
             for (int x = 0; x < size; x++) {
