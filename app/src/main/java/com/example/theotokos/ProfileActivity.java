@@ -53,11 +53,13 @@ public class ProfileActivity extends AppCompatActivity {
         church.setText(user.getChurch());
         TextView birthdate = findViewById(R.id.birthdateTextView);
         birthdate.setText(user.getBirthdate());
+        TextView schoolLevel = findViewById(R.id.levelTextView);
+        schoolLevel.setText(user.getLevel());
     }
 
     public void generateQRCode(String data) {
         try {
-            int size = 1024; // Adjust the size as needed
+            int size = 512; // Adjust the size as needed
             BitMatrix matrix = new QRCodeWriter().encode(data, BarcodeFormat.QR_CODE, size, size);
             Bitmap bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
             for (int x = 0; x < size; x++) {

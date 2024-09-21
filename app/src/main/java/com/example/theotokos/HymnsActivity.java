@@ -27,23 +27,17 @@ public class HymnsActivity extends AppCompatActivity implements AdapterView.OnIt
 
     private FirebaseFirestore db;
     private final List<Hymn> hymnList = new ArrayList<>();
-    private LinearLayout hymnContainer;
     private Spinner hymnSpinner;
-    private TableLayout tableLayout;
-    TextView hymnTitle, hymnCopticContent, hymnArabicContent, hymnCopticArabicContent;
     private OnDataFetchedListener listener;
     private DataCache dataCache;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        EdgeToEdge.enable(this);
-
 
         setContentView(R.layout.activity_hymns);
         Objects.requireNonNull(getSupportActionBar()).hide();
         hymnSpinner = findViewById(R.id.titlesSpinner);
-        //tableLayout = findViewById(R.id.tableContent);
         db = FirebaseFirestore.getInstance();
         dataCache = DataCache.getInstance(this);
         User user = dataCache.getUser();
@@ -78,7 +72,6 @@ public class HymnsActivity extends AppCompatActivity implements AdapterView.OnIt
         };
         try {
             hymnSpinner.setOnItemSelectedListener(this);
-            //hymnCopticContent.setText(hymnList.get(1).getArabicContent());
 
         }catch (Exception e){
             Log.e( "onCreate: ", e.getMessage());
@@ -100,7 +93,6 @@ public class HymnsActivity extends AppCompatActivity implements AdapterView.OnIt
                             hymnsArray.add(hymn);
                         }
                     }
-
 
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, hymnTitles);
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -128,8 +120,6 @@ public class HymnsActivity extends AppCompatActivity implements AdapterView.OnIt
                 String[] copticArr= hymn.getCopticContent().split("\\|");
                 String[] copticArabicArr= hymn.getCopticArabicContent().split("\\|");
 
-                Log.d( "onItemSelected: ", ""+arabicArr);
-
                 TableLayout tableLayout = TableLayoutHelper.createTableLayout(this, arabicArr, copticArr, copticArabicArr);
                 ScrollView scrollView = findViewById(R.id.scrollView2);
                 scrollView.removeAllViews();
@@ -140,9 +130,6 @@ public class HymnsActivity extends AppCompatActivity implements AdapterView.OnIt
         {
             Log.e("onItemSelected: ", ex.getMessage() );
         }
-
-
-
     }
 
     @Override

@@ -49,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).hide();
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
-
+        getSupportActionBar().hide();
         dataCache = DataCache.getInstance(this);
         User user = dataCache.getUser();
         if (user != null){

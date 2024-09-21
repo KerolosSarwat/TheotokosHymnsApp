@@ -2,6 +2,7 @@ package com.example.theotokos;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -38,11 +39,15 @@ public class TaksDetailsActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Taks taks = (Taks) getIntent().getSerializableExtra("taks");
+        int fontSize = SettingsFragment.getFontSize();
 
         if (taks != null){
             titleTextView.setText(taks.getTitle());
             contentTextView.setText(taks.getContent());
+            contentTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
             homeworkTextView.setText(taks.getHomework());
+            homeworkTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
+
         }
         else {
             Log.e("onCreate: ", "Taks is NULL" );

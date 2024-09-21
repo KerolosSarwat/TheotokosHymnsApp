@@ -2,6 +2,7 @@ package com.example.theotokos;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -40,12 +41,13 @@ public class AgbyaDetailsActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Agbya agbya = (Agbya) getIntent().getSerializableExtra("agbya");
-
+        int fontSize = SettingsFragment.getFontSize();
         if (agbya != null){
-
             titleTextView.setText(agbya.getTitle());
             contentTextView.setText(agbya.getContent());
+            contentTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
             descriptionTextView.setText(agbya.getDescription());
+            descriptionTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
         }
         else {
             Log.e("onCreate: ", "Agbya is NULL" );

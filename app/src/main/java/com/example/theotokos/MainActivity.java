@@ -2,6 +2,8 @@ package com.example.theotokos;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -53,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
 
         dataCache = DataCache.getInstance(this);
         getSupportActionBar().setTitle("مرحباً " + dataCache.getUser().getFullName().split(" ")[0]);
-
     }
 
     @Override
@@ -95,6 +96,11 @@ public class MainActivity extends AppCompatActivity {
         navigationView.getMenu().findItem(R.id.nav_profile).setOnMenuItemClickListener(menuItem -> {
             Intent profileIntent = new Intent(MainActivity.this, ProfileActivity.class);
             startActivity(profileIntent);
+            return false;
+        });
+        navigationView.getMenu().findItem(R.id.nav_qrscanner).setOnMenuItemClickListener(menuItem -> {
+            Intent qrIntent = new Intent(MainActivity.this, QrCodeScannerActivity.class);
+            startActivity(qrIntent);
             return false;
         });
     }

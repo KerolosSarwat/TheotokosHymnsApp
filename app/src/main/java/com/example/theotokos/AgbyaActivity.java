@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -85,7 +87,7 @@ public class AgbyaActivity extends AppCompatActivity {
                         if (agbya.getAgeLevel().contains(level))
                             agbyaList.add(agbya);
                     }
-
+                    agbyaList.sort(Comparator.comparing(Agbya::getTitle));
                     // Update the RecyclerView adapter with the fetched data
                     agbyaAdapter.submitList(agbyaList);
                 })

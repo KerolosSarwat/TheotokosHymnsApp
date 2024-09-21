@@ -38,6 +38,11 @@
                 android:id="@+id/cardView6"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+
                 app:cardCornerRadius="8dp">
 
                 <LinearLayout
@@ -69,6 +74,10 @@
                 android:id="@+id/phoneCardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
                 app:cardCornerRadius="8dp">
 
                 <LinearLayout
@@ -100,6 +109,9 @@
                 android:id="@+id/birthdateCardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
                 app:cardCornerRadius="8dp">
 
                 <LinearLayout
@@ -130,6 +142,9 @@
                 android:id="@+id/addressCardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
                 app:cardCornerRadius="8dp">
 
                 <LinearLayout
@@ -159,6 +174,9 @@
                 android:id="@+id/churchCardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
                 app:cardCornerRadius="8dp">
 
                 <LinearLayout
@@ -178,6 +196,38 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:hint="الكنيسة"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/levelCardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                app:cardCornerRadius="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/baseline_school_24" />
+
+                    <TextView
+                        android:id="@+id/levelTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:hint="المرحلة الدراسية"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 

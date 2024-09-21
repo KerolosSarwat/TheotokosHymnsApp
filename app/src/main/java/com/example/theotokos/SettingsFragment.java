@@ -1,68 +1,36 @@
 package com.example.theotokos;
-
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.lifecycle.viewmodel.CreationExtras;
-import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
-import androidx.preference.PreferenceScreen;
-//import java.util.prefs.PreferenceChangeListener;
 
-public class SettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceChangeListener, SharedPreferences.OnSharedPreferenceChangeListener {
+import java.util.Objects;
 
-    private static final String KEY_FONT_SIZE = "font_size";
+public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private SharedPreferences sharedPreferences;
+    private static final String PREF_FONT_SIZE = "font_size";
+    private static int fontSize;
 
-    @SuppressLint("DefaultLocale")
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.setting, rootKey);
 
-        sharedPreferences = requireContext().getSharedPreferences("your_preference_file_name", Context.MODE_PRIVATE);
+        // Register the listener for preference changes
+        getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
 
-        PreferenceScreen preferenceScreen = getPreferenceScreen();
-        preferenceScreen.getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+        // Retrieve and apply the saved font size
+        fontSize = Objects.requireNonNull(getPreferenceManager().getSharedPreferences()).getInt(PREF_FONT_SIZE, 23);
 
-
-        // Initialize preferences to their default values if not set
-        int defaultFontSize = 16; // Replace with your desired default font size
-        int fontSize = sharedPreferences.getInt(KEY_FONT_SIZE, defaultFontSize);
-        preferenceScreen.findPreference(KEY_FONT_SIZE).setSummary(String.format("Font Size: %d", fontSize));
     }
 
     @Override
-    public boolean onPreferenceChange(Preference preference, Object newValue) {
-        if (preference.getKey().equals(KEY_FONT_SIZE)) {
-            int fontSize = (int) newValue;
-            Log.e("onPreferenceChange: ",""+fontSize );
-            // Apply the font size to your app's views
-            //applyFontSize(fontSize);
-
-            // Update the preference summary
-            preference.setSummary(String.format("Font Size: %d", fontSize));
-
-            return true;
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals(PREF_FONT_SIZE)) {
+            fontSize = sharedPreferences.getInt(PREF_FONT_SIZE, 23);
         }
-        return false;
+    }
+    public static int getFontSize(){
+        return fontSize == 0 ? 16 : fontSize;
     }
 
-
-    @NonNull
-    @Override
-    public CreationExtras getDefaultViewModelCreationExtras() {
-        return super.getDefaultViewModelCreationExtras();
-    }
-
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, @Nullable String s) {
-        Log.e("onPreferenceChange: ","font size" );
-    }
 }

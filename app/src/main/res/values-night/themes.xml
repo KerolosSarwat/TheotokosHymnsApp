@@ -12,10 +12,14 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="android:fontFamily">@font/cairo</item>
+        <item name="android:typeface">@font/cairo</item>
         <!-- Customize your theme here. -->
     </style>
 
     <style name="ThemeOverlay.Theotokos.FullscreenContainer" parent="">
+        <item name="android:fontFamily">@font/cairo</item>
+        <item name="android:typeface">@font/cairo</item>
         <item name="fullscreenBackgroundColor">#00AFB9</item>
         <item name="fullscreenTextColor">@color/light_blue_A400</item>
     </style>

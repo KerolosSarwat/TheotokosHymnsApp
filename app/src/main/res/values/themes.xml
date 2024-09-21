@@ -1,8 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.Theotokos" parent="Theme.MaterialComponents.Light">
+    <style name="Theme.Theotokos" parent="Theme.AppCompat.Light">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">#990404</item>
         <item name="colorPrimaryVariant">#990404</item>
         <item name="colorOnPrimary">@color/white</item>
         <item name="android:textColor">@color/black</item>
@@ -12,11 +11,19 @@
         <item name="colorOnSecondary">@color/white</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="android:fontFamily">@font/cairo</item>
+        <item name="android:typeface">@font/cairo</item>
+        <item name="colorPrimary">@android:color/transparent</item>
+        <item name="windowActionBarOverlay">true</item>
         <!-- Customize your theme here. -->
     </style>
 
     <style name="ThemeOverlay.Theotokos.FullscreenContainer" parent="">
+        <item name="android:fontFamily">@font/cairo</item>
+        <item name="android:typeface">@font/cairo</item>
         <item name="fullscreenBackgroundColor">@color/light_blue_600</item>
         <item name="fullscreenTextColor">@color/light_blue_A200</item>
+        <item name="colorPrimary">@android:color/transparent</item>
+        <item name="windowActionBarOverlay">true</item>
     </style>
 </resources>

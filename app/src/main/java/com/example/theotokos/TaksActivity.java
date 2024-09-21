@@ -16,6 +16,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -72,7 +73,7 @@ public class TaksActivity extends AppCompatActivity {
     }
 
     private void fetchTaksata(int level) {
-        db.collection("taks")
+        db.collection("taks").orderBy("title")
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     List<Taks> taksList = new ArrayList<>();
@@ -86,7 +87,7 @@ public class TaksActivity extends AppCompatActivity {
                             Toast.makeText(this, exception.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
-
+                    taksList.sort(Comparator.comparing(Taks::getTitle));
                     // Update the RecyclerView adapter with the fetched data
                     taksAdapter.submitList(taksList);
                 })

@@ -37,11 +37,9 @@ import com.google.firebase.database.ValueEventListener;
 public class SignupActivity extends AppCompatActivity {
 
     private EditText etFullName, etPhone, etAddress, etChurch, etUsername, etPassword;
-    ;
     private RadioGroup rgGender;
     private Spinner spStudentLevel;
     private Button btnSignup, btnPickDate;
-//    private TextView tvBirthdate;
     String genderValue;
     private final String[] studentLevels = {"أختر المرحلة الدراسية","حضانة", "أولى ابتدائى","ثانية ابتدائى", "ثالثة ابتدائى", "رابعة ابتدائى", "خامسة ابتدائى", "سادسة ابتدائى", "اعدادى", "ثانوى", "جامعيين و خريجين"};
     DataCache dataCache;
@@ -62,7 +60,6 @@ public class SignupActivity extends AppCompatActivity {
         rgGender = findViewById(R.id.rgGender);
         spStudentLevel = findViewById(R.id.spStudentLevel);
         btnSignup = findViewById(R.id.btnSignup);
-//        tvBirthdate = findViewById(R.id.tvBirthdate);
         etUsername = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
         FirebaseApp.initializeApp(this);
@@ -103,41 +100,35 @@ public class SignupActivity extends AppCompatActivity {
         btnSignup.setOnClickListener(view -> {
 
             genderValue = "";
-            if (rgGender.getCheckedRadioButtonId() == R.id.rbMale) {
+
+            if (rgGender.getCheckedRadioButtonId() == R.id.rbMale)
                 genderValue = "Male";
-            } else if (rgGender.getCheckedRadioButtonId() == R.id.rbFemale) {
+
+            else if (rgGender.getCheckedRadioButtonId() == R.id.rbFemale)
                 genderValue = "Female";
-            }
 
-            Log.d("onResume: ", genderValue);
 
-            if (spStudentLevel.getSelectedItem().toString().equals("أختر المرحلة الدراسية")){
+            if (spStudentLevel.getSelectedItem().toString().equals("أختر المرحلة الدراسية"))
                 Toast.makeText(this, "برجاء أختيار المرحلة", Toast.LENGTH_LONG).show();
-            }
-            else if(etPhone.getText().length() != 11 ){
+
+            else if(etPhone.getText().length() != 11)
                 Toast.makeText(this, "برجاء كتابة رقم الهاتف بشكل صحيح", Toast.LENGTH_LONG).show();
-            }
-//            else if (tvBirthdate.getText() == null ||tvBirthdate.getText().equals("")){
-//                Toast.makeText(this, "برجاء اختيار تاريخ الميلاد", Toast.LENGTH_LONG).show();
-//            }
+
             else {
                 User user = null;
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                     user = new User(etFullName.getText().toString(), etPhone.getText().toString(), btnPickDate.getText().toString(), genderValue, etAddress.getText().toString(), etChurch.getText().toString(), etUsername.getText().toString(), PasswordHasher.hashPassword(etPassword.getText().toString()), spStudentLevel.getSelectedItem().toString());
                 }
-                else {
+                else
                     user = new User(etFullName.getText().toString(), etPhone.getText().toString(), btnPickDate.getText().toString(), genderValue, etAddress.getText().toString(), etChurch.getText().toString(), etUsername.getText().toString(), etPassword.getText().toString(), spStudentLevel.getSelectedItem().toString());
-                }
-
 
                 try {
                     submitUserData(user, database);
                 } catch (Exception ex) {
-                    Log.e(TAG, "onResume: Submit Field Kiro");
+                    Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
     }
 
     private void fetchData(DatabaseReference database){
@@ -167,21 +158,12 @@ public class SignupActivity extends AppCompatActivity {
         user.setCode(userID);
         database.child(userID).setValue(user)
                 .addOnCompleteListener(task -> {
-                    if (task.isSuccessful())
-                    {
                         dataCache = new DataCache(SignupActivity.this);
                         dataCache.saveUser(user);
-                        Log.e( "onDataChange: ","Success" );
-
                         // Handle successful submission (e.g., clear fields, navigate to another screen)
-                        Toast.makeText(SignupActivity.this, "User data submitted successfully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SignupActivity.this, "تم التسجيل بنجاح", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(SignupActivity.this, MainActivity.class);
                         startActivity(intent);
-                    } else {
-                        // Handle error (e.g., display error message)
-                        Log.e( "onDataChange: ","Error" );
-                        Toast.makeText(SignupActivity.this, "رجاء تغير أسم المستخدم", Toast.LENGTH_LONG).show();
-                    }
                 }).addOnFailureListener(task -> Toast.makeText(SignupActivity.this, "خطأ فى تسجيل البيانات", Toast.LENGTH_LONG).show());
     }
 }

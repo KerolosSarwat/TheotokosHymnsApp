@@ -25,9 +25,11 @@ public class TableLayoutHelper {
             String value2 = i < column2.length ? column2[i] : "";
             String value3 = i < column3.length ? column3[i] : "";
 
+            int fontSize = SettingsFragment.getFontSize();
+
             TextView textView1 = new TextView(context);
             textView1.setText(value1);
-            textView1.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
+            textView1.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
             textView1.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
             textView1.setPadding(16, 8, 16, 10);
             tableRow.addView(textView1);
@@ -35,7 +37,7 @@ public class TableLayoutHelper {
             TextView textView2 = new TextView(context);
 
             textView2.setText(value2);
-            textView2.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
+            textView2.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
 
             Typeface typeface = ResourcesCompat.getFont(context, R.font.coptic_font);
             textView2.setTypeface(typeface);
@@ -45,7 +47,7 @@ public class TableLayoutHelper {
 
             TextView textView3 = new TextView(context);
             textView3.setText(value3);
-            textView3.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+            textView3.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
 
             textView3.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
             textView3.setPadding(16, 8, 16, 10);

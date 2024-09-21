@@ -82,7 +82,7 @@
                             android:layout_width="100dp"
                             android:layout_height="100dp"
                             android:scaleType="fitXY"
-                            android:src="@drawable/cross"
+                            android:src="@drawable/dofwtrianto"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -128,7 +128,7 @@
                             android:layout_width="100dp"
                             android:layout_height="100dp"
                             android:scaleType="fitXY"
-                            android:src="@drawable/bible"
+                            android:src="@drawable/agbyapic"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
