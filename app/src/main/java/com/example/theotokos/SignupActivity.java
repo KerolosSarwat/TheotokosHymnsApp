@@ -60,7 +60,6 @@ public class SignupActivity extends AppCompatActivity {
         rgGender = findViewById(R.id.rgGender);
         spStudentLevel = findViewById(R.id.spStudentLevel);
         btnSignup = findViewById(R.id.btnSignup);
-        etUsername = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
         FirebaseApp.initializeApp(this);
 
@@ -107,22 +106,29 @@ public class SignupActivity extends AppCompatActivity {
             else if (rgGender.getCheckedRadioButtonId() == R.id.rbFemale)
                 genderValue = "Female";
 
+            boolean isReady = true;
 
-            if (spStudentLevel.getSelectedItem().toString().equals("أختر المرحلة الدراسية"))
+            if (spStudentLevel.getSelectedItem().toString().equals("أختر المرحلة الدراسية")) {
                 Toast.makeText(this, "برجاء أختيار المرحلة", Toast.LENGTH_LONG).show();
-
-            else if(etPhone.getText().length() != 11)
+                isReady = false;
+            }
+            if(etPhone.getText().length() != 11){
                 Toast.makeText(this, "برجاء كتابة رقم الهاتف بشكل صحيح", Toast.LENGTH_LONG).show();
+                isReady = false;
+            }
 
-            else {
+            if(etPassword == null || etPassword.getText().toString().isEmpty()){
+                Toast.makeText(this, "برجاء كتابة كلمة مرور", Toast.LENGTH_LONG).show();
+                isReady = false;
+            }
+            if(isReady) {
+                try {
                 User user = null;
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                    user = new User(etFullName.getText().toString(), etPhone.getText().toString(), btnPickDate.getText().toString(), genderValue, etAddress.getText().toString(), etChurch.getText().toString(), etUsername.getText().toString(), PasswordHasher.hashPassword(etPassword.getText().toString()), spStudentLevel.getSelectedItem().toString());
+                    user = new User(etFullName.getText().toString(), etPhone.getText().toString(), btnPickDate.getText().toString(), genderValue, etAddress.getText().toString(), etChurch.getText().toString(), "", PasswordHasher.hashPassword(etPassword.getText().toString()), spStudentLevel.getSelectedItem().toString());
                 }
                 else
-                    user = new User(etFullName.getText().toString(), etPhone.getText().toString(), btnPickDate.getText().toString(), genderValue, etAddress.getText().toString(), etChurch.getText().toString(), etUsername.getText().toString(), etPassword.getText().toString(), spStudentLevel.getSelectedItem().toString());
-
-                try {
+                    user = new User(etFullName.getText().toString(), etPhone.getText().toString(), btnPickDate.getText().toString(), genderValue, etAddress.getText().toString(), etChurch.getText().toString(), "", etPassword.getText().toString(), spStudentLevel.getSelectedItem().toString());
                     submitUserData(user, database);
                 } catch (Exception ex) {
                     Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
@@ -139,7 +145,6 @@ public class SignupActivity extends AppCompatActivity {
                         etPhone.setText(user.getPhoneNumber());
                         etAddress.setText(user.getAddress());
                         etChurch.setText(user.getChurch());
-                        etUsername.setText(user.getUsername());
                         spStudentLevel.setSelection(Arrays.asList(studentLevels).indexOf(user.getLevel()));
                         btnPickDate.setText(user.getBirthdate());
                         RadioButton rb;

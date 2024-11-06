@@ -18,6 +18,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView navigationView;
     public static FirebaseHelper helper;
     private DataCache dataCache;
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,11 +100,12 @@ public class MainActivity extends AppCompatActivity {
             startActivity(profileIntent);
             return false;
         });
-        navigationView.getMenu().findItem(R.id.nav_qrscanner).setOnMenuItemClickListener(menuItem -> {
-            Intent qrIntent = new Intent(MainActivity.this, QrCodeScannerActivity.class);
-            startActivity(qrIntent);
-            return false;
-        });
+
+//        navigationView.getMenu().findItem(R.id.nav_qrscanner).setOnMenuItemClickListener(menuItem -> {
+//            Intent qrIntent = new Intent(MainActivity.this, QrCodeScannerActivity.class);
+//            startActivity(qrIntent);
+//            return false;
+//        });
     }
 
     @Override

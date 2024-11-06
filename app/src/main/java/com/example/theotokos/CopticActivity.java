@@ -77,19 +77,17 @@ public class CopticActivity extends AppCompatActivity {
             StorageReference pdfRef = FirebaseStorage.getInstance().getReference().child(filename);
 
             auth = FirebaseAuth.getInstance();
-
-            Log.d("onResume: ", "\t" + auth);
             String finalFilename = filename;
             auth.signInAnonymously().addOnSuccessListener(authResult -> {
                 // Load PDF from Google Storage
                 File localFile = new File(CopticActivity.this.getCacheDir(), finalFilename);
 
                 pdfRef.getFile(localFile).addOnSuccessListener(taskSnapshot -> {
+                    savePdfToLocalStorage(localFile, finalFilename);
                     pdfView.fromFile(localFile)
                             .defaultPage(0)
                             .enableAnnotationRendering(true)
                             .load();
-                    savePdfToLocalStorage(localFile, finalFilename);
                     Toast.makeText(CopticActivity.this, "file downloaded successfully", Toast.LENGTH_SHORT).show();
                 }).addOnProgressListener(taskSnapshot -> {
                     double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
@@ -97,7 +95,7 @@ public class CopticActivity extends AppCompatActivity {
                     progressBar.setProgress((int) progress);
                     progressBar.setVisibility(View.VISIBLE);
                 });
-            }).addOnFailureListener(e -> Toast.makeText(CopticActivity.this, "Signin Field", Toast.LENGTH_SHORT).show());
+            }).addOnFailureListener(e -> Toast.makeText(CopticActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show());
         }
 
     }
@@ -116,12 +114,12 @@ public class CopticActivity extends AppCompatActivity {
             try (OutputStream outputStream = resolver.openOutputStream(uri)) {
                 FileInputStream inputStream = new FileInputStream(pdfFile);
                 IOUtils.copy(inputStream, outputStream);
-                Log.e("Storage", "PDF saved successfully to: " + uri.toString());
             } catch (IOException e) {
-                Log.e("Storage", "Error saving PDF to local storage: " + e.getMessage());
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         } else {
-            Log.e("Storage", "Failed to insert PDF into Downloads: " + uri);
+
+            Toast.makeText(this, "Failed to download PDF", Toast.LENGTH_SHORT).show();
         }
     }
     private boolean loadPdfFromLocalStorage(String filename) {
@@ -137,8 +135,6 @@ public class CopticActivity extends AppCompatActivity {
                     .load();
             return true;
         } else {
-
-            Log.e( "loadPdfFromLocalStorage: ", "PDF not Exists" );
             Toast.makeText(this, "PDF not Downloaded", Toast.LENGTH_SHORT).show();
             return false;
             // Handle case where file doesn't exist (optional)
