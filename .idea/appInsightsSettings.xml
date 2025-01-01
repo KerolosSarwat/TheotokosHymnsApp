@@ -23,7 +23,7 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="com.maria.theotokos" />
+                  <option name="appId" value="com.mariam.theotokos" />
                   <option name="mobileSdkAppId" value="1:773452189288:android:df26b95104b9f655ebf5dd" />
                   <option name="projectId" value="theotokosmobileapp" />
                   <option name="projectNumber" value="773452189288" />

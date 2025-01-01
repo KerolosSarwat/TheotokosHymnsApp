@@ -52,7 +52,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         dataCache = DataCache.getInstance(this);
         user = dataCache.getUser();
-        qrCodeImageView = findViewById(R.id.qrCodeImageView);
+        //qrCodeImageView = findViewById(R.id.qrCodeImageView);
         attendanceRecyclerView = findViewById(R.id.attendanceRecyclerView);
 
 
@@ -65,6 +65,8 @@ public class ProfileActivity extends AppCompatActivity {
 
         TextView fullname = findViewById(R.id.fullnameTextView);
         fullname.setText(user.getFullName());
+        TextView code = findViewById(R.id.codeTextView);
+        code.setText(user.getCode());
         generateQRCode(user.getCode());
         TextView phone = findViewById(R.id.phoneTextView);
         phone.setText(user.getPhoneNumber());
@@ -95,7 +97,7 @@ public class ProfileActivity extends AppCompatActivity {
                 }
             }
             // Display the bitmap in an ImageView
-            qrCodeImageView.setImageBitmap(bitmap);
+//            qrCodeImageView.setImageBitmap(bitmap);
         } catch (WriterException e) {
             e.printStackTrace();
         }
