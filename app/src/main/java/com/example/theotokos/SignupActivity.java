@@ -124,11 +124,13 @@ public class SignupActivity extends AppCompatActivity {
             if(isReady) {
                 try {
                 User user = null;
+                    Degrees degrees = new Degrees(0, 0, 0);
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                    user = new User(etFullName.getText().toString(), etPhone.getText().toString(), btnPickDate.getText().toString(), genderValue, etAddress.getText().toString(), etChurch.getText().toString(), "", PasswordHasher.hashPassword(etPassword.getText().toString()), spStudentLevel.getSelectedItem().toString());
+
+                    user = new User(etFullName.getText().toString(), etPhone.getText().toString(), btnPickDate.getText().toString(), genderValue, etAddress.getText().toString(), etChurch.getText().toString(), "", PasswordHasher.hashPassword(etPassword.getText().toString()), spStudentLevel.getSelectedItem().toString(), degrees);
                 }
                 else
-                    user = new User(etFullName.getText().toString(), etPhone.getText().toString(), btnPickDate.getText().toString(), genderValue, etAddress.getText().toString(), etChurch.getText().toString(), "", etPassword.getText().toString(), spStudentLevel.getSelectedItem().toString());
+                    user = new User(etFullName.getText().toString(), etPhone.getText().toString(), btnPickDate.getText().toString(), genderValue, etAddress.getText().toString(), etChurch.getText().toString(), "", etPassword.getText().toString(), spStudentLevel.getSelectedItem().toString(), degrees);
                     submitUserData(user, database);
                 } catch (Exception ex) {
                     Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();

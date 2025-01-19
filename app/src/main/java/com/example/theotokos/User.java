@@ -15,6 +15,7 @@ public class User {
     public String level;
     public String createdDate;
     public String updatedDate;
+    public Degrees degrees;
 
     public String getCode() {
         return code;
@@ -118,7 +119,7 @@ public class User {
         this.updatedDate = updatedDate;
     }
 
-    public User(String fullName, String phoneNumber, String birthdate, String gender, String address, String church, String username, String password, String level, String createdDate, String updatedDate) {
+    public User(String fullName, String phoneNumber, String birthdate, String gender, String address, String church, String username, String password, String level, String createdDate, String updatedDate, Degrees degrees) {
         this.fullName = fullName;
         this.phoneNumber = phoneNumber;
         this.birthdate = birthdate;
@@ -130,9 +131,10 @@ public class User {
         this.level = level;
         this.createdDate = createdDate;
         this.updatedDate = updatedDate;
+        this.degrees = degrees;
     }
 
-    public User(String fullName, String phoneNumber, String birthdate, String gender, String address, String church, String username, String password, String level) {
+    public User(String fullName, String phoneNumber, String birthdate, String gender, String address, String church, String username, String password, String level, Degrees degrees) {
         this.fullName = fullName;
         this.phoneNumber = phoneNumber;
         this.birthdate = birthdate;
@@ -144,6 +146,7 @@ public class User {
         this.level = level;
         this.createdDate = ""+System.currentTimeMillis();
         this.updatedDate = ""+System.currentTimeMillis();
+        this.degrees = degrees;
     }
 
 }

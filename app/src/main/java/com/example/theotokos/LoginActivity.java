@@ -32,7 +32,7 @@ import java.util.Objects;
 public class LoginActivity extends AppCompatActivity {
 
     private EditText etUsername, etPassword;
-    private Button btnLogin, btnSignup;
+    private Button btnLogin;
     private FirebaseFirestore db;
     private FirebaseAuth auth;
     private DataCache dataCache;
@@ -64,7 +64,6 @@ public class LoginActivity extends AppCompatActivity {
         etUsername = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
         btnLogin = findViewById(R.id.btnLogin);
-        btnSignup = findViewById(R.id.btnSignup);
         dataCache = new DataCache(this);
 
 
@@ -98,6 +97,7 @@ public class LoginActivity extends AppCompatActivity {
                                         else if (!user.getPassword().isEmpty() && PasswordHasher.validatePassword(user.getPassword(), password))
                                         {
                                             // User found, handle login
+                                            Log.e( "onResume: ", ""+user.degrees.getFirstTerm() );
                                             dataCache.saveUser(user);
                                             navigateToMainActivity();
                                         } else {

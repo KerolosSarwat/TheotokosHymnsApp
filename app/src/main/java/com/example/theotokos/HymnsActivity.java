@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -93,6 +95,7 @@ public class HymnsActivity extends AppCompatActivity implements AdapterView.OnIt
                         }
                     }
 
+
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, hymnTitles);
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     hymnSpinner.setAdapter(adapter);
@@ -108,7 +111,8 @@ public class HymnsActivity extends AppCompatActivity implements AdapterView.OnIt
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
         String selectedItem = parent.getItemAtPosition(position).toString();
-
+        TextView hymnTitle = findViewById(R.id.HymnName);
+        hymnTitle.setText(selectedItem);
         Hymn hymn = hymnList.stream().filter(hy -> hy.getTitle().equals(selectedItem)).findFirst().orElse(null);
 
         try {

@@ -17,14 +17,15 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 public class AgbyaActivity extends AppCompatActivity {
 
-    private RecyclerView agbyaRecyclerView;
-    private AgbyaAdapter agbyaAdapter;
+    private RecyclerView agbyaRecyclerView, secondRecyclerView;
+    private AgbyaAdapter firstTermAdapter, secondTermAdapter, thirdTermAdapter ;
     private FirebaseFirestore db;
     private DataCache dataCache;
     private final List<String> studentLevels = Arrays.asList(new String[]{"حضانة", "أولى ابتدائى", "ثانية ابتدائى", "ثالثة ابتدائى", "رابعة ابتدائى", "خامسة ابتدائى", "سادسة ابتدائى", "اعدادى", "ثانوى", "جامعيين و خريجين"});
@@ -42,6 +43,7 @@ public class AgbyaActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).hide();
         dataCache = DataCache.getInstance(this);
         agbyaRecyclerView = findViewById(R.id.agbyaRecyclerView);
+        secondRecyclerView = findViewById(R.id.secondRecyclerView);
 
     }
 
@@ -69,9 +71,10 @@ public class AgbyaActivity extends AppCompatActivity {
             fetchAgbyaData(7);
 
 
-        agbyaAdapter = new AgbyaAdapter(new ArrayList<>(), this);
+        firstTermAdapter = new AgbyaAdapter(new ArrayList<>(), this);
+        secondTermAdapter = new AgbyaAdapter(new ArrayList<>(), this);
         agbyaRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        agbyaRecyclerView.setAdapter(agbyaAdapter);
+        agbyaRecyclerView.setAdapter(firstTermAdapter);
 
 
     }
@@ -87,9 +90,17 @@ public class AgbyaActivity extends AppCompatActivity {
                         if (agbya.getAgeLevel().contains(level))
                             agbyaList.add(agbya);
                     }
-                    agbyaList.sort(Comparator.comparing(Agbya::getTitle));
+                    Collections.sort(agbyaList, (s1, s2) -> {
+                        int num1 = Integer.parseInt(s1.getTitle().split("-")[0].trim());
+                        int num2 = Integer.parseInt(s2.getTitle().split("-")[0].trim());
+                        return Integer.compare(num1, num2);
+                    });
                     // Update the RecyclerView adapter with the fetched data
-                    agbyaAdapter.submitList(agbyaList);
+                    try {
+                        firstTermAdapter.submitList(agbyaList.stream().filter(agbya -> agbya.getTerm() == 1).collect(Collectors.toList()));
+                    }catch (Exception ex){
+                        Log.e("fetchAgbyaData: ", ex.getMessage());
+                    }
                 })
                 .addOnFailureListener(e -> {
                     // Handle errors

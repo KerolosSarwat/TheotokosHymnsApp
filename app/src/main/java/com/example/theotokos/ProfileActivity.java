@@ -1,13 +1,16 @@
 package com.example.theotokos;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -15,9 +18,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,6 +30,7 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,8 +56,22 @@ public class ProfileActivity extends AppCompatActivity {
 
         dataCache = DataCache.getInstance(this);
         user = dataCache.getUser();
-        //qrCodeImageView = findViewById(R.id.qrCodeImageView);
-        attendanceRecyclerView = findViewById(R.id.attendanceRecyclerView);
+        if (NetworkUtils.isNetworkConnected(this))
+        {
+            DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
+            try {
+                usersRef.child(user.getCode()).get().addOnSuccessListener(dataSnapshot -> {
+                    user = dataSnapshot.getValue(User.class);
+                    dataCache.saveUser(user);
+                    Log.e( "onCreate: degrees", ""+user.degrees.getFirstTerm());
+                });
+            }catch (Exception ex){
+            Log.e("onCreate: ", ex.getMessage());
+            }
+        }
+
+//        //qrCodeImageView = findViewById(R.id.qrCodeImageView);
+//        attendanceRecyclerView = findViewById(R.id.attendanceRecyclerView);
 
 
         getSupportActionBar().hide();
@@ -78,12 +96,17 @@ public class ProfileActivity extends AppCompatActivity {
         birthdate.setText(user.getBirthdate());
         TextView schoolLevel = findViewById(R.id.levelTextView);
         schoolLevel.setText(user.getLevel());
+        ImageButton qrButton = findViewById(R.id.QrButton);
 
+        TabLayout tabLayout = findViewById(R.id.termsTabs);
+        tabLayout.addTab(tabLayout.newTab().setText("الترم الأول ("+ user.degrees.getFirstTerm()+")"));
+        tabLayout.addTab(tabLayout.newTab().setText("الترم الثانى ("+ user.degrees.getSecondTerm()+")"));
+        tabLayout.addTab(tabLayout.newTab().setText("الترم الثالث ("+ user.degrees.getThirdTerm()+")"));
+
+
+        qrButton.setOnClickListener(v -> showQRCodeDialog(user.getCode()));
         fetchAttendance();
-        attendanceAdapter = new AttendanceAdapter(new ArrayList<>());
-        attendanceRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        attendanceRecyclerView.setAdapter(attendanceAdapter);
-        attendanceAdapter.notifyDataSetChanged();
+
     }
 
     public void generateQRCode(String data) {
@@ -103,6 +126,34 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
+    private void showQRCodeDialog(String qrCodeContent) {
+        // Create a dialog
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog_qr_code);
+
+        ImageView qrCodeImage = dialog.findViewById(R.id.qr_code_image);
+        Button closeButton = dialog.findViewById(R.id.close_button);
+
+        // Generate QR code
+        try {
+            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+            Bitmap bitmap = barcodeEncoder.encodeBitmap(qrCodeContent, BarcodeFormat.QR_CODE, 600, 600);
+            qrCodeImage.setImageBitmap(bitmap);
+        } catch (WriterException e) {
+            e.printStackTrace();
+        }
+
+        // Set close button listener
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        // Show the dialog
+        dialog.show();
+    }
     public void fetchAttendance(){
 
         String userId = user.getCode();
@@ -115,11 +166,15 @@ public class ProfileActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists())
                 {
+                    int count = 0;
                     for (DataSnapshot childSnapshot : snapshot.getChildren()) {
                         attendanceDates.add(childSnapshot.getKey());
+                        count++;
                     }
+                    TextView attendanceCount= findViewById(R.id.attendanceCount);
+                    attendanceCount.setText(""+count);
+                    //attendanceAdapter.submitList(attendanceDates);
 
-                    attendanceAdapter.submitList(attendanceDates);
                     // Process the attendance dates here
                 }
             }

@@ -8,17 +8,18 @@ public class Agbya implements Serializable {
     private String content;
     private String description;
     private List<Integer> ageLevel;
-
+    private int term;
 
     public Agbya() {
 
     }
 
-    public Agbya(String title, String content, String description, List<Integer> ageLevel) {
+    public Agbya(String title, String content, String description, List<Integer> ageLevel, int term) {
         this.title = title;
         this.content = content;
         this.description = description;
         this.ageLevel = ageLevel;
+        this.term = term;
     }
 
     public String getTitle() {
@@ -53,5 +54,11 @@ public class Agbya implements Serializable {
         this.ageLevel = ageLevel;
     }
 
+    public int getTerm() {
+        return term;
+    }
 
+    public void setTerm(int term) {
+        this.term = term;
+    }
 }

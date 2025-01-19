@@ -16,6 +16,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -63,7 +64,7 @@ public class TaksActivity extends AppCompatActivity {
             fetchTaksata(5);
         else if(user.getLevel().equals( "سادسة ابتدائى"))
             fetchTaksata(6);
-        else if(user.getLevel().equals("ثانوى")||user.getLevel().equals("اعدادى")||user.getLevel().equals( "جامعيين و خريجين"))
+        else if(user.getLevel().equals("ثانوى")||user.getLevel().equals("اعدادى")||user.getLevel().equals("جامعيين و خريجين"))
             fetchTaksata(7);
 
 
@@ -77,23 +78,25 @@ public class TaksActivity extends AppCompatActivity {
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     List<Taks> taksList = new ArrayList<>();
+
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                         try {
                             Taks taks = document.toObject(Taks.class);
-                            //Log.e( "fetchTaksata: ", taks.getTitle()+ "\t"+ taks.getAgeLevel() );
-                            if ( taks.getAgeLevel().contains(level))
+
+                            if (taks.getAgeLevel().contains(level))
                                 taksList.add(taks);
-                        }catch (Exception exception){
+
+                        } catch (Exception exception) {
                             Toast.makeText(this, exception.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
-                    taksList.sort(Comparator.comparing(Taks::getTitle));
-                    // Update the RecyclerView adapter with the fetched data
+                    Collections.sort(taksList, (s1, s2) -> {
+                        int num1 = Integer.parseInt(s1.getTitle().split("-")[0].trim());
+                        int num2 = Integer.parseInt(s2.getTitle().split("-")[0].trim());
+                        return Integer.compare(num1, num2);
+                    });
                     taksAdapter.submitList(taksList);
-                })
-                .addOnFailureListener(e -> {
-                    // Handle errors
-                    Log.e("Firestore", "Error getting documents.", e);
                 });
+
     }
 }
