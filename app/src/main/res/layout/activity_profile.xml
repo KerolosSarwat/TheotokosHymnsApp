@@ -12,10 +12,10 @@
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="927dp"
-        android:layout_height="519dp"
-        android:layout_marginTop="-180dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        app:layout_constraintBottom_toTopOf="@+id/phoneTextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.263"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/wave_png_free_download" />

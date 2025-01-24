@@ -75,6 +75,8 @@ public class AgbyaActivity extends AppCompatActivity {
         secondTermAdapter = new AgbyaAdapter(new ArrayList<>(), this);
         agbyaRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         agbyaRecyclerView.setAdapter(firstTermAdapter);
+        secondRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        secondRecyclerView.setAdapter(secondTermAdapter);
 
 
     }
@@ -98,6 +100,8 @@ public class AgbyaActivity extends AppCompatActivity {
                     // Update the RecyclerView adapter with the fetched data
                     try {
                         firstTermAdapter.submitList(agbyaList.stream().filter(agbya -> agbya.getTerm() == 1).collect(Collectors.toList()));
+                        secondTermAdapter.submitList(agbyaList.stream().filter(agbya -> agbya.getTerm() == 2).collect(Collectors.toList()));
+
                     }catch (Exception ex){
                         Log.e("fetchAgbyaData: ", ex.getMessage());
                     }
