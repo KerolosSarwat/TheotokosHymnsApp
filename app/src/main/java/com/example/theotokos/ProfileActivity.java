@@ -99,6 +99,7 @@ public class ProfileActivity extends AppCompatActivity {
         ImageButton qrButton = findViewById(R.id.QrButton);
 
         TabLayout tabLayout = findViewById(R.id.termsTabs);
+        Log.e( "onResume: ", ""+user.degrees.getFirstTerm().getHymns());
         tabLayout.addTab(tabLayout.newTab().setText("الترم الأول ("+ user.degrees.getFirstTerm()+")"));
         tabLayout.addTab(tabLayout.newTab().setText("الترم الثانى ("+ user.degrees.getSecondTerm()+")"));
         tabLayout.addTab(tabLayout.newTab().setText("الترم الثالث ("+ user.degrees.getThirdTerm()+")"));

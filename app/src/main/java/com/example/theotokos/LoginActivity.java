@@ -72,62 +72,64 @@ public class LoginActivity extends AppCompatActivity {
             String username = etUsername.getText().toString();
             String password = etPassword.getText().toString();
 
-            auth.signInAnonymously().addOnSuccessListener(task -> {
 
-                if (username.isEmpty()){
-                    Toast.makeText(LoginActivity.this, "برجاء ادخال اسم المستخدم أو كلمة المرور",Toast.LENGTH_LONG).show();
-                }
-                else {
-                    if (NetworkUtils.isNetworkConnected(LoginActivity.this)) {
-                        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
-                        try {
-                            usersRef.child(username).get().addOnSuccessListener(dataSnapshot -> {
-                                User user = dataSnapshot.getValue(User.class);
-                                if(user != null){
-                                    String code = usersRef.child(username).getKey();
-                                    user.setCode(code);
-                                    //Log.e( "onResume: ", user.getPhoneNumber());
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                        if(password.isEmpty()){
-                                            Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
-                                            intent.putExtra("userID", username);
-                                            startActivity(intent);
-                                        }
+            try {
 
-                                        else if (!user.getPassword().isEmpty() && PasswordHasher.validatePassword(user.getPassword(), password))
-                                        {
-                                            // User found, handle login
-                                            Log.e( "onResume: ", ""+user.degrees.getFirstTerm() );
-                                            dataCache.saveUser(user);
-                                            navigateToMainActivity();
-                                        } else {
-                                            // Incorrect password
-                                            Toast.makeText(LoginActivity.this, "كلمة المرور خطأ", Toast.LENGTH_LONG).show();
+
+                auth.signInAnonymously().addOnSuccessListener(task -> {
+
+                    if (username.isEmpty()) {
+                        Toast.makeText(LoginActivity.this, "برجاء ادخال اسم المستخدم أو كلمة المرور", Toast.LENGTH_LONG).show();
+                    } else {
+                        if (NetworkUtils.isNetworkConnected(LoginActivity.this)) {
+                            DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
+                            try {
+                                usersRef.child(username).get().addOnSuccessListener(dataSnapshot -> {
+                                    User user = dataSnapshot.getValue(User.class);
+                                    if (user != null) {
+                                        String code = usersRef.child(username).getKey();
+                                        user.setCode(code);
+                                        //Log.e( "onResume: ", user.getPhoneNumber());
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                            if (password.isEmpty()) {
+                                                Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+                                                intent.putExtra("userID", username);
+                                                startActivity(intent);
+                                            } else if (!user.getPassword().isEmpty() && PasswordHasher.validatePassword(user.getPassword(), password)) {
+                                                // User found, handle login
+                                                Log.e("onResume: ", "" + user.degrees.getFirstTerm());
+                                                dataCache.saveUser(user);
+                                                navigateToMainActivity();
+                                            } else {
+                                                // Incorrect password
+                                                Toast.makeText(LoginActivity.this, "كلمة المرور خطأ", Toast.LENGTH_LONG).show();
+                                            }
                                         }
+                                    } else {
+                                        Toast.makeText(LoginActivity.this, "المستخدم غير موجود", Toast.LENGTH_LONG).show();
+
                                     }
-                                }else{
+                                }).addOnFailureListener(e -> {
+                                    // User not found
                                     Toast.makeText(LoginActivity.this, "المستخدم غير موجود", Toast.LENGTH_LONG).show();
 
-                                }
-                            }).addOnFailureListener(e -> {
-                                // User not found
-                                Toast.makeText(LoginActivity.this, "المستخدم غير موجود", Toast.LENGTH_LONG).show();
+                                }).addOnCanceledListener(() -> Toast.makeText(LoginActivity.this, "برجاء المحاولة فى وقت لاحق", Toast.LENGTH_LONG).show());
+                            } catch (NullPointerException ex) {
+                                Toast.makeText(LoginActivity.this, "اسم المستخدم غير موجود", Toast.LENGTH_LONG).show();
+                            } catch (Exception ex) {
+                                Toast.makeText(LoginActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
+                            }
 
-                            }).addOnCanceledListener(() -> Toast.makeText(LoginActivity.this, "برجاء المحاولة فى وقت لاحق", Toast.LENGTH_LONG).show());
-                        }catch (NullPointerException ex){
-                            Toast.makeText(LoginActivity.this, "اسم المستخدم غير موجود", Toast.LENGTH_LONG).show();
-                        }catch (Exception ex){
-                            Toast.makeText(LoginActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(LoginActivity.this, "برجاء الاتصال بالانترنت", Toast.LENGTH_LONG).show();
                         }
-
                     }
-                    else {
-                        Toast.makeText(LoginActivity.this, "برجاء الاتصال بالانترنت", Toast.LENGTH_LONG).show();
-                    }
-                }
-            }).addOnFailureListener(task -> {
-                Toast.makeText(this, task.getMessage(), Toast.LENGTH_SHORT).show();
-            });
+                }).addOnFailureListener(task -> {
+                    Toast.makeText(this, task.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+            }catch (Exception ex){
+                Log.e("onResume: ", ex.getMessage() );
+            }
         });
 
     }

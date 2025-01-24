@@ -124,7 +124,7 @@ public class SignupActivity extends AppCompatActivity {
             if(isReady) {
                 try {
                 User user = null;
-                    Degrees degrees = new Degrees(0, 0, 0);
+                    Degrees degrees = new Degrees();
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
 
                     user = new User(etFullName.getText().toString(), etPhone.getText().toString(), btnPickDate.getText().toString(), genderValue, etAddress.getText().toString(), etChurch.getText().toString(), "", PasswordHasher.hashPassword(etPassword.getText().toString()), spStudentLevel.getSelectedItem().toString(), degrees);

@@ -1,38 +1,38 @@
 package com.example.theotokos;
 
 public class Degrees {
-    private int firstTerm, secondTerm, thirdTerm;
+    private Term firstTerm, secondTerm, thirdTerm;
 
     public Degrees(){
 
     }
-    public Degrees(int firstTerm, int secondTerm, int thirdTerm) {
+    public Degrees(Term firstTerm, Term secondTerm, Term thirdTerm) {
         this.firstTerm = firstTerm;
         this.secondTerm = secondTerm;
         this.thirdTerm = thirdTerm;
     }
 
-    public int getFirstTerm() {
+    public Term getFirstTerm() {
         return firstTerm;
     }
 
-    public void setFirstTerm(int firstTerm) {
+    public void setFirstTerm(Term firstTerm) {
         this.firstTerm = firstTerm;
     }
 
-    public int getSecondTerm() {
+    public Term getSecondTerm() {
         return secondTerm;
     }
 
-    public void setSecondTerm(int secondTerm) {
+    public void setSecondTerm(Term secondTerm) {
         this.secondTerm = secondTerm;
     }
 
-    public int getThirdTerm() {
+    public Term getThirdTerm() {
         return thirdTerm;
     }
 
-    public void setThirdTerm(int thirdTerm) {
+    public void setThirdTerm(Term thirdTerm) {
         this.thirdTerm = thirdTerm;
     }
 }
