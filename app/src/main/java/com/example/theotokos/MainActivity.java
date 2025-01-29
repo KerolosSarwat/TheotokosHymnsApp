@@ -32,8 +32,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
         helper = new FirebaseHelper();
-
 //        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -101,11 +101,11 @@ public class MainActivity extends AppCompatActivity {
             return false;
         });
 
-//        navigationView.getMenu().findItem(R.id.nav_qrscanner).setOnMenuItemClickListener(menuItem -> {
-//            Intent qrIntent = new Intent(MainActivity.this, QrCodeScannerActivity.class);
-//            startActivity(qrIntent);
-//            return false;
-//        });
+        navigationView.getMenu().findItem(R.id.nav_qrscanner).setOnMenuItemClickListener(menuItem -> {
+            Intent qrIntent = new Intent(MainActivity.this, QrCodeScannerActivity.class);
+            startActivity(qrIntent);
+            return false;
+        });
     }
 
     @Override

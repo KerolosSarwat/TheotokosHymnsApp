@@ -1,30 +1,18 @@
 package com.example.theotokos;
 
-import java.sql.Timestamp;
-import java.time.Instant;
-
 public class User {
-    public String fullName;
-    public String phoneNumber;
-    public String birthdate;
-    public String gender;
-    public String address;
-    public String church;
-    public String username;
-    public String password;
-    public String level;
-    public String createdDate;
-    public String updatedDate;
-    public Degrees degrees;
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
+    private String fullName;
+    private String phoneNumber;
+    private String birthdate;
+    private String gender;
+    private String address;
+    private String church;
+    private String username;
+    private String password;
+    private String level;
+    private String createdDate;
+    private String updatedDate;
+    private Degree degree;
     public String code;
 
     public User() {
@@ -119,7 +107,21 @@ public class User {
         this.updatedDate = updatedDate;
     }
 
-    public User(String fullName, String phoneNumber, String birthdate, String gender, String address, String church, String username, String password, String level, String createdDate, String updatedDate, Degrees degrees) {
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public Degree getDegree() { return degree; }
+
+    public void setDegree(Degree degree) {
+        this.degree = degree;
+    }
+
+    public User(String fullName, String phoneNumber, String birthdate, String gender, String address, String church, String username, String password, String level, String createdDate, String updatedDate, Degree degrees) {
         this.fullName = fullName;
         this.phoneNumber = phoneNumber;
         this.birthdate = birthdate;
@@ -131,10 +133,10 @@ public class User {
         this.level = level;
         this.createdDate = createdDate;
         this.updatedDate = updatedDate;
-        this.degrees = degrees;
+        this.degree = degrees;
     }
 
-    public User(String fullName, String phoneNumber, String birthdate, String gender, String address, String church, String username, String password, String level, Degrees degrees) {
+    public User(String fullName, String phoneNumber, String birthdate, String gender, String address, String church, String username, String password, String level, Degree degrees) {
         this.fullName = fullName;
         this.phoneNumber = phoneNumber;
         this.birthdate = birthdate;
@@ -146,7 +148,7 @@ public class User {
         this.level = level;
         this.createdDate = ""+System.currentTimeMillis();
         this.updatedDate = ""+System.currentTimeMillis();
-        this.degrees = degrees;
+        this.degree = degrees;
     }
 
 }

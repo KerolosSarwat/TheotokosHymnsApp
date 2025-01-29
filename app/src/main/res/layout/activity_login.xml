@@ -33,7 +33,7 @@
             android:alpha="0.7"
             android:drawableRight="@drawable/baseline_person_24"
             android:fontFamily="@font/cairo"
-            android:inputType="text"
+            android:inputType="number"
             android:maxLines="1"
             android:textColor="@color/black" />
 
@@ -73,16 +73,16 @@
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_margin="16dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:fontFamily="@font/cairo"
-        android:textColor="@color/white"
+        android:layout_marginEnd="32dp"
         android:background="@drawable/rounded_corner"
         android:backgroundTint="#00AFB9"
-        android:text="تسجيل دخول"
-        app:layout_constraintEnd_toEndOf="parent"
         android:elevation="4dp"
+        android:fontFamily="@font/cairo"
+        android:text="تسجيل دخول"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/passwordLayout" />
 

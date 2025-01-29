@@ -19,8 +19,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -43,19 +45,29 @@ public class ProfileActivity extends AppCompatActivity {
     ImageView qrCodeImageView;
     private AttendanceAdapter attendanceAdapter;
     private RecyclerView attendanceRecyclerView;
+    private TabLayout tabLayout;
+    private ViewPager2 viewPager;
+    private TermsPagerAdapter pagerAdapter;
+
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
+//        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_profile);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        tabLayout = findViewById(R.id.termsTabs);
+        viewPager = findViewById(R.id.viewPager);
 
         dataCache = DataCache.getInstance(this);
         user = dataCache.getUser();
+
+         // Replace with your method to get the Degree object
+
         if (NetworkUtils.isNetworkConnected(this))
         {
             DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
@@ -63,7 +75,7 @@ public class ProfileActivity extends AppCompatActivity {
                 usersRef.child(user.getCode()).get().addOnSuccessListener(dataSnapshot -> {
                     user = dataSnapshot.getValue(User.class);
                     dataCache.saveUser(user);
-                    Log.e( "onCreate: degrees", ""+user.degrees.getFirstTerm());
+                    Log.e( "onCreate: degrees", ""+user.getDegree().getFirstTerm().getAgbya());
                 });
             }catch (Exception ex){
             Log.e("onCreate: ", ex.getMessage());
@@ -72,7 +84,6 @@ public class ProfileActivity extends AppCompatActivity {
 
 //        //qrCodeImageView = findViewById(R.id.qrCodeImageView);
 //        attendanceRecyclerView = findViewById(R.id.attendanceRecyclerView);
-
 
         getSupportActionBar().hide();
     }
@@ -98,18 +109,38 @@ public class ProfileActivity extends AppCompatActivity {
         schoolLevel.setText(user.getLevel());
         ImageButton qrButton = findViewById(R.id.QrButton);
 
-        TabLayout tabLayout = findViewById(R.id.termsTabs);
-        Log.e( "onResume: ", ""+user.degrees.getFirstTerm().getHymns());
-        tabLayout.addTab(tabLayout.newTab().setText("الترم الأول ("+ user.degrees.getFirstTerm()+")"));
-        tabLayout.addTab(tabLayout.newTab().setText("الترم الثانى ("+ user.degrees.getSecondTerm()+")"));
-        tabLayout.addTab(tabLayout.newTab().setText("الترم الثالث ("+ user.degrees.getThirdTerm()+")"));
-
-
+        Degree degree = user.getDegree();
+        setupViewPager(degree);
         qrButton.setOnClickListener(v -> showQRCodeDialog(user.getCode()));
         fetchAttendance();
 
     }
 
+    private void setupViewPager(Degree degree) {
+        pagerAdapter = new TermsPagerAdapter(ProfileActivity.this, degree);
+        viewPager.setAdapter(pagerAdapter);
+
+        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
+
+            switch (position) {
+                case 0:
+//                    tabLayout.getTabAt(0).setText("الترم الأول ("+ user.getDegree().getFirstTerm().getResult()+")");
+
+                    tab.setText("الترم الأول ("+ user.getDegree().getFirstTerm().getResult()+")");
+                    break;
+                case 1:
+//                    tabLayout.getTabAt(1).setText("الترم الثانى ("+ user.getDegree().getSecondTerm().getResult()+")");
+
+                    tab.setText("الترم الثانى ("+ user.getDegree().getSecondTerm().getResult()+")");
+                    break;
+                case 2:
+//                    tabLayout.getTabAt(2).setText("الترم الثالث ("+ user.getDegree().getThirdTerm().getResult()+")");
+
+                    tab.setText("الترم الثالث ("+ user.getDegree().getThirdTerm().getResult()+")");
+                    break;
+            }
+        }).attach();
+    }
     public void generateQRCode(String data) {
         try {
             int size = 512; // Adjust the size as needed

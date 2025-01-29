@@ -1,38 +1,29 @@
 package com.example.theotokos;
-import static android.content.ContentValues.TAG;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
+
 import androidx.appcompat.app.AppCompatActivity;
-import android.util.Log;
+
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.app.DatePickerDialog;
-import android.widget.TextView;
 
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import android.widget.Toast;
 
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -124,7 +115,7 @@ public class SignupActivity extends AppCompatActivity {
             if(isReady) {
                 try {
                 User user = null;
-                    Degrees degrees = new Degrees();
+                    Degree degrees = new Degree();
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
 
                     user = new User(etFullName.getText().toString(), etPhone.getText().toString(), btnPickDate.getText().toString(), genderValue, etAddress.getText().toString(), etChurch.getText().toString(), "", PasswordHasher.hashPassword(etPassword.getText().toString()), spStudentLevel.getSelectedItem().toString(), degrees);

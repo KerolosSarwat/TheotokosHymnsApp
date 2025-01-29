@@ -1,6 +1,8 @@
 package com.example.theotokos;
 
-public class Term {
+import java.io.Serializable;
+
+public class Term implements Serializable {
     private int hymns, taks, agbya, coptic, attencance;
 
     public Term() {
@@ -13,6 +15,7 @@ public class Term {
         this.coptic = coptic;
         this.attencance = attencance;
     }
+    public int getResult(){ return hymns + taks + agbya + coptic + attencance; }
 
     public int getHymns() {
         return hymns;

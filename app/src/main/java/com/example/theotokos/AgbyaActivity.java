@@ -24,7 +24,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 public class AgbyaActivity extends AppCompatActivity {
 
-    private RecyclerView agbyaRecyclerView, secondRecyclerView;
+    private RecyclerView agbyaRecyclerView, secondRecyclerView, thirdRecyclerView;
     private AgbyaAdapter firstTermAdapter, secondTermAdapter, thirdTermAdapter ;
     private FirebaseFirestore db;
     private DataCache dataCache;
@@ -44,6 +44,7 @@ public class AgbyaActivity extends AppCompatActivity {
         dataCache = DataCache.getInstance(this);
         agbyaRecyclerView = findViewById(R.id.agbyaRecyclerView);
         secondRecyclerView = findViewById(R.id.secondRecyclerView);
+        thirdRecyclerView = findViewById(R.id.thirdRecyclerView);
 
     }
 
@@ -73,10 +74,13 @@ public class AgbyaActivity extends AppCompatActivity {
 
         firstTermAdapter = new AgbyaAdapter(new ArrayList<>(), this);
         secondTermAdapter = new AgbyaAdapter(new ArrayList<>(), this);
+        thirdTermAdapter = new AgbyaAdapter(new ArrayList<>(), this);
         agbyaRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         agbyaRecyclerView.setAdapter(firstTermAdapter);
         secondRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         secondRecyclerView.setAdapter(secondTermAdapter);
+        thirdRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        thirdRecyclerView.setAdapter(thirdTermAdapter);
 
 
     }
@@ -101,6 +105,7 @@ public class AgbyaActivity extends AppCompatActivity {
                     try {
                         firstTermAdapter.submitList(agbyaList.stream().filter(agbya -> agbya.getTerm() == 1).collect(Collectors.toList()));
                         secondTermAdapter.submitList(agbyaList.stream().filter(agbya -> agbya.getTerm() == 2).collect(Collectors.toList()));
+                        thirdTermAdapter.submitList(agbyaList.stream().filter(agbya -> agbya.getTerm() == 3).collect(Collectors.toList()));
 
                     }catch (Exception ex){
                         Log.e("fetchAgbyaData: ", ex.getMessage());

@@ -45,7 +45,8 @@ public class LoginActivity extends AppCompatActivity {
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_STORAGE_PERMISSION);
-
+//        SettingsFragment sf =
+//        sf.getPreferenceManager();
         Objects.requireNonNull(getSupportActionBar()).hide();
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
@@ -97,7 +98,6 @@ public class LoginActivity extends AppCompatActivity {
                                                 startActivity(intent);
                                             } else if (!user.getPassword().isEmpty() && PasswordHasher.validatePassword(user.getPassword(), password)) {
                                                 // User found, handle login
-                                                Log.e("onResume: ", "" + user.degrees.getFirstTerm());
                                                 dataCache.saveUser(user);
                                                 navigateToMainActivity();
                                             } else {

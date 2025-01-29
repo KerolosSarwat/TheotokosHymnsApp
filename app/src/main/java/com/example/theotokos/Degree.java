@@ -1,12 +1,14 @@
 package com.example.theotokos;
 
-public class Degrees {
-    private Term firstTerm, secondTerm, thirdTerm;
+public class Degree {
+    private Term firstTerm;
+    private Term secondTerm;
+    private Term thirdTerm;
 
-    public Degrees(){
+    public Degree(){
 
     }
-    public Degrees(Term firstTerm, Term secondTerm, Term thirdTerm) {
+    public Degree(Term firstTerm, Term secondTerm, Term thirdTerm) {
         this.firstTerm = firstTerm;
         this.secondTerm = secondTerm;
         this.thirdTerm = thirdTerm;
@@ -35,4 +37,5 @@ public class Degrees {
     public void setThirdTerm(Term thirdTerm) {
         this.thirdTerm = thirdTerm;
     }
+
 }
