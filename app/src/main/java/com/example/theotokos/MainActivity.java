@@ -45,6 +45,12 @@ public class MainActivity extends AppCompatActivity {
         navigationView = findViewById(R.id.navigation_menu);
 
         drawerLayout = findViewById(R.id.my_drawer_layout);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
 
         // pass the Open and Close toggle for the drawer layout listener
@@ -57,11 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
         dataCache = DataCache.getInstance(this);
         getSupportActionBar().setTitle("مرحباً " + dataCache.getUser().getFullName().split(" ")[0]);
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
         View hymnsImageView = findViewById(R.id.hymns);
         View agbyaImageView = findViewById(R.id.agbya);
         View copticImageView = findViewById(R.id.coptic);

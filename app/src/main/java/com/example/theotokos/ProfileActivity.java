@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -75,7 +76,7 @@ public class ProfileActivity extends AppCompatActivity {
                 usersRef.child(user.getCode()).get().addOnSuccessListener(dataSnapshot -> {
                     user = dataSnapshot.getValue(User.class);
                     dataCache.saveUser(user);
-                    Log.e( "onCreate: degrees", ""+user.getDegree().getFirstTerm().getAgbya());
+//                    Log.e( "onCreate: degrees", ""+user.getDegree().getFirstTerm().getAgbya());
                 });
             }catch (Exception ex){
             Log.e("onCreate: ", ex.getMessage());
@@ -109,10 +110,16 @@ public class ProfileActivity extends AppCompatActivity {
         schoolLevel.setText(user.getLevel());
         ImageButton qrButton = findViewById(R.id.QrButton);
 
-        Degree degree = user.getDegree();
-        setupViewPager(degree);
-        qrButton.setOnClickListener(v -> showQRCodeDialog(user.getCode()));
-        fetchAttendance();
+        try {
+            Degree degree = user.getDegree();
+            setupViewPager(degree);
+            qrButton.setOnClickListener(v -> showQRCodeDialog(user.getCode()));
+            fetchAttendance();
+        }catch (Exception ex){
+            Log.e("onResume: ", ex.getMessage());
+            ex.printStackTrace();
+            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+        }
 
     }
 
