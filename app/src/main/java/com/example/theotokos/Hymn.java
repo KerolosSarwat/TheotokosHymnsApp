@@ -1,9 +1,10 @@
 package com.example.theotokos;
 
-import android.os.AsyncTask;
+import androidx.annotation.Keep;
 
 import java.util.List;
 
+@Keep
 public class Hymn{
     private String arabicContent;
     private String copticContent;

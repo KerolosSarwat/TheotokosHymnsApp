@@ -13,16 +13,16 @@
         android:id="@+id/usernameLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="74dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:fontFamily="@font/cairo"
         android:hint="  كود المستخدم"
-        app:shapeAppearance="@style/Rounded"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:shapeAppearance="@style/Rounded"
         tools:ignore="HardcodedText,RtlHardcoded">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -39,81 +39,33 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/passwordLayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:hint="كلمة المرور"
-        android:fontFamily="@font/cairo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/usernameLayout"
-        app:endIconMode="password_toggle"
-        app:shapeAppearance="@style/Rounded"
-        tools:ignore="HardcodedText,RtlHardcoded">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:alpha="0.7"
-            android:drawableRight="@drawable/baseline_password_24"
-            android:fontFamily="@font/cairo"
-            android:inputType="textPassword"
-            android:maxLines="1"
-            android:textColor="@color/black" />
-    </com.google.android.material.textfield.TextInputLayout>
-
     <Button
         android:id="@+id/btnLogin"
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_margin="16dp"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
         android:background="@drawable/rounded_corner"
-        android:backgroundTint="#00AFB9"
+        android:backgroundTint="#6F0303"
         android:elevation="4dp"
         android:fontFamily="@font/cairo"
         android:text="تسجيل دخول"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/passwordLayout" />
-
-<!--    <Button-->
-<!--        android:id="@+id/btnSignup"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="48dp"-->
-<!--        android:layout_margin="16dp"-->
-<!--        android:layout_marginStart="8dp"-->
-<!--        android:layout_marginTop="8dp"-->
-<!--        android:layout_marginEnd="8dp"-->
-<!--        android:elevation="4dp"-->
-<!--        android:backgroundTint="#F07167"-->
-<!--        android:fontFamily="@font/cairo"-->
-<!--        android:background="@drawable/rounded_corner"-->
-<!--        android:textColor="@color/white"-->
-<!--        android:text="تسجيل جديد"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/btnLogin" />-->
+        app:layout_constraintTop_toBottomOf="@+id/usernameLayout" />
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="243dp"
+        android:layout_width="0dp"
         android:layout_height="233dp"
         android:layout_marginStart="84dp"
-        android:layout_marginTop="24dp"
         android:layout_marginEnd="84dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2"
         app:srcCompat="@drawable/oip" />
 
     <TextView
@@ -124,12 +76,22 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="63dp"
         android:fontFamily="@font/cairo"
-        android:text="مدرسة ثيؤطوكوس ترحب بكم"
+        android:text="مدرسة ثيؤطوكوس للألحان ترحب بكم"
         android:textColor="#000000"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="161dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/___" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

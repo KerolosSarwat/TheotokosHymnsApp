@@ -4,10 +4,10 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2025-01-30T22:29:39.818642300Z">
+        <DropdownSelection timestamp="2025-02-04T22:01:34.234748500Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\Kirollos.DESKTOP-KH00HA2\.android\avd\Medium_Phone_API_29.avd" />
+              <DeviceId pluginId="Default" identifier="serial=emulator-5554;connection=ab0109ca" />
             </handle>
           </Target>
         </DropdownSelection>
@@ -20,6 +20,9 @@
             </Target>
           </targets>
         </DialogSelection>
+      </SelectionState>
+      <SelectionState runConfigName="AgbyaDetailsActivity">
+        <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
   </component>

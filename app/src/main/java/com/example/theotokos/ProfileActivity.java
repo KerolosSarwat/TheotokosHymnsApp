@@ -12,8 +12,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -21,7 +19,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
-
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.database.DataSnapshot;
@@ -34,7 +31,6 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,10 +38,6 @@ public class ProfileActivity extends AppCompatActivity {
 
     private DataCache dataCache;
     private User user;
-    private List<String> attendanceList;
-    ImageView qrCodeImageView;
-    private AttendanceAdapter attendanceAdapter;
-    private RecyclerView attendanceRecyclerView;
     private TabLayout tabLayout;
     private ViewPager2 viewPager;
     private TermsPagerAdapter pagerAdapter;
@@ -63,12 +55,16 @@ public class ProfileActivity extends AppCompatActivity {
         });
         tabLayout = findViewById(R.id.termsTabs);
         viewPager = findViewById(R.id.viewPager);
-
         dataCache = DataCache.getInstance(this);
+        getSupportActionBar().hide();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         user = dataCache.getUser();
 
-         // Replace with your method to get the Degree object
-
+        // Replace with your method to get the Degree object
         if (NetworkUtils.isNetworkConnected(this))
         {
             DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
@@ -76,23 +72,11 @@ public class ProfileActivity extends AppCompatActivity {
                 usersRef.child(user.getCode()).get().addOnSuccessListener(dataSnapshot -> {
                     user = dataSnapshot.getValue(User.class);
                     dataCache.saveUser(user);
-//                    Log.e( "onCreate: degrees", ""+user.getDegree().getFirstTerm().getAgbya());
                 });
             }catch (Exception ex){
-            Log.e("onCreate: ", ex.getMessage());
+                Log.e("onCreate: ", ex.getMessage());
             }
         }
-
-//        //qrCodeImageView = findViewById(R.id.qrCodeImageView);
-//        attendanceRecyclerView = findViewById(R.id.attendanceRecyclerView);
-
-        getSupportActionBar().hide();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
         TextView fullname = findViewById(R.id.fullnameTextView);
         fullname.setText(user.getFullName());
         TextView code = findViewById(R.id.codeTextView);
@@ -117,7 +101,6 @@ public class ProfileActivity extends AppCompatActivity {
             fetchAttendance();
         }catch (Exception ex){
             Log.e("onResume: ", ex.getMessage());
-            ex.printStackTrace();
             Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
@@ -196,25 +179,22 @@ public class ProfileActivity extends AppCompatActivity {
     public void fetchAttendance(){
 
         String userId = user.getCode();
-        List<String> attendanceDates = new ArrayList<>();
+        //List<String> attendanceDates = new ArrayList<>();
 
         DatabaseReference attendanceRef = FirebaseDatabase.getInstance().getReference("attendance").child(userId);
         attendanceRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @SuppressLint("NotifyDataSetChanged")
+            @SuppressLint({"NotifyDataSetChanged", "SetTextI18n"})
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists())
                 {
                     int count = 0;
                     for (DataSnapshot childSnapshot : snapshot.getChildren()) {
-                        attendanceDates.add(childSnapshot.getKey());
+                        //attendanceDates.add(childSnapshot.getKey());
                         count++;
                     }
                     TextView attendanceCount= findViewById(R.id.attendanceCount);
                     attendanceCount.setText(""+count);
-                    //attendanceAdapter.submitList(attendanceDates);
-
-                    // Process the attendance dates here
                 }
             }
 

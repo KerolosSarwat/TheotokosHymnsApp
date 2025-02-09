@@ -1,11 +1,14 @@
 package com.example.theotokos;
 
-import java.io.Serializable;
+import androidx.annotation.Keep;
 
+import java.io.Serializable;
+@Keep
 public class Term implements Serializable {
     private int hymns, taks, agbya, coptic, attencance;
 
     public Term() {
+        hymns = taks = agbya = coptic = 0;
     }
 
     public Term(int hymns, int taks, int agbya, int coptic, int attencance) {

@@ -1,12 +1,13 @@
 package com.example.theotokos;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.util.TypedValue;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import androidx.core.content.res.ResourcesCompat;
-import java.util.ArrayList;
+import androidx.preference.PreferenceManager;
 
 public class TableLayoutHelper {
 
@@ -25,7 +26,8 @@ public class TableLayoutHelper {
             String value2 = i < column2.length ? column2[i] : "";
             String value3 = i < column3.length ? column3[i] : "";
 
-            int fontSize = SettingsFragment.getFontSize();
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+            int fontSize = SettingsFragment.getFontSize(sharedPreferences);
 
             TextView textView1 = new TextView(context);
             textView1.setText(value1);

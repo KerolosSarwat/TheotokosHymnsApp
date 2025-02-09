@@ -1,5 +1,8 @@
 package com.example.theotokos;
 
+import androidx.annotation.Keep;
+
+@Keep
 public class Degree {
     private Term firstTerm;
     private Term secondTerm;

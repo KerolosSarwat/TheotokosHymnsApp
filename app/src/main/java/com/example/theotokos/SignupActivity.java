@@ -1,42 +1,35 @@
 package com.example.theotokos;
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-
 import androidx.appcompat.app.AppCompatActivity;
-
+import android.util.Log;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.app.DatePickerDialog;
-
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Objects;
-
 import android.widget.Toast;
-
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class SignupActivity extends AppCompatActivity {
 
-    private EditText etFullName, etPhone, etAddress, etChurch, etUsername, etPassword;
+    private EditText etFullName, etPhone, etAddress, etChurch;
     private RadioGroup rgGender;
-    private Spinner spStudentLevel;
+    private AutoCompleteTextView spStudentLevel;
     private Button btnSignup, btnPickDate;
     String genderValue;
-    private final String[] studentLevels = {"أختر المرحلة الدراسية","حضانة", "أولى ابتدائى","ثانية ابتدائى", "ثالثة ابتدائى", "رابعة ابتدائى", "خامسة ابتدائى", "سادسة ابتدائى", "اعدادى", "ثانوى", "جامعيين و خريجين"};
+    String[] studentLevels = {"حضانة", "أولى ابتدائى","ثانية ابتدائى", "ثالثة ابتدائى", "رابعة ابتدائى", "خامسة ابتدائى", "سادسة ابتدائى", "اعدادى", "ثانوى", "جامعيين و خريجين"};
     DataCache dataCache;
     String userID;
-    DatePickerDialog.OnDateSetListener dateSetListener1, dateSetListener2;
-
+    DatePickerDialog.OnDateSetListener dateSetListener1;
+    String selectedLevel = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,13 +44,10 @@ public class SignupActivity extends AppCompatActivity {
         rgGender = findViewById(R.id.rgGender);
         spStudentLevel = findViewById(R.id.spStudentLevel);
         btnSignup = findViewById(R.id.btnSignup);
-        etPassword = findViewById(R.id.etPassword);
         FirebaseApp.initializeApp(this);
 
         dataCache = DataCache.getInstance(this);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, studentLevels);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item , studentLevels);
         spStudentLevel.setAdapter(adapter);
 
     }
@@ -68,7 +58,7 @@ public class SignupActivity extends AppCompatActivity {
 
         userID = getIntent().getStringExtra("userID");
         DatabaseReference database = FirebaseDatabase.getInstance().getReference("users");
-        fetchData(database);
+        //fetchData(database);
         btnPickDate.setOnClickListener(view -> {
             Calendar calendar = Calendar.getInstance();
             int year = calendar.get(Calendar.YEAR);
@@ -87,6 +77,12 @@ public class SignupActivity extends AppCompatActivity {
             btnPickDate.setText(date);
         };
 
+        spStudentLevel.setOnItemClickListener((adapterView, view1, i, l) -> {
+            Log.e( "onItemSelected 2: ", adapterView.getItemAtPosition(i).toString());
+            Toast.makeText(SignupActivity.this, adapterView.getItemAtPosition(i).toString(), Toast.LENGTH_LONG).show();
+
+        });
+
         btnSignup.setOnClickListener(view -> {
 
             genderValue = "";
@@ -97,31 +93,47 @@ public class SignupActivity extends AppCompatActivity {
             else if (rgGender.getCheckedRadioButtonId() == R.id.rbFemale)
                 genderValue = "Female";
 
+
+
             boolean isReady = true;
 
-            if (spStudentLevel.getSelectedItem().toString().equals("أختر المرحلة الدراسية")) {
-                Toast.makeText(this, "برجاء أختيار المرحلة", Toast.LENGTH_LONG).show();
+            if (etFullName.getText().toString().isEmpty()){
+                Toast.makeText(this, "برجاء كتابة الأسم بشكل صحيح", Toast.LENGTH_LONG).show();
                 isReady = false;
             }
+
             if(etPhone.getText().length() != 11){
                 Toast.makeText(this, "برجاء كتابة رقم الهاتف بشكل صحيح", Toast.LENGTH_LONG).show();
                 isReady = false;
             }
 
-            if(etPassword == null || etPassword.getText().toString().isEmpty()){
-                Toast.makeText(this, "برجاء كتابة كلمة مرور", Toast.LENGTH_LONG).show();
+            if(btnPickDate.getText().equals("تاريخ الميلاد") || btnPickDate.getText().toString().isEmpty()){
+                Toast.makeText(this, "برجاء اختر تاريخ الميلاد", Toast.LENGTH_LONG).show();
                 isReady = false;
             }
+            if (etAddress.getText().toString().isEmpty()){
+                Toast.makeText(this, "برجاء كتابة العنوان", Toast.LENGTH_LONG).show();
+                isReady = false;
+            } if (etChurch.getText().toString().isEmpty()){
+                Toast.makeText(this, "برجاء كتابة اسم الكنيسة", Toast.LENGTH_LONG).show();
+                isReady = false;
+            }
+            if (genderValue.isEmpty()){
+                Toast.makeText(this, "برجاء اختيار النوع", Toast.LENGTH_LONG).show();
+                isReady = false;
+            }
+            if (selectedLevel.isEmpty())
+            {
+                Toast.makeText(this, "برجاء اختيار المرحلة الدراسية", Toast.LENGTH_LONG).show();
+                isReady = false;
+            }
+
             if(isReady) {
                 try {
                 User user = null;
-                    Degree degrees = new Degree();
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-
-                    user = new User(etFullName.getText().toString(), etPhone.getText().toString(), btnPickDate.getText().toString(), genderValue, etAddress.getText().toString(), etChurch.getText().toString(), "", PasswordHasher.hashPassword(etPassword.getText().toString()), spStudentLevel.getSelectedItem().toString(), degrees);
-                }
-                else
-                    user = new User(etFullName.getText().toString(), etPhone.getText().toString(), btnPickDate.getText().toString(), genderValue, etAddress.getText().toString(), etChurch.getText().toString(), "", etPassword.getText().toString(), spStudentLevel.getSelectedItem().toString(), degrees);
+                    Term term = new Term();
+                    Degree degrees = new Degree(term, term, term);
+                    user = new User(etFullName.getText().toString(), etPhone.getText().toString(), btnPickDate.getText().toString(), genderValue, etAddress.getText().toString(), etChurch.getText().toString(), selectedLevel, degrees);
                     submitUserData(user, database);
                 } catch (Exception ex) {
                     Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
@@ -130,7 +142,7 @@ public class SignupActivity extends AppCompatActivity {
         });
     }
 
-    private void fetchData(DatabaseReference database){
+/*    private void fetchData(DatabaseReference database){
         database.child(userID).get()
                 .addOnSuccessListener(dataSnapshot -> {
                         User user = dataSnapshot.getValue(User.class);
@@ -151,6 +163,8 @@ public class SignupActivity extends AppCompatActivity {
 
                 });
     }
+*/
+
 
     private void submitUserData(User user,  DatabaseReference database) {
         user.setCode(userID);
@@ -159,7 +173,7 @@ public class SignupActivity extends AppCompatActivity {
                         dataCache = new DataCache(SignupActivity.this);
                         dataCache.saveUser(user);
                         // Handle successful submission (e.g., clear fields, navigate to another screen)
-                        Toast.makeText(SignupActivity.this, "تم التسجيل بنجاح", Toast.LENGTH_SHORT).show();
+                         Toast.makeText(SignupActivity.this, "تم التسجيل بنجاح", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(SignupActivity.this, MainActivity.class);
                         startActivity(intent);
                 }).addOnFailureListener(task -> Toast.makeText(SignupActivity.this, "خطأ فى تسجيل البيانات", Toast.LENGTH_LONG).show());

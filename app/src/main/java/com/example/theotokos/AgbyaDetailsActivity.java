@@ -1,15 +1,15 @@
 package com.example.theotokos;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.widget.TextView;
-
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.preference.PreferenceManager;
 
 import java.util.Objects;
 
@@ -41,7 +41,9 @@ public class AgbyaDetailsActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Agbya agbya = (Agbya) getIntent().getSerializableExtra("agbya");
-        int fontSize = SettingsFragment.getFontSize();
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        int fontSize = SettingsFragment.getFontSize(sharedPreferences);
+
         if (agbya != null){
             titleTextView.setText(agbya.getTitle());
             contentTextView.setText(agbya.getContent());

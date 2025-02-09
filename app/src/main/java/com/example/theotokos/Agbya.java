@@ -1,33 +1,36 @@
 package com.example.theotokos;
+import androidx.annotation.Keep;
 
 import java.io.Serializable;
 import java.util.List;
 
+@Keep
 public class Agbya implements Serializable {
-    private String title;
+
+    private List<Integer> ageLevel; // Use Integer for numbers
     private String content;
     private String description;
-    private List<Integer> ageLevel;
-    private int term;
+    private int term; // Use int for whole numbers
+    private String title;
 
-    public Agbya() {
+    // Constructors (Good Practice)
+    public Agbya() {} // Empty constructor for Firebase
 
-    }
-
-    public Agbya(String title, String content, String description, List<Integer> ageLevel, int term) {
-        this.title = title;
+    public Agbya(List<Integer> ageLevel, String content, String description, int term, String title) {
+        this.ageLevel = ageLevel;
         this.content = content;
         this.description = description;
-        this.ageLevel = ageLevel;
         this.term = term;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
         this.title = title;
+    }
+
+    // Getters and Setters (Essential for Firebase)
+    public List<Integer> getAgeLevel() {
+        return ageLevel;
+    }
+
+    public void setAgeLevel(List<Integer> ageLevel) {
+        this.ageLevel = ageLevel;
     }
 
     public String getContent() {
@@ -46,19 +49,19 @@ public class Agbya implements Serializable {
         this.description = description;
     }
 
-    public List<Integer> getAgeLevel() {
-        return ageLevel;
-    }
-
-    public void setAgeLevel(List<Integer> ageLevel) {
-        this.ageLevel = ageLevel;
-    }
-
     public int getTerm() {
         return term;
     }
 
     public void setTerm(int term) {
         this.term = term;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

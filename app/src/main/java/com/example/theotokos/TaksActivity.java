@@ -1,23 +1,18 @@
 package com.example.theotokos;
-
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
-
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -27,6 +22,7 @@ public class TaksActivity extends AppCompatActivity {
     private TaksAdapter taksAdapter;
     private FirebaseFirestore db;
     private DataCache dataCache;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,14 +37,15 @@ public class TaksActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).hide();
         dataCache = DataCache.getInstance(this);
         taksRecyclerView = findViewById(R.id.taksRecyclerView);
+        progressBar = findViewById(R.id.progressindicator);
 
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        progressBar.setVisibility(View.VISIBLE);
         db = FirebaseFirestore.getInstance();
-
         User user = dataCache.getUser();
         if(user.getLevel().equals( "حضانة"))
             fetchTaksata(0);
@@ -71,10 +68,11 @@ public class TaksActivity extends AppCompatActivity {
         taksAdapter = new TaksAdapter(new ArrayList<>(), this);
         taksRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         taksRecyclerView.setAdapter(taksAdapter);
+        progressBar.setVisibility(View.GONE);
     }
 
     private void fetchTaksata(int level) {
-        db.collection("taks").orderBy("title")
+        db.collection("taks").whereArrayContains("ageLevel", level)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     List<Taks> taksList = new ArrayList<>();
@@ -82,8 +80,7 @@ public class TaksActivity extends AppCompatActivity {
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                         try {
                             Taks taks = document.toObject(Taks.class);
-
-                            if (taks.getAgeLevel().contains(level))
+                            if (taks != null)
                                 taksList.add(taks);
 
                         } catch (Exception exception) {

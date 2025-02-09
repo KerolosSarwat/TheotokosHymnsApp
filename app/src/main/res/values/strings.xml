@@ -13,5 +13,10 @@
     <string name="pref_font_size">Font Size</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hymns">ألحان</string>
+    <string name="agbya">أجبية</string>
+    <string name="taks">طقس</string>
+    <string name="coptic">لغة قبطية</string>
+    <string name="birthdate">تاريخ الميلاد</string>
 
 </resources>

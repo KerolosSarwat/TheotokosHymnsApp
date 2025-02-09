@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory
-        android:title="@string/pref_category_general">
+    <PreferenceCategory android:title="الخط">
 
         <SeekBarPreference
+            android:defaultValue="23"
             android:key="font_size"
-            android:title="@string/pref_font_size"
-            android:defaultValue="16"
-            android:max="30" />
+            android:max="50"
+            android:title="حجم الخط"
+            app:min="20" />
 
     </PreferenceCategory>
 

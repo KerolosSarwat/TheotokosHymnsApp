@@ -2,24 +2,25 @@ package com.example.theotokos;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class AgbyaAdapter extends RecyclerView.Adapter<AgbyaAdapter.AgbyaViewHolder> {
 
     private List<Agbya> agbyaList;
     private Context context;
-
     public AgbyaAdapter(List<Agbya> agbyaList, Context context) {
         this.agbyaList = agbyaList;
         this.context = context;
+
     }
 
     @NonNull

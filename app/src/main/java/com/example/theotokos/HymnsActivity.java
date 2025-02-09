@@ -2,26 +2,19 @@ package com.example.theotokos;
 
 import android.os.Bundle;
 import android.util.Log;
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ScrollView;
 import android.widget.Spinner;
-import android.widget.LinearLayout;
 import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -83,13 +76,13 @@ public class HymnsActivity extends AppCompatActivity implements AdapterView.OnIt
     private void fetchHymnData(int level) {
         List<String> hymnTitles = new ArrayList<>();
 
-        db.collection("hymns")
+        db.collection("hymns").whereArrayContains("ageLevel", level)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     ArrayList<Hymn> hymnsArray = new ArrayList<>();
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                         Hymn hymn = document.toObject(Hymn.class);
-                        if (hymn.getAgeLevel() != null && hymn.getAgeLevel().contains(level)){
+                        if (hymn.getAgeLevel() != null){
                             hymnTitles.add(hymn.getTitle());
                             hymnsArray.add(hymn);
                         }
@@ -97,7 +90,7 @@ public class HymnsActivity extends AppCompatActivity implements AdapterView.OnIt
 
 
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, hymnTitles);
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
                     hymnSpinner.setAdapter(adapter);
                     listener.onDataFetched(hymnsArray);
                 })

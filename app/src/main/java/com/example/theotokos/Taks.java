@@ -1,8 +1,11 @@
 package com.example.theotokos;
 
+import androidx.annotation.Keep;
+
 import java.io.Serializable;
 import java.util.List;
 
+@Keep
 public class Taks implements Serializable {
     private String title;
     private String content;

@@ -1,15 +1,14 @@
 package com.example.theotokos;
-
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.widget.TextView;
-
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.preference.PreferenceManager;
 
 import java.util.Objects;
 
@@ -39,7 +38,8 @@ public class TaksDetailsActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Taks taks = (Taks) getIntent().getSerializableExtra("taks");
-        int fontSize = SettingsFragment.getFontSize();
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        int fontSize = SettingsFragment.getFontSize(sharedPreferences);
 
         if (taks != null){
             titleTextView.setText(taks.getTitle());

@@ -2,6 +2,8 @@ package com.example.theotokos;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,17 +12,14 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+
 
 public class AgbyaActivity extends AppCompatActivity {
 
@@ -29,7 +28,7 @@ public class AgbyaActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private DataCache dataCache;
     private final List<String> studentLevels = Arrays.asList(new String[]{"حضانة", "أولى ابتدائى", "ثانية ابتدائى", "ثالثة ابتدائى", "رابعة ابتدائى", "خامسة ابتدائى", "سادسة ابتدائى", "اعدادى", "ثانوى", "جامعيين و خريجين"});
-
+    private ProgressBar progressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,11 +39,13 @@ public class AgbyaActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
         Objects.requireNonNull(getSupportActionBar()).hide();
         dataCache = DataCache.getInstance(this);
         agbyaRecyclerView = findViewById(R.id.agbyaRecyclerView);
         secondRecyclerView = findViewById(R.id.secondRecyclerView);
         thirdRecyclerView = findViewById(R.id.thirdRecyclerView);
+        progressBar = findViewById(R.id.progressBar2);
 
     }
 
@@ -53,23 +54,28 @@ public class AgbyaActivity extends AppCompatActivity {
         super.onResume();
         db = FirebaseFirestore.getInstance();
 
-        User user = dataCache.getUser();
-        if(user.getLevel().equals( "حضانة"))
-            fetchAgbyaData(0);
-        else if(user.getLevel().equals( "أولى ابتدائى"))
-            fetchAgbyaData(1);
-        else if(user.getLevel().equals( "ثانية ابتدائى"))
-            fetchAgbyaData(2);
-        else if(user.getLevel().equals( "ثالثة ابتدائى"))
-            fetchAgbyaData(3);
-        else if(user.getLevel().equals( "رابعة ابتدائى"))
-            fetchAgbyaData(4);
-        else if(user.getLevel().equals( "خامسة ابتدائى"))
-            fetchAgbyaData(5);
-        else if(user.getLevel().equals( "سادسة ابتدائى"))
-            fetchAgbyaData(6);
-        else if(user.getLevel().equals("ثانوى")||user.getLevel().equals("اعدادى")||user.getLevel().equals( "جامعيين و خريجين"))
-            fetchAgbyaData(7);
+        try {
+            User user = dataCache.getUser();
+            if(user.getLevel().equals( "حضانة"))
+                fetchAgbyaData(0);
+            else if(user.getLevel().equals( "أولى ابتدائى"))
+                fetchAgbyaData(1);
+            else if(user.getLevel().equals( "ثانية ابتدائى"))
+                fetchAgbyaData(2);
+            else if(user.getLevel().equals( "ثالثة ابتدائى"))
+                fetchAgbyaData(3);
+            else if(user.getLevel().equals( "رابعة ابتدائى"))
+                fetchAgbyaData(4);
+            else if(user.getLevel().equals( "خامسة ابتدائى"))
+                fetchAgbyaData(5);
+            else if(user.getLevel().equals( "سادسة ابتدائى"))
+                fetchAgbyaData(6);
+            else if(user.getLevel().equals("ثانوى")||user.getLevel().equals("اعدادى")||user.getLevel().equals( "جامعيين و خريجين"))
+                fetchAgbyaData(7);
+        }catch (Exception ex){
+            Log.e( "Agbya Activity onResume: ", ex.getMessage());
+        }
+
 
 
         firstTermAdapter = new AgbyaAdapter(new ArrayList<>(), this);
@@ -82,21 +88,25 @@ public class AgbyaActivity extends AppCompatActivity {
         thirdRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         thirdRecyclerView.setAdapter(thirdTermAdapter);
 
-
+        progressBar.setVisibility(View.INVISIBLE);
     }
 
     private void fetchAgbyaData(int level) {
-        db.collection("agbya")
+        db.collection("agbya").whereArrayContains("ageLevel", level)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     List<Agbya> agbyaList = new ArrayList<>();
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                         Agbya agbya = document.toObject(Agbya.class);
-
-                        if (agbya.getAgeLevel().contains(level))
+                        if ( agbya != null ) {
+                            //Log.e("Agbya Activity","Agbya Title: "+ agbya.getTitle());
                             agbyaList.add(agbya);
+                        }else {
+                            String documentId = document.getId();
+                            Log.e("Firestore", "Error converting document: " + documentId); // Use your logging mechanism
+                        }
                     }
-                    Collections.sort(agbyaList, (s1, s2) -> {
+                    agbyaList.sort((s1, s2) -> {
                         int num1 = Integer.parseInt(s1.getTitle().split("-")[0].trim());
                         int num2 = Integer.parseInt(s2.getTitle().split("-")[0].trim());
                         return Integer.compare(num1, num2);
@@ -113,7 +123,7 @@ public class AgbyaActivity extends AppCompatActivity {
                 })
                 .addOnFailureListener(e -> {
                     // Handle errors
-                    Log.e("Firestore", "Error getting documents.", e);
+                    Log.e("Firestore", "Error getting documents." + e.getMessage());
                 });
     }
 }

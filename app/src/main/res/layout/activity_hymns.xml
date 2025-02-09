@@ -63,7 +63,6 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:fontFamily="@font/cairo"
-        android:text="TextView"
         android:textColor="#6F0303"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"

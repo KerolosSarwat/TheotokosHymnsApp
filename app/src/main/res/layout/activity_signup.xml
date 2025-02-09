@@ -28,7 +28,7 @@
                 android:fontFamily="@font/cairo"
                 android:layout_gravity="center"
                 android:text="تسجيل جديد"
-                android:textColor="#0081a7"
+                android:textColor="#6F0303"
                 android:textSize="36sp" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -49,7 +49,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:alpha="0.7"
+                    android:alpha="1"
                     android:drawableRight="@drawable/baseline_perm_identity_24"
                     android:fontFamily="@font/cairo"
                     android:inputType="text"
@@ -73,7 +73,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:alpha="0.7"
+                    android:alpha="1"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
@@ -96,9 +96,9 @@
                 android:background="#3077b6"
                 android:fontFamily="@font/cairo"
                 android:hint="تاريخ الميلاد"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                style="@style/TextAppearance.AppCompat.Widget.Button.Colored"
                 android:drawableEnd="@drawable/baseline_date_range_24"
-                 />
+                />
 
             <RadioGroup
                 android:id="@+id/rgGender"
@@ -106,6 +106,7 @@
                 android:layout_height="48dp"
                 android:layout_margin="16dp"
                 android:layout_marginTop="8dp"
+                android:layoutDirection="rtl"
                 android:orientation="horizontal">
 
                 <RadioButton
@@ -144,7 +145,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:alpha="0.7"
+                    android:alpha="1"
                     android:drawableRight="@drawable/baseline_location_pin_24"
                     android:fontFamily="@font/cairo"
                     android:inputType="text"
@@ -170,7 +171,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:alpha="0.7"
+                    android:alpha="1"
                     android:drawableRight="@drawable/baseline_church_24"
                     android:fontFamily="@font/cairo"
                     android:inputType="textAutoComplete"
@@ -178,39 +179,23 @@
                     android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <Spinner
-                android:id="@+id/spStudentLevel"
-                android:layout_width="match_parent"
-                android:layout_height="46sp"
-                android:layout_margin="16dp"
-                android:background="@drawable/rounded_corner_spinner"
-                android:hint="المرحلة الدراسية" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/passwordLayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:fontFamily="@font/cairo"
-                android:hint="  كلمة السر"
-                app:shapeAppearance="@style/Rounded"
-                tools:ignore="HardcodedText,RtlHardcoded">
+                android:layout_margin="16dp"
+                android:hint="المرحلة الدراسية"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etPassword"
+                <AutoCompleteTextView
+                    android:id="@+id/spStudentLevel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:alpha="0.7"
-                    android:drawableRight="@drawable/baseline_person_24"
-                    android:fontFamily="@font/cairo"
-                    android:inputType="textPassword"
-                    android:maxLines="1"
-                    android:textColor="@color/black" />
+                    android:layout_weight="1"
+                    android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
+
+
 
             <Button
                 android:id="@+id/btnSignup"
@@ -221,7 +206,7 @@
                 android:layout_marginTop="18dp"
                 android:layout_marginEnd="8dp"
                 android:fontFamily="@font/cairo"
-                android:background="#f07167"
+                android:background="#6F0303"
                 android:textColor="@color/white"
                 android:text="@string/sign" />
         </LinearLayout>

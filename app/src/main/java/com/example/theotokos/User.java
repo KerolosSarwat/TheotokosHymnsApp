@@ -1,5 +1,8 @@
 package com.example.theotokos;
 
+import androidx.annotation.Keep;
+
+@Keep
 public class User {
     private String fullName;
     private String phoneNumber;
@@ -7,16 +10,11 @@ public class User {
     private String gender;
     private String address;
     private String church;
-    private String username;
-    private String password;
     private String level;
-    private String createdDate;
-    private String updatedDate;
     private Degree degree;
     public String code;
 
     public User() {
-        // Default constructor required for Firebase
     }
 
     public String getFullName() {
@@ -67,44 +65,12 @@ public class User {
         this.church = church;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getLevel() {
         return level;
     }
 
     public void setLevel(String level) {
         this.level = level;
-    }
-
-    public String getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(String createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public String getUpdatedDate() {
-        return updatedDate;
-    }
-
-    public void setUpdatedDate(String updatedDate) {
-        this.updatedDate = updatedDate;
     }
 
     public String getCode() {
@@ -121,33 +87,25 @@ public class User {
         this.degree = degree;
     }
 
-    public User(String fullName, String phoneNumber, String birthdate, String gender, String address, String church, String username, String password, String level, String createdDate, String updatedDate, Degree degrees) {
+    public User(String fullName, String phoneNumber, String birthdate, String gender, String address, String church, String level, Degree degrees) {
         this.fullName = fullName;
         this.phoneNumber = phoneNumber;
         this.birthdate = birthdate;
         this.gender = gender;
         this.address = address;
         this.church = church;
-        this.username = username;
-        this.password = password;
         this.level = level;
-        this.createdDate = createdDate;
-        this.updatedDate = updatedDate;
         this.degree = degrees;
     }
 
-    public User(String fullName, String phoneNumber, String birthdate, String gender, String address, String church, String username, String password, String level, Degree degrees) {
+    public User(String fullName, String phoneNumber, String birthdate, String gender, String address, String church, String username, String level, Degree degrees) {
         this.fullName = fullName;
         this.phoneNumber = phoneNumber;
         this.birthdate = birthdate;
         this.gender = gender;
         this.address = address;
         this.church = church;
-        this.username = username;
-        this.password = password;
         this.level = level;
-        this.createdDate = ""+System.currentTimeMillis();
-        this.updatedDate = ""+System.currentTimeMillis();
         this.degree = degrees;
     }
 
