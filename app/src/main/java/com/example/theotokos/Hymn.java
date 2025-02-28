@@ -10,13 +10,14 @@ public class Hymn{
     private String copticContent;
     private String copticArabicContent;
     private String title;
+    private String audio;
     private List<Integer> ageLevel;
 
     public Hymn() {
         // Default constructor required for Firebase Firestore
     }
 
-    public Hymn(String copticArabicContent, String arabicContent, String copticContent, String title, List<Integer> ageLevel) {
+    public Hymn(String copticArabicContent, String arabicContent, String copticContent, String title, List<Integer> ageLevel, String audio) {
         this.arabicContent = arabicContent;
         this.copticContent = copticContent;
         this.copticArabicContent = copticArabicContent;
@@ -62,5 +63,13 @@ public class Hymn{
 
     public void setAgeLevel(List<Integer> ageLevel) {
         this.ageLevel = ageLevel;
+    }
+
+    public String getAudio() {
+        return audio;
+    }
+
+    public void setAudio(String audio) {
+        this.audio = audio;
     }
 }

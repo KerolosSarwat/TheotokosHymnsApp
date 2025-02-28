@@ -80,7 +80,7 @@ public class SignupActivity extends AppCompatActivity {
         spStudentLevel.setOnItemClickListener((adapterView, view1, i, l) -> {
             Log.e( "onItemSelected 2: ", adapterView.getItemAtPosition(i).toString());
             Toast.makeText(SignupActivity.this, adapterView.getItemAtPosition(i).toString(), Toast.LENGTH_LONG).show();
-
+            selectedLevel = adapterView.getItemAtPosition(i).toString();
         });
 
         btnSignup.setOnClickListener(view -> {

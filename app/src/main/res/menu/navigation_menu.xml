@@ -4,7 +4,11 @@
     tools:ignore="HardcodedText">
 
     <item
+        android:id="@+id/home"
+        android:icon="@drawable/baseline_home_24"
+        android:title="الصفحة الرئيسية" />
 
+    <item
         android:id="@+id/nav_profile"
         android:icon="@drawable/baseline_person_24"
         android:title="الحساب الشخصى" />
@@ -17,6 +21,10 @@
 <!--        android:id="@+id/nav_qrscanner"-->
 <!--        android:icon="@drawable/baseline_qr_code_scanner_24"-->
 <!--        android:title="مسح QR" />-->
+    <item
+        android:id="@+id/attendance"
+        android:icon="@drawable/baseline_assignment_24"
+        android:title="الغياب" />
     <item
         android:id="@+id/nav_logout"
         android:icon="@drawable/baseline_logout_24"

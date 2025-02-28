@@ -13,8 +13,8 @@ android {
         applicationId = "com.mariam.theotokos" // Make sure this is correct
         minSdk = 24 // Consider raising if you don't need very old device support
         targetSdk = 34
-        versionCode = 6
-        versionName = "6"
+        versionCode = 7
+        versionName = "1.7"
 
 //        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -71,6 +71,14 @@ dependencies {
     implementation(libs.preference)
     implementation(libs.play.services.base)
     implementation(libs.firebase.crashlytics.buildtools)
+    implementation(libs.material.v1120)
+
+//    implementation (libs.play.services)
+    implementation ("com.google.android.exoplayer:exoplayer:2.19.1")
+    implementation ("com.google.android.exoplayer:exoplayer-core:2.19.1")
+    implementation ("com.google.android.exoplayer:exoplayer-dash:2.19.1")
+    implementation ("com.google.android.exoplayer:exoplayer-ui:2.19.1")
+    implementation(libs.cardview)
 
     // Remove or comment out test dependencies unless you are actively using them
     // testImplementation(libs.junit)

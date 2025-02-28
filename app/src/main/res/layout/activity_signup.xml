@@ -185,7 +185,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:hint="المرحلة الدراسية"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu">
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
 
                 <AutoCompleteTextView
                     android:id="@+id/spStudentLevel"

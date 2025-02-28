@@ -2,6 +2,9 @@ package com.example.theotokos;
 
 import androidx.annotation.Keep;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Keep
 public class User {
     private String fullName;
@@ -13,8 +16,37 @@ public class User {
     private String level;
     private Degree degree;
     public String code;
+    public boolean isPresent;
+    public boolean isAdmin;
+    private List<String> attendanceDates;
 
     public User() {
+        // Default constructor required for Firebase
+        attendanceDates = new ArrayList<>();
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+    }
+
+    public List<String> getAttendanceDates() {
+        return attendanceDates;
+    }
+
+    public void setAttendanceDates(List<String> attendanceDates) {
+        this.attendanceDates = attendanceDates;
+    }
+
+    public boolean isPresent() {
+        return isPresent;
+    }
+
+    public void setPresent(boolean present) {
+        isPresent = present;
     }
 
     public String getFullName() {
@@ -107,6 +139,9 @@ public class User {
         this.church = church;
         this.level = level;
         this.degree = degrees;
+    }
+    public void addAttendanceDate(String date) {
+        attendanceDates.add(date);
     }
 
 }

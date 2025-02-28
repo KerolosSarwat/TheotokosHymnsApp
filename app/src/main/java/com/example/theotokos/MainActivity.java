@@ -1,9 +1,8 @@
 package com.example.theotokos;
 
-import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import androidx.annotation.NonNull;
@@ -13,22 +12,18 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
-    public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
     private BottomNavigationView navigationView;
-    public static FirebaseHelper helper;
     private DataCache dataCache;
     private FirebaseFirestore db;
 
@@ -38,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
         scheduleNotification();
-        helper = new FirebaseHelper();
         setContentView(R.layout.activity_main);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -94,6 +88,19 @@ public class MainActivity extends AppCompatActivity {
             startActivity(profileIntent);
             return false;
         });
+        try {
+            Log.e("onResume: ", ""+ dataCache.getUser().isAdmin );
+            if (dataCache.getUser().isAdmin()) {
+                navigationView.getMenu().findItem(R.id.attendance).setOnMenuItemClickListener(menuItem -> {
+                    Intent profileIntent = new Intent(MainActivity.this, MyClass.class);
+                    startActivity(profileIntent);
+                    return true;
+                });n
+            }
+        }catch (NullPointerException ex){
+            dataCache.getUser().setAdmin(false);
+        }
+
 
 //        navigationView.getMenu().findItem(R.id.nav_qrscanner).setOnMenuItemClickListener(menuItem -> {
 //            Intent qrIntent = new Intent(MainActivity.this, QrCodeScannerActivity.class);

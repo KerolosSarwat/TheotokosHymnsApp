@@ -20,10 +20,13 @@ firebaseFirestore = "25.0.0"
 firebaseAuth = "23.0.0"
 firebaseStorage = "21.0.0"
 firebaseCrashlyticsBuildtools = "3.0.2"
+materialVersion = "1.12.0"
+playServices = "17.0.0"
 playServicesBase = "18.5.0"
 preference = "1.2.1"
 annotationJvm = "1.9.1"
 workRuntime = "2.10.0"
+cardview = "1.0.0"
 
 [libraries]
 android-pdf-viewer = { module = "com.github.barteksc:android-pdf-viewer", version.ref = "androidPdfViewer" }
@@ -46,10 +49,13 @@ firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
 firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebaseStorage" }
 firebase-crashlytics-buildtools = { group = "com.google.firebase", name = "firebase-crashlytics-buildtools", version.ref = "firebaseCrashlyticsBuildtools" }
+material-v1120 = { module = "com.google.android.material:material", version.ref = "materialVersion" }
+play-services = { module = "com.google.android.gms:play-services", version.ref = "playServices" }
 play-services-base = { module = "com.google.android.gms:play-services-base", version.ref = "playServicesBase" }
 preference = { group = "androidx.preference", name = "preference", version.ref = "preference" }
 annotation-jvm = { group = "androidx.annotation", name = "annotation-jvm", version.ref = "annotationJvm" }
 work-runtime = { module = "androidx.work:work-runtime", version.ref = "workRuntime" }
+cardview = { group = "androidx.cardview", name = "cardview", version.ref = "cardview" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
