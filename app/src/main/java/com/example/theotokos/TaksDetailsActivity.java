@@ -54,7 +54,7 @@ public class TaksDetailsActivity extends AppCompatActivity {
             if (taks.getHomework().isBlank()){
                 homeworkTitleTextView.setText("");
             }
-            homeworkTextView.setText(taks.getHomework());
+            homeworkTextView.setText(taks.getHomework().replace("*", "\n"));
             homeworkTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
 
         }

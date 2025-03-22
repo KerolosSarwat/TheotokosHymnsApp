@@ -72,7 +72,9 @@ dependencies {
     implementation(libs.play.services.base)
     implementation(libs.firebase.crashlytics.buildtools)
     implementation(libs.material.v1120)
-
+    implementation(libs.viewpager2)
+    implementation(libs.github.glide) // For image loading
+    annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
 //    implementation (libs.play.services)
     implementation ("com.google.android.exoplayer:exoplayer:2.19.1")
     implementation ("com.google.android.exoplayer:exoplayer-core:2.19.1")

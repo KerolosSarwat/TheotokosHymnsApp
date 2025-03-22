@@ -13,8 +13,9 @@
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="8dp"
         android:background="#6F0303"
-        android:padding="16dp"
+        app:layout_constraintHeight_percent="0.1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -29,16 +30,40 @@
             android:textColor="#FFFFFF"
             android:textSize="30sp" />
     </FrameLayout>
+    <!-- Image Slider -->
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/header" />
 
+<!--    &lt;!&ndash; Optional: Dots Indicator &ndash;&gt;-->
+<!--    <me.relex.circleindicator.CircleIndicator3-->
+<!--        android:id="@+id/indicator"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/viewPager"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        tools:ignore="MissingClass" />-->
     <!-- 3x3 Grid of Cards -->
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="16dp"
-        app:layout_constraintTop_toBottomOf="@id/header"
-        app:layout_constraintBottom_toTopOf="@id/bottomNavView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.56"
+        app:layout_constraintStart_toStartOf="parent">
 
         <!-- Row 1 -->
         <!-- Card 1 -->
@@ -50,7 +75,7 @@
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="20dp"
             app:cardElevation="10dp"
-            app:layout_constraintHeight_percent="0.3"
+            app:layout_constraintHeight_percent="0.4"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_percent="0.3">
@@ -77,7 +102,6 @@
                     android:id="@+id/title1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
                     android:text="@string/hymns"
                     android:textColor="#000000"
                     android:textSize="24sp"
@@ -98,7 +122,7 @@
             app:cardCornerRadius="20dp"
             app:cardElevation="10dp"
             app:layout_constraintEnd_toStartOf="@+id/cardView3"
-            app:layout_constraintHeight_percent="0.3"
+            app:layout_constraintHeight_percent="0.4"
             app:layout_constraintStart_toEndOf="@+id/cardView1"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_percent="0.3">
@@ -124,7 +148,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
                     android:text="@string/agbya"
                     android:textColor="#000000"
                     android:textSize="24sp"
@@ -145,10 +168,10 @@
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="20dp"
             app:cardElevation="10dp"
-            app:layout_constraintWidth_percent="0.3"
-            app:layout_constraintHeight_percent="0.3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.4"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintWidth_percent="0.3">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/taks"
@@ -171,7 +194,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
                     android:text="@string/taks"
                     android:textColor="#000000"
                     android:textSize="24sp"
@@ -190,13 +212,15 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="8dp"
+            android:layout_marginTop="8dp"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="20dp"
             app:cardElevation="10dp"
-            app:layout_constraintWidth_percent="0.3"
-            app:layout_constraintHeight_percent="0.3"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHeight_percent="0.4"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cardView1"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintWidth_percent="0.3">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/coptic"
@@ -236,15 +260,19 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="8dp"
+            android:layout_marginTop="8dp"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="20dp"
             app:cardElevation="10dp"
-            app:layout_constraintHeight_percent="0.3"
-            app:layout_constraintStart_toEndOf="@id/cardView4"
-            app:layout_constraintTop_toBottomOf="@id/cardView2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/cardView3"
+            app:layout_constraintHeight_percent="0.4"
+            app:layout_constraintStart_toEndOf="@+id/cardView4"
+            app:layout_constraintTop_toBottomOf="@+id/cardView2"
             app:layout_constraintWidth_percent="0.3">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/form"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -252,9 +280,8 @@
                     android:id="@+id/image5"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:layout_margin="8dp"
                     android:scaleType="fitXY"
-
+                    android:src="@drawable/formicon"
                     app:layout_constraintBottom_toTopOf="@+id/title5"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -265,9 +292,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="تقديم إستمارة"
+                    android:text="ملتحق جديد"
                     android:textColor="#000000"
-                    android:textSize="18sp"
+                    android:textSize="24sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -275,25 +302,16 @@
                     app:layout_constraintTop_toBottomOf="@id/image5" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
-
-        <!-- Card 6 -->
-
-        <!-- Row 3 -->
-        <!-- Card 7 -->
-
-        <!-- Card 8 -->
-
-        <!-- Card 9 -->
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- Bottom Navigation -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavView"
-        android:layout_width="0dp"
-        android:layout_height="56dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="#6F0303"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/navigation_menu" />
 </androidx.constraintlayout.widget.ConstraintLayout>

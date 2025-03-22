@@ -64,20 +64,22 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.StudentV
         return new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
-                List<User> filteredList = new ArrayList<>(studentList);
+                List<User> filteredList = new ArrayList<>();
                 if (constraint == null || constraint.length() == 0) {
                     // If the search query is empty, show the full list
                     filteredList.addAll(studentList);
                 } else {
                     String filterPattern = constraint.toString().toLowerCase().trim();
                     for (User student : studentList) {
-                        if (student.getFullName().contains(filterPattern)) {
+                        // Check if the student's full name is not null and contains the filter pattern
+                        if (student.getFullName() != null && student.getFullName().toLowerCase().contains(filterPattern)) {
                             filteredList.add(student);
                         }
                     }
                 }
                 FilterResults results = new FilterResults();
                 results.values = filteredList;
+                results.count = filteredList.size(); // Set the count of filtered items
                 return results;
             }
 
