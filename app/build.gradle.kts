@@ -35,8 +35,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
 
     // Enable View Binding or Data Binding if you are using them
@@ -79,6 +79,8 @@ dependencies {
     implementation ("com.google.android.exoplayer:exoplayer-dash:2.19.1")
     implementation ("com.google.android.exoplayer:exoplayer-ui:2.19.1")
     implementation(libs.cardview)
+    implementation(libs.navigation.fragment)
+    implementation(libs.navigation.ui)
 
     // Remove or comment out test dependencies unless you are actively using them
     // testImplementation(libs.junit)

@@ -1,9 +1,12 @@
 package com.example.theotokos;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.widget.TextView;
+
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -14,14 +17,12 @@ import java.util.Objects;
 
 public class TaksDetailsActivity extends AppCompatActivity {
 
-    private TextView titleTextView;
-    private TextView contentTextView;
-    private TextView homeworkTextView;
+    private TextView titleTextView, contentTextView, homeworkTextView, homeworkTitleTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //EdgeToEdge.enable(this);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_taks_details);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -32,6 +33,11 @@ public class TaksDetailsActivity extends AppCompatActivity {
         titleTextView = findViewById(R.id.detailTitle);
         contentTextView = findViewById(R.id.detailContent);
         homeworkTextView = findViewById(R.id.detailHomework);
+        homeworkTitleTextView = findViewById(R.id.homework);
+        titleTextView.setTextColor(Color.BLACK);
+        contentTextView.setTextColor(Color.BLACK);
+        homeworkTextView.setTextColor(Color.BLACK);
+
     }
 
     @Override
@@ -43,8 +49,11 @@ public class TaksDetailsActivity extends AppCompatActivity {
 
         if (taks != null){
             titleTextView.setText(taks.getTitle());
-            contentTextView.setText(taks.getContent());
+            contentTextView.setText(taks.getContent().replace("*", "\n"));
             contentTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
+            if (taks.getHomework().isBlank()){
+                homeworkTitleTextView.setText("");
+            }
             homeworkTextView.setText(taks.getHomework());
             homeworkTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
 

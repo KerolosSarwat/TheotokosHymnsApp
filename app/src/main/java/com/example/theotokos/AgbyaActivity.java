@@ -4,45 +4,40 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.ExpandableListView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
-
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.Map;
 import java.util.HashMap;
 
 public class AgbyaActivity extends AppCompatActivity {
 
-    private RecyclerView agbyaRecyclerView, secondRecyclerView, thirdRecyclerView;
-    private AgbyaAdapter firstTermAdapter, secondTermAdapter, thirdTermAdapter ;
-    private FirebaseFirestore db;
     private DataCache dataCache;
-    private final List<String> studentLevels = Arrays.asList(new String[]{"حضانة", "أولى ابتدائى", "ثانية ابتدائى", "ثالثة ابتدائى", "رابعة ابتدائى", "خامسة ابتدائى", "سادسة ابتدائى", "اعدادى", "ثانوى", "جامعيين و خريجين"});
+    String[] studentLevels = {"حضانة", "أولى ابتدائى","ثانية ابتدائى", "ثالثة ابتدائى", "رابعة ابتدائى", "خامسة ابتدائى", "سادسة ابتدائى", "اعدادى", "ثانوى", "جامعيين و خريجين"};
     private ProgressBar progressBar;
     private ExpandableListView expandableListView;
+    private AutoCompleteTextView spStudentLevel, hymn;
     private CustomExpandableListAdapter adapter;
+    private String selectedLevel = "";
     private List<String> groupList;
     private Map<String, List<Agbya>> childMap;
     private List<Agbya> agbyaList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_agbya);
+        EdgeToEdge.enable(this);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -52,74 +47,62 @@ public class AgbyaActivity extends AppCompatActivity {
         expandableListView = findViewById(R.id.expandableListView);
         Objects.requireNonNull(getSupportActionBar()).hide();
         dataCache = DataCache.getInstance(this);
-//        agbyaRecyclerView = findViewById(R.id.agbyaRecyclerView);
-//        secondRecyclerView = findViewById(R.id.secondRecyclerView);
-//        thirdRecyclerView = findViewById(R.id.thirdRecyclerView);
         progressBar = findViewById(R.id.progressBar2);
 
+        spStudentLevel = findViewById(R.id.spStudentLevel);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item , studentLevels);
+        spStudentLevel.setAdapter(adapter);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        db = FirebaseFirestore.getInstance();
 
-        try {
-            User user = dataCache.getUser();
-            switch (user.getLevel()) {
-                case "حضانة":
-                    fetchAgbyaData(0);
-                    break;
-                case "أولى ابتدائى":
-                    fetchAgbyaData(1);
-                    break;
-                case "ثانية ابتدائى":
-                    fetchAgbyaData(2);
-                    break;
-                case "ثالثة ابتدائى":
-                    fetchAgbyaData(3);
-                    break;
-                case "رابعة ابتدائى":
-                    fetchAgbyaData(4);
-                    break;
-                case "خامسة ابتدائى":
-                    fetchAgbyaData(5);
-                    break;
-                case "سادسة ابتدائى":
-                    fetchAgbyaData(6);
-                    break;
-                case "ثانوى":
-                case "اعدادى":
-                case "جامعيين و خريجين":
-                    fetchAgbyaData(7);
-                    break;
+        spStudentLevel.setOnItemClickListener((adapterView, view1, i, l) -> {
+            selectedLevel = adapterView.getItemAtPosition(i).toString();
+            try {
+                //User user = dataCache.getUser();
+                switch (selectedLevel) {
+                    case "حضانة":
+                        fetchAgbyaData(0);
+                        break;
+                    case "أولى ابتدائى":
+                        fetchAgbyaData(1);
+                        break;
+                    case "ثانية ابتدائى":
+                        fetchAgbyaData(2);
+                        break;
+                    case "ثالثة ابتدائى":
+                        fetchAgbyaData(3);
+                        break;
+                    case "رابعة ابتدائى":
+                        fetchAgbyaData(4);
+                        break;
+                    case "خامسة ابتدائى":
+                        fetchAgbyaData(5);
+                        break;
+                    case "سادسة ابتدائى":
+                        fetchAgbyaData(6);
+                        break;
+                    case "ثانوى":
+                    case "اعدادى":
+                    case "جامعيين و خريجين":
+                        fetchAgbyaData(7);
+                        break;
+                }
+                expandableListView.setOnChildClickListener((parent, v, groupPosition, childPosition, id) -> {
+                    // Get the selected Agbya object
+                    Agbya selectedAgbya = (Agbya) adapter.getChild(groupPosition, childPosition);
+                    Intent intent = new Intent(this, AgbyaDetailsActivity.class).putExtra("agbya", selectedAgbya);
+                    this.startActivity(intent);
+
+                    return true;
+                });
+            }catch (Exception ex){
+                Log.e( "Agbya Activity onResume: ", ex.getMessage());
             }
-            expandableListView.setOnChildClickListener((parent, v, groupPosition, childPosition, id) -> {
+        });
 
-
-                // Get the selected Agbya object
-                Agbya selectedAgbya = (Agbya) adapter.getChild(groupPosition, childPosition);
-                Intent intent = new Intent(this, AgbyaDetailsActivity.class).putExtra("agbya", selectedAgbya);
-                this.startActivity(intent);
-
-                return true;
-            });
-        }catch (Exception ex){
-            Log.e( "Agbya Activity onResume: ", ex.getMessage());
-        }
-
-
-
-
-//        firstTermAdapter = new AgbyaAdapter(new ArrayList<>(), this);
-//        secondTermAdapter = new AgbyaAdapter(new ArrayList<>(), this);
-//        thirdTermAdapter = new AgbyaAdapter(new ArrayList<>(), this);
-//        agbyaRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-//        agbyaRecyclerView.setAdapter(firstTermAdapter);
-//        secondRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-//        secondRecyclerView.setAdapter(secondTermAdapter);
-//        thirdRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-//        thirdRecyclerView.setAdapter(thirdTermAdapter);
 
         progressBar.setVisibility(View.INVISIBLE);
     }
@@ -148,7 +131,7 @@ public class AgbyaActivity extends AppCompatActivity {
 
     private void fetchAgbyaData(int level) {
         List<Agbya> list = new ArrayList<>();
-        db.collection("agbya").whereArrayContains("ageLevel", level)
+        FirebaseHelper.getAgbyaDatabase().whereArrayContains("ageLevel", level)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     agbyaList.clear();
@@ -168,19 +151,10 @@ public class AgbyaActivity extends AppCompatActivity {
                     });
                     prepareData();
                     // Initialize the adapter
-                    adapter = new CustomExpandableListAdapter(this, groupList, childMap);
+                    adapter = new CustomExpandableListAdapter<Agbya>(this, groupList, childMap);
 
                     // Set the adapter to the ExpandableListView
                     expandableListView.setAdapter(adapter);
-                    // Update the RecyclerView adapter with the fetched data
-//                    try {
-//                        firstTermAdapter.submitList(agbyaList.stream().filter(agbya -> agbya.getTerm() == 1).collect(Collectors.toList()));
-//                        secondTermAdapter.submitList(agbyaList.stream().filter(agbya -> agbya.getTerm() == 2).collect(Collectors.toList()));
-//                        thirdTermAdapter.submitList(agbyaList.stream().filter(agbya -> agbya.getTerm() == 3).collect(Collectors.toList()));
-//
-//                    }catch (Exception ex){
-//                        Log.e("fetchAgbyaData: ", ex.getMessage());
-//                    }
                 })
                 .addOnFailureListener(e -> {
                     // Handle errors

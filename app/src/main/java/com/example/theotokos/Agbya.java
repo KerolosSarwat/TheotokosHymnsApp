@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Keep
-public class Agbya implements Serializable {
+public class Agbya implements Serializable, TitleContentHolder  {
 
     private List<Integer> ageLevel; // Use Integer for numbers
     private String content;
@@ -33,6 +33,7 @@ public class Agbya implements Serializable {
         this.ageLevel = ageLevel;
     }
 
+    @Override
     public String getContent() {
         return content;
     }
@@ -57,6 +58,7 @@ public class Agbya implements Serializable {
         this.term = term;
     }
 
+    @Override
     public String getTitle() {
         return title;
     }

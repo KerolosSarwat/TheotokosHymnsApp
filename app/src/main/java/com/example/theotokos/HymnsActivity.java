@@ -3,6 +3,8 @@ package com.example.theotokos;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.exoplayer2.upstream.cache.NoOpCacheEvictor;
@@ -15,6 +17,7 @@ import java.util.Objects;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TableLayout;
@@ -32,15 +35,16 @@ import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
 import com.google.android.exoplayer2.upstream.cache.SimpleCache;
 import java.io.File;
 
-public class HymnsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class HymnsActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
-    private FirebaseFirestore db;
     private final List<Hymn> hymnList = new ArrayList<>();
-    private Spinner hymnSpinner;
     private OnDataFetchedListener listener;
     private FloatingActionButton fab;
     private DataCache dataCache;
     private ExoPlayer exoPlayer;
+    String[] studentLevels = {"حضانة", "أولى ابتدائى","ثانية ابتدائى", "ثالثة ابتدائى", "رابعة ابتدائى", "خامسة ابتدائى", "سادسة ابتدائى", "اعدادى", "ثانوى", "جامعيين و خريجين"};
+    private AutoCompleteTextView spStudentLevel, hymn;
+    String selectedLevel = "";
     private Cache cache;
     private User user;
     private boolean isPlaying = false;
@@ -48,14 +52,18 @@ public class HymnsActivity extends AppCompatActivity implements AdapterView.OnIt
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_hymns);
         Objects.requireNonNull(getSupportActionBar()).hide();
-        hymnSpinner = findViewById(R.id.titlesSpinner);
+        EdgeToEdge.enable(this);
+        hymn = findViewById(R.id.titlesSpinner);
         fab = findViewById(R.id.play_pause_btn);
-        db = FirebaseFirestore.getInstance();
         dataCache = DataCache.getInstance(this);
+        spStudentLevel = findViewById(R.id.spStudentLevel);
         user = dataCache.getUser();
 
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item , studentLevels);
+        spStudentLevel.setAdapter(adapter);
         // Initialize ExoPlayer with caching
         initializeExoPlayerWithCache();
 //         // Change icon to "pause"
@@ -67,23 +75,27 @@ public class HymnsActivity extends AppCompatActivity implements AdapterView.OnIt
     @Override
     protected void onResume() {
         super.onResume();
-        if(user.getLevel().equals( "حضانة"))
-            fetchHymnData(0);
-        else if(user.getLevel().equals( "أولى ابتدائى"))
-            fetchHymnData(1);
-        else if(user.getLevel().equals( "ثانية ابتدائى"))
-            fetchHymnData(2);
-        else if(user.getLevel().equals( "ثالثة ابتدائى"))
-            fetchHymnData(3);
-        else if(user.getLevel().equals( "رابعة ابتدائى"))
-            fetchHymnData(4);
-        else if(user.getLevel().equals( "خامسة ابتدائى"))
-            fetchHymnData(5);
-        else if(user.getLevel().equals( "سادسة ابتدائى"))
-            fetchHymnData(6);
-        else if(user.getLevel().equals("ثانوى")||user.getLevel().equals("اعدادى")||user.getLevel().equals( "جامعيين و خريجين"))
-            fetchHymnData(7);
-
+        fetchHymnData(0);
+        spStudentLevel.setOnItemClickListener((adapterView, view1, i, l) -> {
+            Toast.makeText(HymnsActivity.this, adapterView.getItemAtPosition(i).toString(), Toast.LENGTH_LONG).show();
+            selectedLevel = adapterView.getItemAtPosition(i).toString();
+            if(selectedLevel.equals( "حضانة"))
+                fetchHymnData(0);
+            else if(selectedLevel.equals( "أولى ابتدائى"))
+                fetchHymnData(1);
+            else if(selectedLevel.equals( "ثانية ابتدائى"))
+                fetchHymnData(2);
+            else if(selectedLevel.equals( "ثالثة ابتدائى"))
+                fetchHymnData(3);
+            else if(selectedLevel.equals( "رابعة ابتدائى"))
+                fetchHymnData(4);
+            else if(selectedLevel.equals( "خامسة ابتدائى"))
+                fetchHymnData(5);
+            else if(selectedLevel.equals( "سادسة ابتدائى"))
+                fetchHymnData(6);
+            else if(selectedLevel.equals("ثانوى")||selectedLevel.equals("اعدادى")||selectedLevel.equals( "جامعيين و خريجين"))
+                fetchHymnData(7);
+        });
         listener = new OnDataFetchedListener() {
             @Override
             public void onDataFetched(List<Hymn> hymns) {
@@ -97,7 +109,7 @@ public class HymnsActivity extends AppCompatActivity implements AdapterView.OnIt
             }
         };
         try {
-            hymnSpinner.setOnItemSelectedListener(this);
+            hymn.setOnItemClickListener(this);
             fab.setOnClickListener(v -> togglePlayPause());
         }catch (Exception e){
             Log.e( "onCreate: ", e.getMessage());
@@ -105,12 +117,11 @@ public class HymnsActivity extends AppCompatActivity implements AdapterView.OnIt
 
     }
 
-
     @NonNull
     private void fetchHymnData(int level) {
         List<String> hymnTitles = new ArrayList<>();
 
-        db.collection("hymns").whereArrayContains("ageLevel", level)
+        FirebaseHelper.getHymnsDatabase().whereArrayContains("ageLevel", level)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     ArrayList<Hymn> hymnsArray = new ArrayList<>();
@@ -125,9 +136,10 @@ public class HymnsActivity extends AppCompatActivity implements AdapterView.OnIt
                     }
 
 
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, hymnTitles);
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, hymnTitles);
+
                     adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-                    hymnSpinner.setAdapter(adapter);
+                    hymn.setAdapter(adapter);
                     listener.onDataFetched(hymnsArray);
                 })
                 .addOnFailureListener(e -> {
@@ -137,9 +149,8 @@ public class HymnsActivity extends AppCompatActivity implements AdapterView.OnIt
     }
 
     @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-        String selectedItem = parent.getItemAtPosition(position).toString();
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        String selectedItem = adapterView.getItemAtPosition(i).toString();
         TextView hymnTitle = findViewById(R.id.HymnName);
         hymnTitle.setText(selectedItem);
         Hymn hymn = hymnList.stream().filter(hy -> hy.getTitle().equals(selectedItem)).findFirst().orElse(null);
@@ -148,7 +159,6 @@ public class HymnsActivity extends AppCompatActivity implements AdapterView.OnIt
             // Determine the layout based on the selected item
             if (hymn != null) {
                 String[] arabicArr= hymn.getArabicContent().split("\\|");
-
                 String[] copticArr= hymn.getCopticContent().split("\\|");
                 String[] copticArabicArr= hymn.getCopticArabicContent().split("\\|");
 
@@ -168,10 +178,6 @@ public class HymnsActivity extends AppCompatActivity implements AdapterView.OnIt
         }
     }
 
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
-    }
 
     interface OnDataFetchedListener {
         void onDataFetched(List<Hymn> hymns);

@@ -27,6 +27,8 @@ preference = "1.2.1"
 annotationJvm = "1.9.1"
 workRuntime = "2.10.0"
 cardview = "1.0.0"
+navigationFragment = "2.6.0"
+navigationUi = "2.6.0"
 
 [libraries]
 android-pdf-viewer = { module = "com.github.barteksc:android-pdf-viewer", version.ref = "androidPdfViewer" }
@@ -56,6 +58,8 @@ preference = { group = "androidx.preference", name = "preference", version.ref =
 annotation-jvm = { group = "androidx.annotation", name = "annotation-jvm", version.ref = "annotationJvm" }
 work-runtime = { module = "androidx.work:work-runtime", version.ref = "workRuntime" }
 cardview = { group = "androidx.cardview", name = "cardview", version.ref = "cardview" }
+navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment", version.ref = "navigationFragment" }
+navigation-ui = { group = "androidx.navigation", name = "navigation-ui", version.ref = "navigationUi" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

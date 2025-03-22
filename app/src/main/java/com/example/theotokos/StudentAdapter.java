@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,17 +17,21 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.StudentViewHolder> {
+public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.StudentViewHolder> implements Filterable {
 
     private List<User> studentList;
+    private List<User> studentListFiltered; // Filtered list
+
     private Context context;
 
     public StudentAdapter(List<User> studentList, Context context) {
         this.studentList = studentList;
+        this.studentListFiltered = new ArrayList<>(studentList); // Initialize filtered list
         this.context = context;
     }
     @NonNull
@@ -37,7 +43,8 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.StudentV
 
     @Override
     public void onBindViewHolder(@NonNull StudentViewHolder holder, int position) {
-        User student = studentList.get(position);
+        User student = studentListFiltered.get(position);
+
         holder.fullNameTextView.setText(student.getFullName());
         holder.codeTextView.setText(student.getCode());
         holder.attendanceCheckBox.setChecked(student.isPresent());
@@ -49,9 +56,39 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.StudentV
 
     @Override
     public int getItemCount() {
-        return studentList.size();
+        return studentListFiltered.size();
     }
+    @Override
+    public Filter getFilter() {
 
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                List<User> filteredList = new ArrayList<>(studentList);
+                if (constraint == null || constraint.length() == 0) {
+                    // If the search query is empty, show the full list
+                    filteredList.addAll(studentList);
+                } else {
+                    String filterPattern = constraint.toString().toLowerCase().trim();
+                    for (User student : studentList) {
+                        if (student.getFullName().contains(filterPattern)) {
+                            filteredList.add(student);
+                        }
+                    }
+                }
+                FilterResults results = new FilterResults();
+                results.values = filteredList;
+                return results;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                studentListFiltered.clear();
+                studentListFiltered.addAll((List<User>) results.values);
+                notifyDataSetChanged();
+            }
+        };
+    }
     public static class StudentViewHolder extends RecyclerView.ViewHolder {
         TextView fullNameTextView, codeTextView;
         CheckBox attendanceCheckBox;

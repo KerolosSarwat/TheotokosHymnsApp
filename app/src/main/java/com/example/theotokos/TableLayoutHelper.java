@@ -1,6 +1,7 @@
 package com.example.theotokos;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.util.TypedValue;
 import android.widget.TableLayout;
@@ -31,6 +32,7 @@ public class TableLayoutHelper {
 
             TextView textView1 = new TextView(context);
             textView1.setText(value1);
+            textView1.setTextColor(Color.BLACK);
             textView1.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
             textView1.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
             textView1.setPadding(16, 8, 16, 10);
@@ -39,6 +41,7 @@ public class TableLayoutHelper {
             TextView textView2 = new TextView(context);
 
             textView2.setText(value2);
+            textView2.setTextColor(Color.BLACK);
             textView2.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
 
             Typeface typeface = ResourcesCompat.getFont(context, R.font.coptic_font);
@@ -49,6 +52,7 @@ public class TableLayoutHelper {
 
             TextView textView3 = new TextView(context);
             textView3.setText(value3);
+            textView3.setTextColor(Color.BLACK);
             textView3.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
 
             textView3.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));

@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,12 +28,14 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView navigationView;
     private DataCache dataCache;
     private FirebaseFirestore db;
-
+    private FirebaseHelper firebaseHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
+        EdgeToEdge.enable(this);
+
         scheduleNotification();
         setContentView(R.layout.activity_main);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -39,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+         new FirebaseHelper();
+
 
         navigationView = findViewById(R.id.bottomNavView);
     }
@@ -95,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
                     Intent profileIntent = new Intent(MainActivity.this, MyClass.class);
                     startActivity(profileIntent);
                     return true;
-                });n
+                });
             }
         }catch (NullPointerException ex){
             dataCache.getUser().setAdmin(false);

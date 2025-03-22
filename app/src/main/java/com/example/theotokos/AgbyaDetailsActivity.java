@@ -1,10 +1,13 @@
 package com.example.theotokos;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.widget.TextView;
+
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -15,14 +18,12 @@ import java.util.Objects;
 
 public class AgbyaDetailsActivity extends AppCompatActivity {
 
-    private TextView titleTextView;
-    private TextView contentTextView;
-    private TextView descriptionTextView;
+    private TextView titleTextView, contentTextView, descriptionTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        EdgeToEdge.enable(this);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_agbya_details);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -33,6 +34,9 @@ public class AgbyaDetailsActivity extends AppCompatActivity {
         titleTextView = findViewById(R.id.detailTitle);
         contentTextView = findViewById(R.id.detailContent);
         descriptionTextView = findViewById(R.id.detailDescription);
+        titleTextView.setTextColor(Color.BLACK);
+        contentTextView.setTextColor(Color.BLACK);
+        descriptionTextView.setTextColor(Color.BLACK);
 
 
     }
@@ -46,7 +50,7 @@ public class AgbyaDetailsActivity extends AppCompatActivity {
 
         if (agbya != null){
             titleTextView.setText(agbya.getTitle());
-            contentTextView.setText(agbya.getContent());
+            contentTextView.setText(agbya.getContent().replace("*", "\n"));
             contentTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
             descriptionTextView.setText(agbya.getDescription());
             descriptionTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);

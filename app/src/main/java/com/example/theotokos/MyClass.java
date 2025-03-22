@@ -2,7 +2,7 @@ package com.example.theotokos;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.widget.Button;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -28,8 +28,7 @@ public class MyClass extends AppCompatActivity {
     private RecyclerView studentsRecyclerView;
     private StudentAdapter studentAdapter;
     private List<User> studentList;
-    private Button takeAttendanceButton;
-
+    SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,17 +43,13 @@ public class MyClass extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).hide();
 
         studentsRecyclerView = findViewById(R.id.studentsRecyclerView);
-        takeAttendanceButton = findViewById(R.id.takeAttendanceButton);
 
         // Initialize the RecyclerView
         studentList = new ArrayList<>();
+        searchView = findViewById(R.id.searchView);
         studentAdapter = new StudentAdapter(studentList, this);
         studentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         studentsRecyclerView.setAdapter(studentAdapter);
-
-
-
-
     }
 
     @Override
@@ -66,9 +61,20 @@ public class MyClass extends AppCompatActivity {
 
         // Fetch students from Firebase Realtime Database
         fetchStudents(instructorLevel);
-
-        // Handle the "Take Attendance" button click
-        takeAttendanceButton.setOnClickListener(v -> takeAttendance());
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // Filter the list when the user submits the query
+                studentAdapter.getFilter().filter(query);
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                // Filter the list as the user types
+                studentAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
     }
 
     private void fetchStudents(String level) {
@@ -85,26 +91,14 @@ public class MyClass extends AppCompatActivity {
                     }
                 }
                 studentAdapter.notifyDataSetChanged();
-                takeAttendanceButton.setEnabled(true); // Enable the button after data is loaded
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 // Handle error
+                Toast.makeText(MyClass.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+
             }
         });
-    }
-
-    private void takeAttendance() {
-        for (User student : studentList) {
-            // Save attendance status for each student (e.g., to Firebase)
-            boolean isPresent = student.isPresent();
-            // Update the student's attendance in Firebase
-            DatabaseReference studentRef = FirebaseDatabase.getInstance().getReference("users")
-                    .child(student.getCode()); // Use a unique identifier like "code"
-            studentRef.child("attendance").setValue(isPresent);
-        }
-        // Show a success message
-        Toast.makeText(this, "Attendance saved successfully!", Toast.LENGTH_SHORT).show();
     }
 }

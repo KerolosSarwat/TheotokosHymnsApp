@@ -5,7 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="@color/white">
+    android:background="#00ff0000"
+    >
 
     <TextView
         android:id="@+id/childItem"

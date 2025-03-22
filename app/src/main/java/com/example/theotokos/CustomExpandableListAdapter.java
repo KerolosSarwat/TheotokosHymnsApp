@@ -6,25 +6,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
+
 import java.util.List;
 import java.util.Map;
 
-import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseExpandableListAdapter;
-import android.widget.TextView;
-import java.util.List;
-import java.util.Map;
-
-public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
+public class CustomExpandableListAdapter<T extends TitleContentHolder> extends BaseExpandableListAdapter {
 
     private Context context;
     private List<String> groupList; // List of group headers (terms)
-    private Map<String, List<Agbya>> childMap; // Map of group headers to child items (Agbya objects)
+    private Map<String, List<T>> childMap; // Map of group headers to child items (generic objects)
 
-    public CustomExpandableListAdapter(Context context, List<String> groupList, Map<String, List<Agbya>> childMap) {
+    public CustomExpandableListAdapter(Context context, List<String> groupList, Map<String, List<T>> childMap) {
         this.context = context;
         this.groupList = groupList;
         this.childMap = childMap;
@@ -46,7 +38,7 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public Object getChild(int groupPosition, int childPosition) {
+    public T getChild(int groupPosition, int childPosition) {
         return childMap.get(groupList.get(groupPosition)).get(childPosition);
     }
 
@@ -79,13 +71,13 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        Agbya agbya = (Agbya) getChild(groupPosition, childPosition);
+        T item = getChild(groupPosition, childPosition);
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.chid_item, null);
         }
         TextView childItem = convertView.findViewById(R.id.childItem);
-        childItem.setText(agbya.getTitle()); // Display the title of the Agbya object
+        childItem.setText(item.getTitle()); // Display the title of the generic object
         return convertView;
     }
 
