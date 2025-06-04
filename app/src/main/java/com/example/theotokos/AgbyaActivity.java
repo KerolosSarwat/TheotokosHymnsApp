@@ -14,6 +14,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -24,7 +25,7 @@ import java.util.HashMap;
 public class AgbyaActivity extends AppCompatActivity {
 
     private DataCache dataCache;
-    String[] studentLevels = {"حضانة", "أولى ابتدائى","ثانية ابتدائى", "ثالثة ابتدائى", "رابعة ابتدائى", "خامسة ابتدائى", "سادسة ابتدائى", "اعدادى", "ثانوى", "جامعيين و خريجين"};
+    private String[] studentLevels = {"حضانة", "أولى و تانية ابتدائى", "ثالثة و رابعة ابتدائى", "خامسة و سادسة ابتدائى", "اعدادى فما فوق"};
     private ProgressBar progressBar;
     private ExpandableListView expandableListView;
     private AutoCompleteTextView spStudentLevel, hymn;
@@ -66,27 +67,16 @@ public class AgbyaActivity extends AppCompatActivity {
                     case "حضانة":
                         fetchAgbyaData(0);
                         break;
-                    case "أولى ابتدائى":
+                    case  "أولى و تانية ابتدائى":
                         fetchAgbyaData(1);
                         break;
-                    case "ثانية ابتدائى":
-                        fetchAgbyaData(2);
-                        break;
-                    case "ثالثة ابتدائى":
+                    case "ثالثة و رابعة ابتدائى":
                         fetchAgbyaData(3);
                         break;
-                    case "رابعة ابتدائى":
-                        fetchAgbyaData(4);
-                        break;
-                    case "خامسة ابتدائى":
+                    case "خامسة و سادسة ابتدائى":
                         fetchAgbyaData(5);
                         break;
-                    case "سادسة ابتدائى":
-                        fetchAgbyaData(6);
-                        break;
-                    case "ثانوى":
-                    case "اعدادى":
-                    case "جامعيين و خريجين":
+                    case  "اعدادى فما فوق":
                         fetchAgbyaData(7);
                         break;
                 }
@@ -144,7 +134,7 @@ public class AgbyaActivity extends AppCompatActivity {
                             Log.e("Firestore", "Error converting document: " + documentId); // Use your logging mechanism
                         }
                     }
-                    list.sort((s1, s2) -> {
+                    Collections.sort(agbyaList, (s1, s2) -> {
                         int num1 = Integer.parseInt(s1.getTitle().split("-")[0].trim());
                         int num2 = Integer.parseInt(s2.getTitle().split("-")[0].trim());
                         return Integer.compare(num1, num2);

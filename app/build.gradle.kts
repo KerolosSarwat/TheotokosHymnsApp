@@ -13,8 +13,8 @@ android {
         applicationId = "com.mariam.theotokos" // Make sure this is correct
         minSdk = 24 // Consider raising if you don't need very old device support
         targetSdk = 34
-        versionCode = 7
-        versionName = "1.7"
+        versionCode = 10
+        versionName = "1.1"
 
 //        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -75,7 +75,8 @@ dependencies {
     implementation(libs.viewpager2)
     implementation(libs.github.glide) // For image loading
     annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
-//    implementation (libs.play.services)
+    implementation("com.squareup.picasso:picasso:2.8")
+    implementation(libs.androidsvg)
     implementation ("com.google.android.exoplayer:exoplayer:2.19.1")
     implementation ("com.google.android.exoplayer:exoplayer-core:2.19.1")
     implementation ("com.google.android.exoplayer:exoplayer-dash:2.19.1")

@@ -43,6 +43,8 @@ public class ProfileActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager2 viewPager;
     private TermsPagerAdapter pagerAdapter;
+    private TextView fullName, phone, code, address, church, birthdate, schoolLevel;
+    ImageButton qrButton;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -50,13 +52,23 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_profile);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+//            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+//            return insets;
+//        });
         tabLayout = findViewById(R.id.termsTabs);
         viewPager = findViewById(R.id.viewPager);
+        fullName = findViewById(R.id.fullnameTextView);
+        phone = findViewById(R.id.phoneTextView);
+        address = findViewById(R.id.AddressTextView);
+        church = findViewById(R.id.churchTextView);
+        birthdate = findViewById(R.id.birthdateTextView);
+        schoolLevel = findViewById(R.id.levelTextView);
+        qrButton = findViewById(R.id.QrButton);
+        code = findViewById(R.id.codeTextView);
+
+
         dataCache = DataCache.getInstance(this);
         getSupportActionBar().hide();
     }
@@ -69,38 +81,27 @@ public class ProfileActivity extends AppCompatActivity {
         // Replace with your method to get the Degree object
         if (NetworkUtils.isNetworkConnected(this))
         {
-            DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
+            DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users").child(user.getCode());
             try {
-                usersRef.child(user.getCode()).get().addOnSuccessListener(dataSnapshot -> {
-                    user = dataSnapshot.getValue(User.class);
-                    dataCache.saveUser(user);
-                });
+                usersRef.get().addOnCompleteListener(task -> dataCache.saveUser(task.getResult().getValue(User.class)));
             }catch (Exception ex){
                 Log.e("onCreate: ", ex.getMessage());
             }
         }
-        TextView fullname = findViewById(R.id.fullnameTextView);
-        fullname.setText(user.getFullName());
-        TextView code = findViewById(R.id.codeTextView);
+
+        fullName.setText(user.getFullName());
         code.setText(user.getCode());
-        generateQRCode(user.getCode());
-        TextView phone = findViewById(R.id.phoneTextView);
         phone.setText(user.getPhoneNumber());
-        TextView address = findViewById(R.id.AddressTextView);
         address.setText(user.getAddress());
-        TextView church = findViewById(R.id.churchTextView);
         church.setText(user.getChurch());
-        TextView birthdate = findViewById(R.id.birthdateTextView);
         birthdate.setText(user.getBirthdate());
-        TextView schoolLevel = findViewById(R.id.levelTextView);
         schoolLevel.setText(user.getLevel());
-        ImageButton qrButton = findViewById(R.id.QrButton);
 
         try {
             Degree degree = user.getDegree();
             setupViewPager(degree);
             qrButton.setOnClickListener(v -> showQRCodeDialog(user.getCode()));
-            fetchAttendance();
+//            fetchAttendance();
         }catch (Exception ex){
             Log.e("onResume: ", ex.getMessage());
             Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
@@ -168,12 +169,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
         // Set close button listener
-        closeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
+        closeButton.setOnClickListener(v -> dialog.dismiss());
 
         // Show the dialog
         dialog.show();

@@ -34,7 +34,7 @@ public class TaksActivity extends AppCompatActivity {
     private CustomExpandableListAdapter adapter;
     private List<String> groupList;
     private Map<String, List<Taks>> childMap;
-    String[] studentLevels = {"حضانة", "أولى ابتدائى","ثانية ابتدائى", "ثالثة ابتدائى", "رابعة ابتدائى", "خامسة ابتدائى", "سادسة ابتدائى", "اعدادى", "ثانوى", "جامعيين و خريجين"};
+    private String[] studentLevels = {"حضانة", "أولى و تانية ابتدائى", "ثالثة و رابعة ابتدائى", "خامسة و سادسة ابتدائى", "اعدادى فما فوق"};
     private AutoCompleteTextView spStudentLevel, hymn;
     private String selectedLevel = "";
     private List<Taks> taksList;
@@ -63,6 +63,7 @@ public class TaksActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         progressBar.setVisibility(View.VISIBLE);
+        expandableListView.setVisibility(View.GONE);
         spStudentLevel.setOnItemClickListener((adapterView, view1, i, l) -> {
             selectedLevel = adapterView.getItemAtPosition(i).toString();
             //User user = dataCache.getUser();
@@ -70,33 +71,23 @@ public class TaksActivity extends AppCompatActivity {
                 case "حضانة":
                     fetchTaksata(0);
                     break;
-                case "أولى ابتدائى":
+                case  "أولى و تانية ابتدائى":
                     fetchTaksata(1);
                     break;
-                case "ثانية ابتدائى":
-                    fetchTaksata(2);
-                    break;
-                case "ثالثة ابتدائى":
+                case "ثالثة و رابعة ابتدائى":
                     fetchTaksata(3);
                     break;
-                case "رابعة ابتدائى":
-                    fetchTaksata(4);
-                    break;
-                case "خامسة ابتدائى":
+                case "خامسة و سادسة ابتدائى":
                     fetchTaksata(5);
                     break;
-                case "سادسة ابتدائى":
-                    fetchTaksata(6);
-                    break;
-                case "ثانوى":
-                case "اعدادى":
-                case "جامعيين و خريجين":
+                case  "اعدادى فما فوق":
                     fetchTaksata(7);
                     break;
             }
         });
 
         progressBar.setVisibility(View.GONE);
+        expandableListView.setVisibility(View.VISIBLE);
 
         expandableListView.setOnChildClickListener((parent, v, groupPosition, childPosition, id) -> {
             // Get the selected Agbya object

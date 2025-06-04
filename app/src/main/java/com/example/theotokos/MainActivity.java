@@ -3,21 +3,21 @@ package com.example.theotokos;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import androidx.activity.EdgeToEdge;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.viewpager2.widget.ViewPager2;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,32 +26,34 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ViewPagerAdapter.OnAllImagesLoadedListener {
 
-    public ActionBarDrawerToggle actionBarDrawerToggle;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
     private BottomNavigationView navigationView;
     private DataCache dataCache;
     private ViewPager2 viewPager;
 //    private CircleIndicator3 indicator;
-    private List<Integer> imageList;
+    private List<String> imageUrls;
     private Timer timer;
+    private View hymnsImageView, agbyaImageView, copticImageView, taksImageView, formView;
+    private ViewPagerAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Objects.requireNonNull(getSupportActionBar()).hide();
-        EdgeToEdge.enable(this);
-         new FirebaseHelper();
-
+//        EdgeToEdge.enable(this);
+        hymnsImageView = findViewById(R.id.hymns);
+        agbyaImageView = findViewById(R.id.agbya);
+        copticImageView = findViewById(R.id.coptic);
+        taksImageView = findViewById(R.id.taks);
+        formView = findViewById(R.id.form);
         navigationView = findViewById(R.id.bottomNavView);
         viewPager = findViewById(R.id.viewPager);
-        imageList = new ArrayList<>();
-        imageList.add(R.drawable.church);
-        imageList.add(R.drawable.oip);
-
-        // Set up adapter
-        ViewPagerAdapter adapter = new ViewPagerAdapter(imageList);
-        viewPager.setAdapter(adapter);
+        viewPager.setUserInputEnabled(false);
+        new FirebaseHelper();
+        fetchBannerImages();
+        Log.e( "onCreate: ","End of oncreate" );
     }
 
     @Override
@@ -77,11 +79,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        View hymnsImageView = findViewById(R.id.hymns);
-        View agbyaImageView = findViewById(R.id.agbya);
-        View copticImageView = findViewById(R.id.coptic);
-        View taksImageView = findViewById(R.id.taks);
-        View formView = findViewById(R.id.form);
 
         formView.setOnClickListener(v -> {
             // Handle the click event here
@@ -100,10 +97,12 @@ public class MainActivity extends AppCompatActivity {
             Intent hymnsIntent = new Intent(MainActivity.this, AgbyaActivity.class);
             startActivity(hymnsIntent);
         });
-        copticImageView.setOnClickListener(view -> {
-            Intent copticIntent = new Intent(MainActivity.this, CopticActivity.class);
-            startActivity(copticIntent);
-        });
+//        copticImageView.setOnClickListener(view -> {
+//            //Intent copticIntent = new Intent(MainActivity.this, CopticActivity.class);
+//            Intent copticIntent = new Intent(MainActivity.this, CopticDetails.class);
+//
+//            startActivity(copticIntent);
+//        });
 
         taksImageView.setOnClickListener(view -> {
             Intent taksIntent = new Intent(MainActivity.this, TaksActivity.class);
@@ -142,17 +141,29 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     private void autoSlideImages() {
-        final Handler handler = new Handler();
-        final Runnable update = new Runnable() {
-            @Override
-            public void run() {
-                if (viewPager.getCurrentItem() == imageList.size() - 1) {
-                    viewPager.setCurrentItem(0);
-                } else {
-                    viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
-                }
-            }
+        if (adapter == null || adapter.getImageUrls() == null || adapter.getImageUrls().isEmpty()) {
+            Log.e("AutoSlide", "Adapter or image list is not initialized");
+            return;
+        }
+
+        final Handler handler = new Handler(Looper.getMainLooper());
+        final Runnable update = () -> {
+            if (viewPager == null || adapter == null) return;
+
+            int currentItem = viewPager.getCurrentItem();
+            int itemCount = adapter.getItemCount(); // Use adapter's method instead
+
+            if (itemCount == 0) return;
+
+            int nextItem = (currentItem == itemCount - 1) ? 0 : currentItem + 1;
+            viewPager.setCurrentItem(nextItem, true);
         };
+
+        // Cancel any existing timer
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
 
         timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -160,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 handler.post(update);
             }
-        }, 5000, 10000); // Delay and period in milliseconds
+        }, 7000, 10000); // Delay and period in milliseconds
     }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -170,6 +181,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
     private void showLogoutConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("تسجيل خروج")
@@ -192,11 +204,45 @@ public class MainActivity extends AppCompatActivity {
         // Enqueue the work request
         WorkManager.getInstance(this).enqueue(workRequest);
     }
+
+    private void fetchBannerImages(){
+        FirebaseHelper.getBannerDatabase().get().addOnSuccessListener(queryDocumentSnapshots -> {
+            Banner banner;
+            imageUrls = new ArrayList<>();
+
+            for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                banner = document.toObject(Banner.class);
+                Log.e( "fetchBannerImages: ", ""+banner.getDescription());
+                imageUrls.add(banner.getImageURL());
+            }
+            adapter = new ViewPagerAdapter(imageUrls, MainActivity.this);
+            viewPager.setAdapter(adapter);
+        });
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();
         if (timer != null) {
             timer.cancel();
         }
+    }
+
+    @Override
+    public void onAllImagesLoaded() {
+        runOnUiThread(() -> {
+            // Enable swiping now that all images are loaded
+            viewPager.setUserInputEnabled(true);
+            Toast.makeText(this, "All images loaded", Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    @Override
+    public void onImageLoaded(int position) {
+        Log.d("ImageLoad", "Image loaded at position: " + position);
+    }
+
+    @Override
+    public void onImageLoadFailed(int position) {
+        Log.e("ImageLoad", "Failed to load image at position: " + position);
     }
 }

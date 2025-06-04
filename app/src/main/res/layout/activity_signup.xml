@@ -11,22 +11,30 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/header"
                 android:layout_width="wrap_content"
-                android:layout_height="75dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:fontFamily="@font/cairo"
-                android:layout_gravity="center"
                 android:text="تسجيل جديد"
                 android:textColor="#6F0303"
                 android:textSize="36sp" />
@@ -35,19 +43,20 @@
                 android:id="@+id/fullnameLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:fontFamily="@font/cairo"
                 android:hint="  الأسم رباعى"
+                app:boxStrokeColor="#6F0303"
                 app:shapeAppearance="@style/Rounded"
                 tools:ignore="HardcodedText,RtlHardcoded">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etFullName"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginBottom="10dp"
                     android:alpha="1"
                     android:drawableRight="@drawable/baseline_perm_identity_24"
@@ -61,8 +70,7 @@
                 android:id="@+id/phoneLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-
+                android:layout_height="match_parent"
                 android:fontFamily="@font/cairo"
                 android:hint="  الموبايل"
                 app:shapeAppearance="@style/Rounded"
@@ -71,14 +79,13 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etPhone"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:alpha="1"
+                    android:layout_height="match_parent"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="10dp"
+                    android:alpha="1"
                     android:drawableRight="@drawable/baseline_phone_24"
-
                     android:fontFamily="@font/cairo"
                     android:inputType="phone"
                     android:maxLines="1"
@@ -86,19 +93,22 @@
             </com.google.android.material.textfield.TextInputLayout>
 
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnPickDate"
+                style="@style/Widget.Material3.Button.OutlinedButton.Icon"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
-                android:background="#3077b6"
                 android:fontFamily="@font/cairo"
-                android:hint="تاريخ الميلاد"
-                style="@style/TextAppearance.AppCompat.Widget.Button.Colored"
-                android:drawableEnd="@drawable/baseline_date_range_24"
-                />
+                android:text="تاريخ الميلاد"
+                android:textSize="16sp"
+                android:textAppearance="@color/black"
+                android:textColor="@color/black"
+                app:icon="@drawable/baseline_date_range_24"
+                app:iconTint="@color/black"
+                app:strokeColor="@color/black_overlay" />
 
             <RadioGroup
                 android:id="@+id/rgGender"
@@ -181,11 +191,11 @@
 
 
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                android:hint="المرحلة الدراسية"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+                android:hint="المرحلة الدراسية">
 
                 <AutoCompleteTextView
                     android:id="@+id/spStudentLevel"
@@ -196,7 +206,6 @@
             </com.google.android.material.textfield.TextInputLayout>
 
 
-
             <Button
                 android:id="@+id/btnSignup"
                 android:layout_width="match_parent"
@@ -205,10 +214,10 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="18dp"
                 android:layout_marginEnd="8dp"
-                android:fontFamily="@font/cairo"
                 android:background="#6F0303"
-                android:textColor="@color/white"
-                android:text="@string/sign" />
+                android:fontFamily="@font/cairo"
+                android:text="@string/sign"
+                android:textColor="@color/white" />
         </LinearLayout>
     </ScrollView>
 

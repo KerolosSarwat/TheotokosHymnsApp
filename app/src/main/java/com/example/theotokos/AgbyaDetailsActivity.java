@@ -18,7 +18,7 @@ import java.util.Objects;
 
 public class AgbyaDetailsActivity extends AppCompatActivity {
 
-    private TextView titleTextView, contentTextView, descriptionTextView;
+    private TextView titleTextView, contentTextView, descriptionTextView, prayTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +34,7 @@ public class AgbyaDetailsActivity extends AppCompatActivity {
         titleTextView = findViewById(R.id.detailTitle);
         contentTextView = findViewById(R.id.detailContent);
         descriptionTextView = findViewById(R.id.detailDescription);
+        prayTextView = findViewById(R.id.pray);
         titleTextView.setTextColor(Color.BLACK);
         contentTextView.setTextColor(Color.BLACK);
         descriptionTextView.setTextColor(Color.BLACK);
@@ -52,8 +53,14 @@ public class AgbyaDetailsActivity extends AppCompatActivity {
             titleTextView.setText(agbya.getTitle());
             contentTextView.setText(agbya.getContent().replace("*", "\n"));
             contentTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
-            descriptionTextView.setText(agbya.getDescription());
-            descriptionTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
+            if (agbya.getDescription().isBlank()){
+                prayTextView.setText("");
+            }
+            else {
+                descriptionTextView.setText(agbya.getDescription());
+                descriptionTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
+
+            }
         }
         else {
             Log.e("onCreate: ", "Agbya is NULL" );

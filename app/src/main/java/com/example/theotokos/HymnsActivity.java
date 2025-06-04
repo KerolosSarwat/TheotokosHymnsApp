@@ -42,7 +42,7 @@ public class HymnsActivity extends AppCompatActivity implements AdapterView.OnIt
     private FloatingActionButton fab;
     private DataCache dataCache;
     private ExoPlayer exoPlayer;
-    String[] studentLevels = {"حضانة", "أولى ابتدائى","ثانية ابتدائى", "ثالثة ابتدائى", "رابعة ابتدائى", "خامسة ابتدائى", "سادسة ابتدائى", "اعدادى", "ثانوى", "جامعيين و خريجين"};
+    private String[] studentLevels = {"حضانة", "أولى و تانية ابتدائى", "ثالثة و رابعة ابتدائى", "خامسة و سادسة ابتدائى", "اعدادى فما فوق"};
     private AutoCompleteTextView spStudentLevel, hymn;
     String selectedLevel = "";
     private Cache cache;
@@ -79,22 +79,23 @@ public class HymnsActivity extends AppCompatActivity implements AdapterView.OnIt
         spStudentLevel.setOnItemClickListener((adapterView, view1, i, l) -> {
             Toast.makeText(HymnsActivity.this, adapterView.getItemAtPosition(i).toString(), Toast.LENGTH_LONG).show();
             selectedLevel = adapterView.getItemAtPosition(i).toString();
-            if(selectedLevel.equals( "حضانة"))
-                fetchHymnData(0);
-            else if(selectedLevel.equals( "أولى ابتدائى"))
-                fetchHymnData(1);
-            else if(selectedLevel.equals( "ثانية ابتدائى"))
-                fetchHymnData(2);
-            else if(selectedLevel.equals( "ثالثة ابتدائى"))
-                fetchHymnData(3);
-            else if(selectedLevel.equals( "رابعة ابتدائى"))
-                fetchHymnData(4);
-            else if(selectedLevel.equals( "خامسة ابتدائى"))
-                fetchHymnData(5);
-            else if(selectedLevel.equals( "سادسة ابتدائى"))
-                fetchHymnData(6);
-            else if(selectedLevel.equals("ثانوى")||selectedLevel.equals("اعدادى")||selectedLevel.equals( "جامعيين و خريجين"))
-                fetchHymnData(7);
+            switch (selectedLevel) {
+                case "حضانة":
+                    fetchHymnData(0);
+                    break;
+                case  "أولى و تانية ابتدائى":
+                    fetchHymnData(1);
+                    break;
+                case "ثالثة و رابعة ابتدائى":
+                    fetchHymnData(3);
+                    break;
+                case "خامسة و سادسة ابتدائى":
+                    fetchHymnData(5);
+                    break;
+                case  "اعدادى فما فوق":
+                    fetchHymnData(7);
+                    break;
+            }
         });
         listener = new OnDataFetchedListener() {
             @Override

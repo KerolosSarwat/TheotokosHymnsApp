@@ -6,13 +6,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class FirebaseHelper {
     //private static final String USERS_NODE =;
-    private static CollectionReference HymnsDatabase, CopticDatabase, AgbyaDatabase, TaksDatabase;
+    private static CollectionReference HymnsDatabase, CopticDatabase, AgbyaDatabase, TaksDatabase, bannerDatabase;
 
     public FirebaseHelper() {
         HymnsDatabase = FirebaseFirestore.getInstance().collection( "hymns");
         CopticDatabase = FirebaseFirestore.getInstance().collection( "coptic");
         AgbyaDatabase = FirebaseFirestore.getInstance().collection( "agbya");
         TaksDatabase = FirebaseFirestore.getInstance().collection( "taks");
+        bannerDatabase = FirebaseFirestore.getInstance().collection( "banner");
     }
 
     public static CollectionReference getHymnsDatabase() {
@@ -29,5 +30,9 @@ public class FirebaseHelper {
 
     public static CollectionReference getTaksDatabase() {
         return TaksDatabase;
+    }
+
+    public static CollectionReference getBannerDatabase() {
+        return bannerDatabase;
     }
 }

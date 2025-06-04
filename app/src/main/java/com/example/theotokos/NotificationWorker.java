@@ -31,18 +31,23 @@ public class NotificationWorker extends Worker {
             notificationManager.createNotificationChannel(channel);
         }
 
-
         // Build the notification
-        Notification notification = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
-                .setContentTitle("مدرسة ثيؤطوكوس للألحان")
-                .setContentText("مرحباً "+ dataCache.getUser().getFullName())
-                .setSmallIcon(R.drawable.oip) // Replace with your icon
-                .setAutoCancel(true)
-                .build();
+        if (dataCache.getUser() != null){
+            Notification notification = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
+                    .setContentTitle("مدرسة ثيؤطوكوس للألحان")
+                    .setContentText("مرحباً "+ dataCache.getUser().getFullName())
+                    .setSmallIcon(R.drawable.oip) // Replace with your icon
+                    .setAutoCancel(true)
+                    .build();
 
-        // Show the notification
-        notificationManager.notify(1, notification);
+            // Show the notification
+            notificationManager.notify(1, notification);
 
-        return Result.success();
+            return Result.success();
+        }
+        else
+            return Result.failure();
+
+
     }
 }
