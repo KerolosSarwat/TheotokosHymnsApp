@@ -5,7 +5,7 @@ import androidx.annotation.Keep;
 import java.io.Serializable;
 @Keep
 public class Term implements Serializable {
-    private int hymns, taks, agbya, coptic, attencance;
+    private float hymns, taks, agbya, coptic, attencance;
 
     public Term() {
         hymns = taks = agbya = coptic = 0;
@@ -18,9 +18,9 @@ public class Term implements Serializable {
         this.coptic = coptic;
         this.attencance = attencance;
     }
-    public int getResult(){ return hymns + taks + agbya + coptic + attencance; }
+    public float getResult(){ return hymns + taks + agbya + coptic + attencance; }
 
-    public int getHymns() {
+    public float getHymns() {
         return hymns;
     }
 
@@ -28,7 +28,7 @@ public class Term implements Serializable {
         this.hymns = hymns;
     }
 
-    public int getTaks() {
+    public float getTaks() {
         return taks;
     }
 
@@ -36,7 +36,7 @@ public class Term implements Serializable {
         this.taks = taks;
     }
 
-    public int getAgbya() {
+    public float getAgbya() {
         return agbya;
     }
 
@@ -44,7 +44,7 @@ public class Term implements Serializable {
         this.agbya = agbya;
     }
 
-    public int getCoptic() {
+    public float getCoptic() {
         return coptic;
     }
 
@@ -52,7 +52,7 @@ public class Term implements Serializable {
         this.coptic = coptic;
     }
 
-    public int getAttencance() {
+    public float getAttencance() {
         return attencance;
     }
 

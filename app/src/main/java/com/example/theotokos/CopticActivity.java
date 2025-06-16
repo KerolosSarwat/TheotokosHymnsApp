@@ -19,7 +19,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.github.barteksc.pdfviewer.PDFView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.crashlytics.buildtools.reloc.org.apache.commons.io.IOUtils;
+//import com.google.firebase.crashlytics.buildtools.reloc.org.apache.commons.io.IOUtils;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import java.io.File;
@@ -112,7 +112,7 @@ public class CopticActivity extends AppCompatActivity {
         if (uri != null) {
             try (OutputStream outputStream = resolver.openOutputStream(uri)) {
                 FileInputStream inputStream = new FileInputStream(pdfFile);
-                IOUtils.copy(inputStream, outputStream);
+//                IOUtils.copy(inputStream, outputStream);
             } catch (IOException e) {
                 Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }

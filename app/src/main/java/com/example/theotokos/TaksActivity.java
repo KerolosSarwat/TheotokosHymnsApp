@@ -49,8 +49,9 @@ public class TaksActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        Objects.requireNonNull(getSupportActionBar()).hide();
-        dataCache = DataCache.getInstance(this);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }        dataCache = DataCache.getInstance(this);
         taksList = new ArrayList<>();
         expandableListView = findViewById(R.id.expandableListView);
         progressBar = findViewById(R.id.progressindicator);

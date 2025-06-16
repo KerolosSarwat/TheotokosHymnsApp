@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.google.gms.google.services)
+
     // If using Crashlytics, uncomment the line below
      //alias(libs.plugins.firebase.crashlytics)
 }
@@ -13,7 +14,7 @@ android {
         applicationId = "com.mariam.theotokos" // Make sure this is correct
         minSdk = 24 // Consider raising if you don't need very old device support
         targetSdk = 34
-        versionCode = 10
+        versionCode = 11
         versionName = "1.1"
 
 //        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -23,10 +24,11 @@ android {
         debug {
             isMinifyEnabled = false // Disable for faster debug builds
             isDebuggable = true
+            isShrinkResources = false
         }
         release {
-            isMinifyEnabled = true
-            isShrinkResources = true
+            isMinifyEnabled = true // Enable for production builds
+            isShrinkResources = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -54,13 +56,15 @@ dependencies {
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.auth)
     implementation(libs.firebase.storage)
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.messaging)
     // If using Crashlytics, uncomment the line below
     //implementation(libs.firebase.crashlytics)
 
     implementation("com.google.zxing:core:3.4.1")
-    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
-    implementation("com.github.mhiew:android-pdf-viewer:3.2.0-beta.3")
-    implementation("androidx.work:work-runtime:2.7.1")
+    implementation(libs.zxing.android.embedded)
+    implementation(libs.mhiew.android.pdf.viewer)
+    implementation(libs.work.runtime.v271)
     implementation(libs.guava)
     implementation(libs.gson)
     implementation(libs.appcompat)
@@ -70,17 +74,17 @@ dependencies {
     implementation(libs.gridlayout)
     implementation(libs.preference)
     implementation(libs.play.services.base)
-    implementation(libs.firebase.crashlytics.buildtools)
-    implementation(libs.material.v1120)
+//    implementation(libs.firebase.crashlytics.buildtools)
+//    implementation(libs.material.v1120)
     implementation(libs.viewpager2)
     implementation(libs.github.glide) // For image loading
     annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
-    implementation("com.squareup.picasso:picasso:2.8")
+    implementation(libs.picasso)
     implementation(libs.androidsvg)
-    implementation ("com.google.android.exoplayer:exoplayer:2.19.1")
-    implementation ("com.google.android.exoplayer:exoplayer-core:2.19.1")
-    implementation ("com.google.android.exoplayer:exoplayer-dash:2.19.1")
-    implementation ("com.google.android.exoplayer:exoplayer-ui:2.19.1")
+    implementation (libs.exoplayer)
+    implementation (libs.exoplayer.core)
+    implementation (libs.exoplayer.dash)
+    implementation (libs.exoplayer.ui)
     implementation(libs.cardview)
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)

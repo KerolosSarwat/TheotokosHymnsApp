@@ -70,7 +70,9 @@ public class ProfileActivity extends AppCompatActivity {
 
 
         dataCache = DataCache.getInstance(this);
-        getSupportActionBar().hide();
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
     }
 
     @Override

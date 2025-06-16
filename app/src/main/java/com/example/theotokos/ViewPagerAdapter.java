@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
+import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,6 +16,7 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import java.util.List;
 
+@Keep
 public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.ViewHolder> {
     private List<String> imageUrls;
     private SparseBooleanArray loadedPositions = new SparseBooleanArray();

@@ -36,9 +36,11 @@ public class SignupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-        Objects.requireNonNull(getSupportActionBar()).hide();
         EdgeToEdge.enable(this);
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
         btnPickDate = findViewById(R.id.btnPickDate);
         etFullName = findViewById(R.id.etFullName);
 

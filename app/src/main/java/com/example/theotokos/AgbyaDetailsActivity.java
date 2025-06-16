@@ -30,7 +30,11 @@ public class AgbyaDetailsActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        Objects.requireNonNull(getSupportActionBar()).hide();
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+
         titleTextView = findViewById(R.id.detailTitle);
         contentTextView = findViewById(R.id.detailContent);
         descriptionTextView = findViewById(R.id.detailDescription);

@@ -43,7 +43,7 @@
         android:layout_height="28dp"
         android:fontFamily="@font/cairo"
         android:hint="code"
-        android:textColorHint="@color/dark_background"
+        android:textColorHint="@color/dark_red"
         android:textColorLink="#FFFFFF"
         android:textSize="16sp"
         android:textStyle="bold"

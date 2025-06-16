@@ -41,8 +41,9 @@ public class MyClass extends AppCompatActivity {
 //            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
 //            return insets;
 //        });
-        Objects.requireNonNull(getSupportActionBar()).hide();
-
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
         studentsRecyclerView = findViewById(R.id.studentsRecyclerView);
 
         // Initialize the RecyclerView

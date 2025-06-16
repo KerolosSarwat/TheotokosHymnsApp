@@ -2,7 +2,11 @@ package com.example.theotokos;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import androidx.annotation.Keep;
+
 import com.google.gson.*;
+@Keep
 public class DataCache {
 
     private static final String PREF_FILE_NAME = "my_prefs";

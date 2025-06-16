@@ -44,9 +44,12 @@ public class AgbyaActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
         agbyaList = new ArrayList<>();
         expandableListView = findViewById(R.id.expandableListView);
-        Objects.requireNonNull(getSupportActionBar()).hide();
+
         dataCache = DataCache.getInstance(this);
         progressBar = findViewById(R.id.progressBar2);
 

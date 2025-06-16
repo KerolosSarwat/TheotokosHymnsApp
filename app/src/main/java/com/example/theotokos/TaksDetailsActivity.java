@@ -29,8 +29,9 @@ public class TaksDetailsActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        Objects.requireNonNull(getSupportActionBar()).hide();
-        titleTextView = findViewById(R.id.detailTitle);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }        titleTextView = findViewById(R.id.detailTitle);
         contentTextView = findViewById(R.id.detailContent);
         homeworkTextView = findViewById(R.id.detailHomework);
         homeworkTitleTextView = findViewById(R.id.homework);

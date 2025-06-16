@@ -1,5 +1,4 @@
 package com.example.theotokos;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,7 +17,6 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -32,17 +30,36 @@ public class MainActivity extends AppCompatActivity implements ViewPagerAdapter.
     private BottomNavigationView navigationView;
     private DataCache dataCache;
     private ViewPager2 viewPager;
-//    private CircleIndicator3 indicator;
     private List<String> imageUrls;
     private Timer timer;
     private View hymnsImageView, agbyaImageView, copticImageView, taksImageView, formView;
     private ViewPagerAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Objects.requireNonNull(getSupportActionBar()).hide();
-//        EdgeToEdge.enable(this);
+        try {
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().hide();
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            Log.e( "onCreate: ", "the main activity const.");
+           var firebase = new FirebaseHelper();
+            initializeViews();
+            setupNavigation();
+
+        } catch (Exception e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            throw new RuntimeException(e);
+        }
+        }
+
+    private void initializeViews() {
         hymnsImageView = findViewById(R.id.hymns);
         agbyaImageView = findViewById(R.id.agbya);
         copticImageView = findViewById(R.id.coptic);
@@ -51,95 +68,67 @@ public class MainActivity extends AppCompatActivity implements ViewPagerAdapter.
         navigationView = findViewById(R.id.bottomNavView);
         viewPager = findViewById(R.id.viewPager);
         viewPager.setUserInputEnabled(false);
-        new FirebaseHelper();
-        fetchBannerImages();
-        Log.e( "onCreate: ","End of oncreate" );
+    }
+
+    private void setupNavigation() {
+        navigationView.getMenu().findItem(R.id.nav_logout).setOnMenuItemClickListener(menuItem -> {
+            showLogoutConfirmationDialog();
+            return false;
+        });
+
+        navigationView.getMenu().findItem(R.id.nav_settings).setOnMenuItemClickListener(menuItem -> {
+            startActivity(new Intent(MainActivity.this, SettingActivity.class));
+            return false;
+        });
+
+        navigationView.getMenu().findItem(R.id.nav_profile).setOnMenuItemClickListener(menuItem -> {
+            Intent profileIntent = (dataCache.getUser() == null) ?
+                    new Intent(MainActivity.this, LoginActivity.class) :
+                    new Intent(MainActivity.this, ProfileActivity.class);
+            startActivity(profileIntent);
+            return false;
+        });
+
+        navigationView.getMenu().findItem(R.id.attendance).setOnMenuItemClickListener(menuItem -> {
+            startActivity(new Intent(MainActivity.this, MyClass.class));
+            return true;
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        // Auto-slide functionality
-        autoSlideImages();
-        navigationView.getMenu().getItem(0).setChecked(true);
         try {
-            //user logined but not admin
-            scheduleNotification();
-            dataCache = DataCache.getInstance(this);
-            if (!dataCache.getUser().isAdmin()){
-                navigationView.getMenu().getItem(3).setVisible(false);
-                navigationView.getMenu().removeItem(3);
-            }
-        }catch (NullPointerException ex){
-            //user not logined yet
-            navigationView.getMenu().getItem(4).setVisible(false);
+
+            fetchBannerImages();
+            autoSlideImages();
+            navigationView.getMenu().getItem(0).setChecked(true);
+            handleUserLoginStatus();
+            setupClickListeners();
+        } catch (Exception e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    private void handleUserLoginStatus() {
+        dataCache = DataCache.getInstance(this);
+        if (dataCache.getUser() != null && dataCache.getUser().isAdmin()) {
+            navigationView.getMenu().getItem(3).setVisible(true);
+        } else {
             navigationView.getMenu().getItem(3).setVisible(false);
             navigationView.getMenu().removeItem(3);
-            navigationView.getMenu().removeItem(4);
-        }
-
-
-
-        formView.setOnClickListener(v -> {
-            // Handle the click event here
-            Intent signIntent = new Intent(MainActivity.this, SignupActivity.class);
-            startActivity(signIntent);
-            // Replace this with your desired action
-        });
-
-        hymnsImageView.setOnClickListener(v -> {
-            // Handle the click event here
-            Intent hymnsIntent = new Intent(MainActivity.this, HymnsActivity.class);
-            startActivity(hymnsIntent);
-            // Replace this with your desired action
-        });
-        agbyaImageView.setOnClickListener(view -> {
-            Intent hymnsIntent = new Intent(MainActivity.this, AgbyaActivity.class);
-            startActivity(hymnsIntent);
-        });
-//        copticImageView.setOnClickListener(view -> {
-//            //Intent copticIntent = new Intent(MainActivity.this, CopticActivity.class);
-//            Intent copticIntent = new Intent(MainActivity.this, CopticDetails.class);
-//
-//            startActivity(copticIntent);
-//        });
-
-        taksImageView.setOnClickListener(view -> {
-            Intent taksIntent = new Intent(MainActivity.this, TaksActivity.class);
-            startActivity(taksIntent);
-        });
-
-        navigationView.getMenu().findItem(R.id.nav_logout).setOnMenuItemClickListener(menuItem -> {
-            showLogoutConfirmationDialog();
-            return false;
-        });
-        navigationView.getMenu().findItem(R.id.nav_settings).setOnMenuItemClickListener(menuItem -> {
-            Intent loginIntent = new Intent(MainActivity.this, SettingActivity.class);
-            startActivity(loginIntent);
-            return false;
-        });
-
-        navigationView.getMenu().findItem(R.id.nav_profile).setOnMenuItemClickListener(menuItem -> {
-            Intent profileIntent;
-            if(dataCache.getUser() == null){
-                profileIntent = new Intent(MainActivity.this, LoginActivity.class);
-            }
-            else
-                profileIntent = new Intent(MainActivity.this, ProfileActivity.class);
-
-            startActivity(profileIntent);
-            return false;
-        });
-        try {
-                navigationView.getMenu().findItem(R.id.attendance).setOnMenuItemClickListener(menuItem -> {
-                    Intent profileIntent = new Intent(MainActivity.this, MyClass.class);
-                    startActivity(profileIntent);
-                    return true;
-                });
-        }catch (NullPointerException ex){
-            Log.e("onResume: ", "Exception: "+ ex.getMessage() );
         }
     }
+
+    private void setupClickListeners() {
+        formView.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, SignupActivity.class)));
+        hymnsImageView.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, HymnsActivity.class)));
+        agbyaImageView.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, AgbyaActivity.class)));
+        taksImageView.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, TaksActivity.class)));
+    }
+
     private void autoSlideImages() {
         if (adapter == null || adapter.getImageUrls() == null || adapter.getImageUrls().isEmpty()) {
             Log.e("AutoSlide", "Adapter or image list is not initialized");
@@ -151,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements ViewPagerAdapter.
             if (viewPager == null || adapter == null) return;
 
             int currentItem = viewPager.getCurrentItem();
-            int itemCount = adapter.getItemCount(); // Use adapter's method instead
+            int itemCount = adapter.getItemCount();
 
             if (itemCount == 0) return;
 
@@ -173,13 +162,10 @@ public class MainActivity extends AppCompatActivity implements ViewPagerAdapter.
             }
         }, 7000, 10000); // Delay and period in milliseconds
     }
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
     private void showLogoutConfirmationDialog() {
@@ -187,38 +173,40 @@ public class MainActivity extends AppCompatActivity implements ViewPagerAdapter.
         builder.setTitle("تسجيل خروج")
                 .setMessage("هل تريد تسجيل خروج من التطبيق")
                 .setPositiveButton("نعم", (dialog, which) -> {
-                    // Log out the user
-                    Intent loginIntent = new Intent(MainActivity.this, MainActivity.class);
                     dataCache.clearCache();
-                    startActivity(loginIntent);
+                    startActivity(new Intent(MainActivity.this, MainActivity.class));
                 })
                 .setNegativeButton("لا", null)
                 .show();
     }
-    private void scheduleNotification() {
-        // Create a work request to trigger the NotificationWorker after 10 seconds
-        OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(NotificationWorker.class)
-                .setInitialDelay(10, TimeUnit.SECONDS) // 10 seconds from now
-                .build();
 
-        // Enqueue the work request
+    private void scheduleNotification() {
+        OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(NotificationWorker.class)
+                .setInitialDelay(10, TimeUnit.SECONDS)
+                .build();
         WorkManager.getInstance(this).enqueue(workRequest);
     }
 
-    private void fetchBannerImages(){
-        FirebaseHelper.getBannerDatabase().get().addOnSuccessListener(queryDocumentSnapshots -> {
-            Banner banner;
-            imageUrls = new ArrayList<>();
-
-            for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                banner = document.toObject(Banner.class);
-                Log.e( "fetchBannerImages: ", ""+banner.getDescription());
-                imageUrls.add(banner.getImageURL());
-            }
-            adapter = new ViewPagerAdapter(imageUrls, MainActivity.this);
-            viewPager.setAdapter(adapter);
-        });
+    private void fetchBannerImages() {
+        FirebaseHelper.getBannerDatabase().get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    imageUrls = new ArrayList<>();
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        Banner banner = document.toObject(Banner.class);
+                        if (banner != null && banner.getImageURL() != null) {
+                            Log.e("fetchBannerImages: ", "" + banner.getDescription());
+                            imageUrls.add(banner.getImageURL());
+                        }
+                    }
+                    adapter = new ViewPagerAdapter(imageUrls, MainActivity.this);
+                    viewPager.setAdapter(adapter);
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("FirebaseError", "Error fetching banner images", e);
+                    Toast.makeText(this, "Failed to load images", Toast.LENGTH_SHORT).show();
+                });
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -230,9 +218,8 @@ public class MainActivity extends AppCompatActivity implements ViewPagerAdapter.
     @Override
     public void onAllImagesLoaded() {
         runOnUiThread(() -> {
-            // Enable swiping now that all images are loaded
             viewPager.setUserInputEnabled(true);
-            Toast.makeText(this, "All images loaded", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "All images loaded", Toast.LENGTH_SHORT).show();
         });
     }
 

@@ -54,8 +54,9 @@ public class HymnsActivity extends AppCompatActivity implements AdapterView.OnIt
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_hymns);
-        Objects.requireNonNull(getSupportActionBar()).hide();
-        EdgeToEdge.enable(this);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }        EdgeToEdge.enable(this);
         hymn = findViewById(R.id.titlesSpinner);
         fab = findViewById(R.id.play_pause_btn);
         dataCache = DataCache.getInstance(this);
